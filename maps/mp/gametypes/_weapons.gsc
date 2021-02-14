@@ -13,9 +13,9 @@ init()
 		precacheItem("thompson_mp");
 		precacheItem("bar_mp");
 		precacheItem("springfield_mp");
-		precacheItem("springfield_noscope_mp");
 		precacheItem("greasegun_mp");
 		precacheItem("shotgun_mp");
+		precacheItem("enfield_mp");
 		precacheItem("mosin_nagant_mp");
 		//precacheItem("30cal_mp");
 		//precacheItem("M9_Bazooka");
@@ -94,7 +94,6 @@ init()
 	level.weaponnames[21] = "fraggrenade";
 	level.weaponnames[22] = "smokegrenade";
 	level.weaponnames[23] = "thompson_british_mp";
-	level.weaponnames[24] = "springfield_noscope_mp";
 
 	level.weapons = [];
 	level.weapons["greasegun_mp"] = spawnstruct();
@@ -216,12 +215,6 @@ init()
 	level.weapons["thompson_british_mp"].server_allowcvar = "scr_allow_thompson_british";
 	level.weapons["thompson_british_mp"].client_allowcvar = "ui_allow_thompson_british";
 	level.weapons["thompson_british_mp"].allow_default = 1;
-
-	level.weapons["springfield_noscope_mp"] = spawnstruct();
-	level.weapons["springfield_noscope_mp"].server_allowcvar = "scr_allow_springfield_noscope";
-	level.weapons["springfield_noscope_mp"].client_allowcvar = "ui_allow_springfield_noscope";
-	level.weapons["springfield_noscope_mp"].allow_default = 1;
-
 
 	for(i = 0; i < level.weaponnames.size; i++)
 	{
@@ -514,7 +507,6 @@ getWeaponBasedGrenadeCount(weapon)
 	switch(weapon)
 	{
 	case "springfield_mp":
-	case "springfield_noscope_mp":
 	case "enfield_scope_mp":
 	case "mosin_nagant_sniper_mp":
 	case "kar98k_sniper_mp":
@@ -570,7 +562,6 @@ getWeaponBasedSmokeGrenadeCount(weapon)
 	case "mp44_mp":
 		return 1;
 	case "springfield_mp":
-	case "springfield_noscope_mp":
 	case "enfield_scope_mp":
 	case "mosin_nagant_sniper_mp":
 	case "kar98k_sniper_mp":
@@ -635,7 +626,6 @@ isMainWeapon(weapon)
 	case "thompson_british_mp":
 	case "bar_mp":
 	case "springfield_mp":
-	case "springfield_noscope_mp":
 	case "sten_mp":
 	case "enfield_mp":
 	case "bren_mp":
@@ -701,15 +691,6 @@ restrictWeaponByServerCvars(response)
 			response = "restricted";
 		}
 		break;
-
-	case "springfield_noscope_mp":
-		if(!getcvarint("scr_allow_springfield_noscope"))
-		{
-			//self iprintln(&"MP_SPRINGFIELD_IS_A_RESTRICTED");
-			response = "restricted";
-		}
-		break;
-
 
 	case "greasegun_mp":
 		if(!getcvarint("scr_allow_greasegun"))
@@ -914,10 +895,6 @@ getWeaponName(weapon)
 		break;
 
 	case "springfield_mp":
-		weaponname = &"WEAPON_SPRINGFIELD";
-		break;
-
-	case "springfield_noscope_mp":
 		weaponname = &"WEAPON_SPRINGFIELD";
 		break;
 

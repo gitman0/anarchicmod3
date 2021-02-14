@@ -301,9 +301,9 @@ Callback_PlayerConnect()
 	//self thread disableEnemyRadar();
 	//self thread tweakAmbientFix();
 
-	self thread oldHeadIcons(); // scale the headicons according to view distance
-	self thread oldObjPoints(); // see the objpoints on the compass from farther away
-	self thread forceSayPos(); // reset the chat position in case we forced it off-screen
+	self thread oldHeadIcons();
+	self thread oldObjPoints();
+	self thread forceSayPos();
 
 	if ((level.show_kdhud) && (level.gametype != "cnq"))
 		self thread miniscore_myscore();
@@ -785,7 +785,7 @@ spawnPlayer() {
 				clientAnnouncement(self, "Remember, friendly fire is ^1ON^7, don't shoot your teammates!");
 			}
 			else {
-				clientAnnouncement(self, "Welcome back " + nocolors(self.name) + "^7!");
+				clientAnnouncement(self, "Welcome back, " + nocolors(self.name) + "^7!");
 				clientAnnouncement(self, " ");
 				clientAnnouncement(self, "Your previous score has been restored.");
 			}
@@ -987,19 +987,13 @@ checkTimeLimit()
 					level.clock.fontscale = 2;
 					level.clock setTimerUp(0);
 					if (debug) iprintln("settimerup has been called");
-
-					// create some kind of notification
 				}
 				level.in_sudden_death = true;
 
 				if (score_diff == 0)
 				{
 					// disable respawns if its a tie
-					if (!level.ctf_sudden_death_norespawn)
-					{
-						level.ctf_sudden_death_norespawn = true;
-						// create some kind of notification
-					}
+					level.ctf_sudden_death_norespawn = true;
 					return;
 				}
 				// don't end the game if the losing team has a chance to tie it up
@@ -1129,7 +1123,6 @@ isturret(w)
 
 spawn_assist()
 {
-	self endon("disconnect");
 	self endon("killed_player");
 	self endon("player_fired");
 	if (level.spawn_assist <= 0)
@@ -1403,8 +1396,6 @@ disableEnemyRadar() {
 		wait 10;
 	}
 }
-
-// scale the headicons according to view distance
 oldHeadIcons() {
 	self endon("disconnect");
 	for (;;)
@@ -1413,8 +1404,6 @@ oldHeadIcons() {
 		wait 10;
 	}
 }
-
-// see the objpoints on the compass from farther away
 oldObjPoints() {
 	self endon("disconnect");
 	for (;;)
@@ -1423,15 +1412,13 @@ oldObjPoints() {
 		wait 10;
 	}
 }
-
-// reset the chat position in case we forced it off-screen
 forceSayPos() {
 	self endon("disconnect");
-	//for (;;)
-	//{
+	for (;;)
+	{
 		self setClientCvar("cg_hudchatposition", "5 85");
-	//	wait 10;
-	//}
+		wait 10;
+	}
 }
 tweakAmbientFix() {
 	self endon("disconnect");
@@ -1626,6 +1613,10 @@ defineRuleSet()
 	level.ruleset[level.ruleset.size] = &"AX_SPAM10";
 	level.ruleset[level.ruleset.size] = &"AX_SPAM11";
 	level.ruleset[level.ruleset.size] = &"AX_SPAM12";
+	level.ruleset[level.ruleset.size] = &"AX_SPAM13";
+	level.ruleset[level.ruleset.size] = &"AX_SPAM14";
+	level.ruleset[level.ruleset.size] = &"AX_SPAM15";
+	level.ruleset[level.ruleset.size] = &"AX_SPAM16";
 }
 
 /////////////////////////////////////////
