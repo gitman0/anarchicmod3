@@ -58,6 +58,8 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
+
+	maps\mp\gametypes\_anarchic::main();
 }
 
 Callback_StartGameType()
@@ -147,6 +149,8 @@ Callback_StartGameType()
 	thread startGame();
 	thread updateGametypeCvars();
 	//thread maps\mp\gametypes\_teams::addTestClients();
+
+	maps\mp\gametypes\_anarchic::Callback_StartGametype();
 }
 
 dummy()
@@ -168,7 +172,9 @@ Callback_PlayerConnect()
 	level notify("connected", self);
 
 	if(!level.splitscreen)
-		iprintln(&"MP_CONNECTED", self);
+		iprintln(&"MP_CONNECTED", self.name);
+
+	maps\mp\gametypes\_anarchic::Callback_PlayerConnect();
 
 	lpselfnum = self getEntityNumber();
 	lpselfguid = self getGuid();
@@ -189,6 +195,8 @@ Callback_PlayerConnect()
 
 	if(isdefined(self.pers["team"]) && self.pers["team"] != "spectator")
 	{
+		maps\mp\gametypes\_anarchic::checkSnipers();
+
 		self setClientCvar("ui_allow_weaponchange", "1");
 		self.sessionteam = "none";
 
@@ -214,12 +222,7 @@ Callback_PlayerConnect()
 	{
 		self setClientCvar("ui_allow_weaponchange", "0");
 
-		if(!level.xenon)
-		{
-			if(!isdefined(self.pers["skipserverinfo"]))
-				self openMenu(game["menu_serverinfo"]);
-		}
-		else
+		if(!isdefined(self.pers["skipserverinfo"]))
 			self openMenu(game["menu_team"]);
 
 		self.pers["team"] = "spectator";
@@ -234,7 +237,7 @@ Callback_PlayerConnect()
 Callback_PlayerDisconnect()
 {
 	if(!level.splitscreen)
-		iprintln(&"MP_DISCONNECTED", self);
+		iprintln(&"MP_DISCONNECTED", self.name);
 
 	if(isdefined(self.clientid))
 		setplayerteamrank(self, self.clientid, 0);
@@ -254,6 +257,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 		iDFlags |= level.iDFLAGS_NO_KNOCKBACK;
 
 	// Make sure at least one point of damage is done
+	iDamage = self maps\mp\gametypes\_anarchic::getdamage(iDamage, sMeansOfDeath);
 	if(iDamage < 1)
 		iDamage = 1;
 
@@ -308,6 +312,8 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	if(self.sessionteam == "spectator")
 		return;
 
+	maps\mp\gametypes\_anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
+
 	// If the player was killed by a head shot, let players know it was a head shot kill
 	if(sHitLoc == "head" && sMeansOfDeath != "MOD_MELEE")
 		sMeansOfDeath = "MOD_HEAD_SHOT";
@@ -353,7 +359,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		lpattackguid = attacker getGuid();
 		lpattackname = attacker.name;
 
-		attacker notify("update_playerhud_score");
+		attacker notify("update_playerscore_hud");
 	}
 	else // If you weren't killed by a player, you were in the wrong place at the wrong time
 	{
@@ -365,7 +371,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		lpattackguid = "";
 		lpattackname = "";
 
-		self notify("update_playerhud_score");
+		self notify("update_playerscore_hud");
 	}
 
 	logPrint("K;" + lpselfguid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackguid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
@@ -445,6 +451,8 @@ spawnPlayer()
 
 	waittillframeend;
 	self notify("spawned_player");
+
+	self thread maps\mp\gametypes\_anarchic::spawnplayer();
 }
 
 spawnSpectator(origin, angles)
@@ -453,6 +461,8 @@ spawnSpectator(origin, angles)
 	self notify("end_respawn");
 
 	resettimeout();
+
+	maps\mp\gametypes\_anarchic::checkSnipers();
 
 	// Stop shellshock and rumble
 	self stopShellshock();
@@ -769,7 +779,6 @@ updateGametypeCvars()
 		{
 			level.scorelimit = scorelimit;
 			setCvar("ui_dm_scorelimit", level.scorelimit);
-			level notify("update_allhud_score");
 
 			players = getentarray("player", "classname");
 			for(i = 0; i < players.size; i++)

@@ -64,65 +64,63 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
+
+	level.spawnspectator = ::spawnspectator;
+	maps\mp\gametypes\_anarchic::main();
 }
 
 Callback_StartGameType()
 {
 	level.splitscreen = isSplitScreen();
 
-	// defaults if not defined in level script
-	if(!isDefined(game["allies"]))
-		game["allies"] = "american";
-	if(!isDefined(game["axis"]))
-		game["axis"] = "german";
+	if(!isdefined(game["gamestarted"]))
+	{
+		// defaults if not defined in level script
+		if(!isDefined(game["allies"]))
+			game["allies"] = "american";
+		if(!isDefined(game["axis"]))
+			game["axis"] = "german";
 
-	// server cvar overrides
-	if(getCvar("scr_allies") != "")
-		game["allies"] = getCvar("scr_allies");
-	if(getCvar("scr_axis") != "")
-		game["axis"] = getCvar("scr_axis");
+		// server cvar overrides
+		if(getCvar("scr_allies") != "")
+			game["allies"] = getCvar("scr_allies");
+		if(getCvar("scr_axis") != "")
+			game["axis"] = getCvar("scr_axis");
+
+		precacheStatusIcon("hud_status_dead");
+		precacheStatusIcon("hud_status_connecting");
+		precacheStatusIcon("compass_flag_" + game["allies"]);
+		precacheStatusIcon("compass_flag_" + game["axis"]);
+		precacheRumble("damage_heavy");
+		precacheShader("compass_flag_" + game["allies"]);
+		precacheShader("compass_flag_" + game["axis"]);
+		precacheShader("objpoint_flag_" + game["allies"]);
+		precacheShader("objpoint_flag_" + game["axis"]);
+		precacheShader("compass_flag_" + game["allies"]);
+		precacheShader("compass_flag_" + game["axis"]);
+		precacheShader("objpoint_flag_" + game["allies"]);
+		precacheShader("objpoint_flag_" + game["axis"]);
+		precacheModel("xmodel/prop_flag_" + game["allies"]);
+		precacheModel("xmodel/prop_flag_" + game["axis"]);
+		precacheModel("xmodel/prop_flag_" + game["allies"] + "_carry");
+		precacheModel("xmodel/prop_flag_" + game["axis"] + "_carry");
+		precacheString(&"MP_TIME_TILL_SPAWN");
+		precacheString(&"MP_CTF_OBJ_TEXT");
+		precacheString(&"MP_ENEMY_FLAG_TAKEN");
+		precacheString(&"MP_ENEMY_FLAG_CAPTURED");
+		precacheString(&"MP_YOUR_FLAG_WAS_TAKEN");
+		precacheString(&"MP_YOUR_FLAG_WAS_CAPTURED");
+		precacheString(&"MP_YOUR_FLAG_WAS_RETURNED");
+		precacheString(&"PLATFORM_PRESS_TO_SPAWN");
+
+	}
 
 	level.compassflag_allies = "compass_flag_" + game["allies"];
 	level.compassflag_axis = "compass_flag_" + game["axis"];
-	level.objpointflag_allies = "objpoint_flagpatch1_" + game["allies"];
-	level.objpointflag_axis = "objpoint_flagpatch1_" + game["axis"];
-	level.objpointflagmissing_allies = "objpoint_flagmissing_" + game["allies"];
-	level.objpointflagmissing_axis = "objpoint_flagmissing_" + game["axis"];
+	level.objpointflag_allies = "objpoint_flag_" + game["allies"];
+	level.objpointflag_axis = "objpoint_flag_" + game["axis"];
 	level.hudflag_allies = "compass_flag_" + game["allies"];
 	level.hudflag_axis = "compass_flag_" + game["axis"];
-	
-	level.hudflagflash_allies = "hud_flagflash_" + game["allies"];
-	level.hudflagflash_axis = "hud_flagflash_" + game["axis"];
-
-	precacheStatusIcon("hud_status_dead");
-	precacheStatusIcon("hud_status_connecting");
-	precacheStatusIcon(level.hudflag_allies);
-	precacheStatusIcon(level.hudflag_axis);
-	precacheRumble("damage_heavy");
-	precacheShader(level.compassflag_allies);
-	precacheShader(level.compassflag_axis);
-	precacheShader(level.objpointflag_allies);
-	precacheShader(level.objpointflag_axis);
-	precacheShader(level.hudflag_allies);
-	precacheShader(level.hudflag_axis);
-	precacheShader(level.hudflagflash_allies);
-	precacheShader(level.hudflagflash_axis);
-	precacheShader(level.objpointflag_allies);
-	precacheShader(level.objpointflag_axis);
-	precacheShader(level.objpointflagmissing_allies);
-	precacheShader(level.objpointflagmissing_axis);
-	precacheModel("xmodel/prop_flag_" + game["allies"]);
-	precacheModel("xmodel/prop_flag_" + game["axis"]);
-	precacheModel("xmodel/prop_flag_" + game["allies"] + "_carry");
-	precacheModel("xmodel/prop_flag_" + game["axis"] + "_carry");
-	precacheString(&"MP_TIME_TILL_SPAWN");
-	precacheString(&"MP_CTF_OBJ_TEXT");
-	precacheString(&"MP_ENEMY_FLAG_TAKEN");
-	precacheString(&"MP_ENEMY_FLAG_CAPTURED");
-	precacheString(&"MP_YOUR_FLAG_WAS_TAKEN");
-	precacheString(&"MP_YOUR_FLAG_WAS_CAPTURED");
-	precacheString(&"MP_YOUR_FLAG_WAS_RETURNED");
-	precacheString(&"PLATFORM_PRESS_TO_SPAWN");
 
 	thread maps\mp\gametypes\_menus::init();
 	thread maps\mp\gametypes\_serversettings::init();
@@ -203,7 +201,9 @@ Callback_StartGameType()
 	level.team["allies"] = 0;
 	level.team["axis"] = 0;
 
-	level.respawndelay = 10;
+	level.respawndelay = getCvarInt("scr_ctf_respawn_delay");
+	if (!isdefined(level.respawndelay))
+		level.respawndelay = 10;
 
 	minefields = [];
 	minefields = getentarray("minefield", "targetname");
@@ -214,10 +214,16 @@ Callback_StartGameType()
 	for(i = 0; i < trigger_hurts.size; i++)
 		level.flag_returners[level.flag_returners.size] = trigger_hurts[i];
 
-	thread initFlags();
 	thread startGame();
+
+	if (isdefined(game["matchstarted"]) && game["matchstarted"]) {
+		thread initFlags();
+		thread sayMoveIn();
+	}
 	thread updateGametypeCvars();
-	//thread maps\mp\gametypes\_teams::addTestClients();
+	thread maps\mp\gametypes\_teams::addTestClients();
+
+	maps\mp\gametypes\_anarchic::Callback_StartGametype();
 }
 
 dummy()
@@ -239,7 +245,9 @@ Callback_PlayerConnect()
 	level notify("connected", self);
 
 	if(!level.splitscreen)
-		iprintln(&"MP_CONNECTED", self);
+		iprintln(&"MP_CONNECTED", self.name + "^7");
+
+	maps\mp\gametypes\_anarchic::Callback_PlayerConnect();
 
 	lpselfnum = self getEntityNumber();
 	lpGuid = self getGuid();
@@ -253,10 +261,7 @@ Callback_PlayerConnect()
 
 	level endon("intermission");
 
-	if(level.splitscreen)
-		scriptMainMenu = game["menu_ingame_spectator"];
-	else
-		scriptMainMenu = game["menu_ingame"];
+	scriptMainMenu = game["menu_ingame"];
 
 	if(isDefined(self.pers["team"]) && self.pers["team"] != "spectator")
 	{
@@ -289,14 +294,11 @@ Callback_PlayerConnect()
 	{
 		self setClientCvar("ui_allow_weaponchange", "0");
 
-		if(!level.xenon)
+		if(!isDefined(self.pers["skipserverinfo"]))
 		{
-			if(!isdefined(self.pers["skipserverinfo"]))
-				self openMenu(game["menu_serverinfo"]);
+			self openMenu(game["menu_serverinfo"]);
+			self.pers["skipserverinfo"] = true;
 		}
-		else
-			self openMenu(game["menu_team"]);
-
 		self.pers["team"] = "spectator";
 		self.sessionteam = "spectator";
 
@@ -311,7 +313,7 @@ Callback_PlayerDisconnect()
 	self dropFlag();
 
 	if(!level.splitscreen)
-		iprintln(&"MP_DISCONNECTED", self);
+		iprintln(&"MP_DISCONNECTED", self.name + "^7");
 
 	if(isdefined(self.pers["team"]))
 	{
@@ -344,61 +346,12 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 	{
 		if(isPlayer(eAttacker) && (self != eAttacker) && (self.pers["team"] == eAttacker.pers["team"]))
 		{
-			if(level.friendlyfire == "0")
-			{
-				return;
-			}
-			else if(level.friendlyfire == "1")
-			{
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-
-				// Shellshock/Rumble
-				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
-				self playrumble("damage_heavy");
-			}
-			else if(level.friendlyfire == "2")
-			{
-				eAttacker.friendlydamage = true;
-
-				iDamage = int(iDamage * .5);
-
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				eAttacker finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker.friendlydamage = undefined;
-
-				friendly = true;
-			}
-			else if(level.friendlyfire == "3")
-			{
-				eAttacker.friendlydamage = true;
-
-				iDamage = int(iDamage * .5);
-
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker.friendlydamage = undefined;
-
-				friendly = true;
-
-				// Shellshock/Rumble
-				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
-				self playrumble("damage_heavy");
-			}
+			self maps\mp\gametypes\_anarchic::friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 		}
 		else
 		{
 			// Make sure at least one point of damage is done
+			iDamage = self maps\mp\gametypes\_anarchic::getdamage(iDamage, sMeansOfDeath, eAttacker, sWeapon);
 			if(iDamage < 1)
 				iDamage = 1;
 
@@ -449,8 +402,8 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 			lpattackname = lpselfname;
 			lpattackGuid = lpselfGuid;
 		}
-
-		logPrint("D;" + lpselfGuid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackGuid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
+		if (game["matchstarted"])
+			logPrint("D;" + lpselfGuid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackGuid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
 	}
 }
 
@@ -462,6 +415,13 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	if(self.sessionteam == "spectator")
 		return;
 
+	if (isplayer(attacker)) {
+		if ( isdefined(attacker.sessionteam) && (attacker.sessionteam == "spectator"))
+			return;
+	}
+
+	maps\mp\gametypes\_anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
+
 	// If the player was killed by a head shot, let players know it was a head shot kill
 	if(sHitLoc == "head" && sMeansOfDeath != "MOD_MELEE")
 		sMeansOfDeath = "MOD_HEAD_SHOT";
@@ -471,6 +431,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 
 	self maps\mp\gametypes\_weapons::dropWeapon();
 	self maps\mp\gametypes\_weapons::dropOffhand();
+	self maps\mp\gametypes\_weapons::dropSmoke();
 
 	self dropFlag();
 
@@ -479,7 +440,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	self.dead_origin = self.origin;
 	self.dead_angles = self.angles;
 
-	if(!isdefined(self.switching_teams))
+	if(!isdefined(self.switching_teams) && game["matchstarted"])
 		self.deaths++;
 
 	lpselfnum = self getEntityNumber();
@@ -504,7 +465,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 					players[self.leaving_team]--;
 					players[self.joining_team]++;
 
-					if((players[self.joining_team] - players[self.leaving_team]) > 1)
+					if( ((players[self.joining_team] - players[self.leaving_team]) > 1) && game["matchstarted"] )
 						attacker.score--;
 				}
 			}
@@ -517,10 +478,15 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			attackerNum = attacker getEntityNumber();
 			doKillcam = true;
 
-			if(self.pers["team"] == attacker.pers["team"]) // killed by a friendly
-				attacker.score--;
-			else
-				attacker.score++;
+			if (game["matchstarted"])
+			{
+				if(self.pers["team"] == attacker.pers["team"]) { // killed by a friendly
+					attacker.score--;
+					attacker.teamkills++; //anarchicmod
+				}
+				else
+					attacker.score++;
+			}
 		}
 
 		lpattacknum = attacker getEntityNumber();
@@ -539,8 +505,8 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		lpattackguid = "";
 		lpattackerteam = "world";
 	}
-
-	logPrint("K;" + lpselfguid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackguid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
+	if (game["matchstarted"])
+		logPrint("K;" + lpselfguid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackguid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
 
 	// Stop thread if map ended on this death
 	if(level.mapended)
@@ -628,6 +594,8 @@ spawnPlayer()
 
 	waittillframeend;
 	self notify("spawned_player");
+
+	self thread maps\mp\gametypes\_anarchic::spawnplayer();
 }
 
 spawnSpectator(origin, angles)
@@ -636,6 +604,8 @@ spawnSpectator(origin, angles)
 	self notify("end_respawn");
 
 	resettimeout();
+
+	maps\mp\gametypes\_anarchic::checkSnipers();
 
 	// Stop shellshock and rumble
 	self stopShellshock();
@@ -784,27 +754,80 @@ waitRemoveRespawnText(message)
 	self waittill(message);
 	self notify("remove_respawntext");
 }
+make_permanent_announcement(message, cleanup_notify, timer, y_position, color)
+{
+	if ( !isdefined(y_position) )
+	{
+		y_position = 130;
+	}
+	
+	text = newHudElem();
+	text setText(message);
+	text.alignX = "center";
+	text.alignY = "middle";
+	text.x = 320;
+	text.y = y_position;
+	text.sort = 0.0;
+	text.fontscale = 2.0;
 
+	time = newHudElem();
+	time setTimer(timer);
+	time.alignX = "center";
+	time.alignY = "middle";
+	time.x = 320;
+	time.y = y_position + 21;
+	time.sort = 0.0;
+	time.fontscale = 1.6;
+
+	if ( isdefined(color) )
+	{
+		text.color = color;
+		time.color = color;
+	}
+	
+	level waittill(cleanup_notify);
+	
+	text destroy();
+	time destroy();
+}
 startGame()
 {
-	level.starttime = getTime();
-
-	if(level.timelimit > 0)
+	if (!isdefined(game["matchstarted"]))
 	{
-		level.clock = newHudElem();
-		level.clock.horzAlign = "left";
-		level.clock.vertAlign = "top";
-		level.clock.x = 8;
-		level.clock.y = 2;
-		level.clock.font = "default";
-		level.clock.fontscale = 2;
-		level.clock setTimer(level.timelimit * 60);
+		if (isdefined(level.ctf_warmup))
+			warmup = level.ctf_warmup;
+		else warmup = 50;
+		thread make_permanent_announcement(&"AX_MATCHSTARTING", "cleanup match starting", warmup);
+		game["matchstarted"] = false;
+		wait warmup;
+		game["matchstarted"] = true;
+		level notify("cleanup match starting");
+		wait 0.05;
+		level notify("restarting");
+		wait 0.05;
+		map_restart(true);
 	}
-
-	for(;;)
+	else 
 	{
-		checkTimeLimit();
-		wait 1;
+		level.starttime = getTime();
+	
+		if(level.timelimit > 0)
+		{
+			level.clock = newHudElem();
+			level.clock.horzAlign = "left";
+			level.clock.vertAlign = "top";
+			level.clock.x = 8;
+			level.clock.y = 2;
+			level.clock.font = "default";
+			level.clock.fontscale = 2;
+			level.clock setTimer(level.timelimit * 60);
+		}
+	
+		for(;;)
+		{
+			checkTimeLimit();
+			wait 1;
+		}
 	}
 }
 
@@ -812,6 +835,8 @@ endMap()
 {
 	game["state"] = "intermission";
 	level notify("intermission");
+
+	maps\mp\gametypes\_anarchic::endMap();
 
 	alliedscore = getTeamScore("allies");
 	axisscore = getTeamScore("axis");
@@ -945,15 +970,30 @@ checkScoreLimit()
 	if(level.scorelimit <= 0)
 		return;
 
-	if(getTeamScore("allies") < level.scorelimit && getTeamScore("axis") < level.scorelimit)
+	// BEGIN anarchic
+	shutout = false;
+	shutout_limit = getcvarint("scr_ctf_shutout_limit");	
+	score_axis = getTeamScore("axis");
+	score_allies = getTeamScore("allies");
+
+	if (shutout_limit > 0)
+	{
+		if (score_allies == 0 && score_axis >= shutout_limit)
+			shutout = true;
+		if (score_axis == 0 && score_allies >= shutout_limit)
+			shutout = true;
+	}
+
+	if(getTeamScore("allies") < level.scorelimit && getTeamScore("axis") < level.scorelimit && !shutout)
 		return;
 
 	if(level.mapended)
 		return;
 	level.mapended = true;
 
-	if(!level.splitscreen)
+	if(!shutout)
 		iprintln(&"MP_SCORE_LIMIT_REACHED");
+	else iprintln("Game over - TOTAL SHUTOUT!");
 
 	level thread endMap();
 }
@@ -1003,7 +1043,6 @@ updateGametypeCvars()
 		{
 			level.scorelimit = scorelimit;
 			setCvar("ui_ctf_scorelimit", level.scorelimit);
-			level notify("update_allhud_score");
 		}
 		checkScoreLimit();
 
@@ -1016,9 +1055,9 @@ printJoinedTeam(team)
 	if(!level.splitscreen)
 	{
 	    if(team == "allies")
-		    iprintln(&"MP_JOINED_ALLIES", self);
+		    iprintln(&"MP_JOINED_ALLIES", self.name + "^7");
 	    else if(team == "axis")
-		    iprintln(&"MP_JOINED_AXIS", self);
+		    iprintln(&"MP_JOINED_AXIS", self.name + "^7");
 	}
 }
 
@@ -1062,7 +1101,6 @@ initFlags()
 	allied_flag.objective = 0;
 	allied_flag.compassflag = level.compassflag_allies;
 	allied_flag.objpointflag = level.objpointflag_allies;
-	allied_flag.objpointflagmissing = level.objpointflagmissing_allies;
 	allied_flag thread flag();
 
 	axis_flag = getent("axis_flag", "targetname");
@@ -1079,7 +1117,6 @@ initFlags()
 	axis_flag.objective = 1;
 	axis_flag.compassflag = level.compassflag_axis;
 	axis_flag.objpointflag = level.objpointflag_axis;
-	axis_flag.objpointflagmissing = level.objpointflagmissing_axis;
 	axis_flag thread flag();
 }
 
@@ -1114,9 +1151,16 @@ flag()
 						if(!level.splitscreen)
 							thread playSoundOnPlayers(enemyAlias, enemy);
 
-						thread printOnTeam(&"MP_ENEMY_FLAG_CAPTURED", self.team);
+						//thread printOnTeam(&"MP_ENEMY_FLAG_CAPTURED", self.team);
+						thread printOnTeam("Enemy Flag Captured By " + other.name + "^7!", self.team);
 						thread printOnTeam(&"MP_YOUR_FLAG_WAS_CAPTURED", enemy);
 
+						lpselfnum = other getEntityNumber();
+						lpselfguid = other getGuid();
+
+						logPrint("A;" + lpselfguid + ";" + lpselfnum + ";" + other.pers["team"] + ";" + other.name + ";" + "flag_capture" + "\n");
+
+						other.pers["flag_caps"]++; // anarchic
 						other.flag returnFlag();
 						other detachFlag(other.flag);
 						other.flag = undefined;
@@ -1126,7 +1170,7 @@ flag()
 						teamscore = getTeamScore(other.pers["team"]);
 						teamscore += 1;
 						setTeamScore(other.pers["team"], teamscore);
-						level notify("update_allhud_score");
+						level notify("update_teamscore_hud");
 
 						checkScoreLimit();
 					}
@@ -1137,10 +1181,15 @@ flag()
 					thread playSoundOnPlayers("ctf_touchown", self.team);
 					thread printOnTeam(&"MP_YOUR_FLAG_WAS_RETURNED", self.team);
 
+					lpselfnum = other getEntityNumber();
+					lpselfguid = other getGuid();
+
+					logPrint("A;" + lpselfguid + ";" + lpselfnum + ";" + other.pers["team"] + ";" + other.name + ";" + "flag_return" + "\n");
+
 					self returnFlag();
 
 					other.score += 2;
-					level notify("update_allhud_score");
+					level notify("update_teamscore_hud");
 				}
 			}
 			else if(other.pers["team"] != self.team) // Touched by enemy
@@ -1160,7 +1209,13 @@ flag()
 					thread playSoundOnPlayers(enemyAlias, enemy);
 
 				thread printOnTeam(&"MP_YOUR_FLAG_WAS_TAKEN", self.team);
-				thread printOnTeam(&"MP_ENEMY_FLAG_TAKEN", enemy);
+				//thread printOnTeam(&"MP_ENEMY_FLAG_TAKEN", enemy);
+				thread printOnTeam("Enemy Flag Taken By " + other.name + "^7!", enemy);
+
+				lpselfnum = other getEntityNumber();
+				lpselfguid = other getGuid();
+
+				logPrint("A;" + lpselfguid + ";" + lpselfnum + ";" + other.pers["team"] + ";" + other.name + ";" + "flag_stolen" + "\n");
 
 				other pickupFlag(self); // Stolen flag
 			}
@@ -1185,12 +1240,12 @@ pickupFlag(flag)
 	self.dont_auto_balance = true;
 
 	flag deleteFlagWaypoint();
-	flag createFlagMissingWaypoint();
 
-	objective_onEntity(self.flag.objective, self);
-	objective_team(self.flag.objective, self.pers["team"]);
+	objective_state(self.flag.objective, "invisible");
 
 	self attachFlag();
+
+
 }
 
 dropFlag()
@@ -1207,8 +1262,9 @@ dropFlag()
 		self.flag.atbase = false;
 		self.statusicon = "";
 
+		// set compass flag position on player
 		objective_position(self.flag.objective, self.flag.origin);
-		objective_team(self.flag.objective, "none");
+		objective_state(self.flag.objective, "current");
 
 		self.flag createFlagWaypoint();
 
@@ -1240,11 +1296,11 @@ returnFlag()
 	self.flagmodel show();
 	self.atbase = true;
 
+	// set compass flag position on player
 	objective_position(self.objective, self.origin);
-	objective_team(self.objective, "none");
+	objective_state(self.objective, "current");
 
 	self createFlagWaypoint();
-	self deleteFlagMissingWaypoint();
 }
 
 autoReturn()
@@ -1257,93 +1313,48 @@ autoReturn()
 
 attachFlag()
 {
-	if(isdefined(self.flagAttached))
+	if (isdefined(self.flagAttached))
 		return;
 
-	if(self.pers["team"] == "allies")
+	//put icon on screen
+	self.flagAttached = newClientHudElem(self);
+	self.flagAttached.x = 30;
+	self.flagAttached.y = 95;
+	self.flagAttached.alignX = "center";
+	self.flagAttached.alignY = "middle";
+	self.flagAttached.horzAlign = "left";
+	self.flagAttached.vertAlign = "top";
+
+	iconSize = 40;
+
+	if (self.pers["team"] == "allies")
+	{
 		flagModel = "xmodel/prop_flag_" + game["axis"] + "_carry";
+		self.flagAttached setShader(level.hudflag_axis, iconSize, iconSize);
+	}
 	else
+	{
 		flagModel = "xmodel/prop_flag_" + game["allies"] + "_carry";
-	
+		self.flagAttached setShader(level.hudflag_allies, iconSize, iconSize);
+	}
 	self attach(flagModel, "J_Spine4", true);
-	self.flagAttached = true;
-	
-	self thread createHudIcon();
+	thread maps\mp\gametypes\_anarchic::pickupFlag(self);
+
 }
 
 detachFlag(flag)
 {
-	if(!isdefined(self.flagAttached))
+	if (!isdefined(self.flagAttached))
 		return;
 
-	if(flag.team == "allies")
+	if (flag.team == "allies")
 		flagModel = "xmodel/prop_flag_" + game["allies"] + "_carry";
 	else
 		flagModel = "xmodel/prop_flag_" + game["axis"] + "_carry";
-		
 	self detach(flagModel, "J_Spine4");
-	self.flagAttached = undefined;
 
-	self thread deleteHudIcon();
-}
-
-createHudIcon()
-{
-	iconSize = 40;
-
-	self.hud_flag = newClientHudElem(self);
-	self.hud_flag.x = 30;
-	self.hud_flag.y = 95;
-	self.hud_flag.alignX = "center";
-	self.hud_flag.alignY = "middle";
-	self.hud_flag.horzAlign = "left";
-	self.hud_flag.vertAlign = "top";
-	self.hud_flag.alpha = 0;
-
-	self.hud_flagflash = newClientHudElem(self);
-	self.hud_flagflash.x = 30;
-	self.hud_flagflash.y = 95;
-	self.hud_flagflash.alignX = "center";
-	self.hud_flagflash.alignY = "middle";
-	self.hud_flagflash.horzAlign = "left";
-	self.hud_flagflash.vertAlign = "top";
-	self.hud_flagflash.alpha = 0;
-	self.hud_flagflash.sort = 1;
-
-	if(self.pers["team"] == "allies")
-	{
-		self.hud_flag setShader(level.hudflag_axis, iconSize, iconSize);
-		self.hud_flagflash setShader(level.hudflagflash_axis, iconSize, iconSize);
-	}
-	else
-	{
-		assert(self.pers["team"] == "axis");
-		self.hud_flag setShader(level.hudflag_allies, iconSize, iconSize);
-		self.hud_flagflash setShader(level.hudflagflash_allies, iconSize, iconSize);
-	}
-
-	self.hud_flagflash fadeOverTime(.2);
-	self.hud_flagflash.alpha = 1;
-
-	self.hud_flag fadeOverTime(.2);
-	self.hud_flag.alpha = 1;
-
-	wait .2;
-	
-	if(isdefined(self.hud_flagflash))
-	{
-		self.hud_flagflash fadeOverTime(1);
-		self.hud_flagflash.alpha = 0;
-	}
-}
-
-deleteHudIcon()
-{
-	if(isdefined(self.hud_flagflash))
-		self.hud_flagflash destroy();
-		
-	if(isdefined(self.hud_flag))
-		self.hud_flag destroy();
+	self.flagAttached destroy();
+	self notify("flag_dropped");
 }
 
 createFlagWaypoint()
@@ -1354,48 +1365,24 @@ createFlagWaypoint()
 	waypoint.x = self.origin[0];
 	waypoint.y = self.origin[1];
 	waypoint.z = self.origin[2] + 100;
-	waypoint.alpha = .61;
+	//waypoint.alpha = .61; //anarchic
+	waypoint.alpha = .4;
 	waypoint.archived = true;
 
 	if(level.splitscreen)
 		waypoint setShader(self.objpointflag, 14, 14);
 	else
-		waypoint setShader(self.objpointflag, 7, 7);
+		//waypoint setShader(self.objpointflag, 7, 7);//anarchic
+		waypoint setShader(self.objpointflag, 6, 6);
 
 	waypoint setwaypoint(true);
-	self.waypoint_flag = waypoint;
+	self.waypoint = waypoint;
 }
 
 deleteFlagWaypoint()
 {
-	if(isdefined(self.waypoint_flag))
-		self.waypoint_flag destroy();
-}
-
-createFlagMissingWaypoint()
-{
-	self deleteFlagMissingWaypoint();
-
-	waypoint = newHudElem();
-	waypoint.x = self.home_origin[0];
-	waypoint.y = self.home_origin[1];
-	waypoint.z = self.home_origin[2] + 100;
-	waypoint.alpha = .61;
-	waypoint.archived = true;
-
-	if(level.splitscreen)
-		waypoint setShader(self.objpointflagmissing, 14, 14);
-	else
-		waypoint setShader(self.objpointflagmissing, 7, 7);
-
-	waypoint setwaypoint(true);
-	self.waypoint_base = waypoint;
-}
-
-deleteFlagMissingWaypoint()
-{
-	if(isdefined(self.waypoint_base))
-		self.waypoint_base destroy();
+	if(isdefined(self.waypoint))
+		self.waypoint destroy();
 }
 
 playSoundOnPlayers(sound, team)
@@ -1437,12 +1424,6 @@ printOnTeam(text, team)
 
 menuAutoAssign()
 {
-	if(!level.xenon && isdefined(self.pers["team"]) && (self.pers["team"] == "allies" || self.pers["team"] == "axis"))
-	{
-		self openMenu(game["menu_team"]);
-		return;
-	}
-
 	numonteam["allies"] = 0;
 	numonteam["axis"] = 0;
 
@@ -1451,7 +1432,7 @@ menuAutoAssign()
 	{
 		player = players[i];
 
-		if(!isDefined(player.pers["team"]) || player.pers["team"] == "spectator")
+		if(!isDefined(player.pers["team"]) || player.pers["team"] == "spectator" || player == self)
 			continue;
 
 		numonteam[player.pers["team"]]++;
@@ -1464,7 +1445,7 @@ menuAutoAssign()
 		{
 			teams[0] = "allies";
 			teams[1] = "axis";
-			assignment = teams[randomInt(2)];	// should not switch teams if already on a team
+			assignment = teams[randomInt(2)];
 		}
 		else if(getTeamScore("allies") < getTeamScore("axis"))
 			assignment = "allies";
@@ -1522,12 +1503,6 @@ menuAllies()
 {
 	if(self.pers["team"] != "allies")
 	{
-		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("allies"))
-		{
-			self openMenu(game["menu_team"]);
-			return;
-		}
-
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
@@ -1555,12 +1530,6 @@ menuAxis()
 {
 	if(self.pers["team"] != "axis")
 	{
-		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("axis"))
-		{
-			self openMenu(game["menu_team"]);
-			return;
-		}
-
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
@@ -1675,6 +1644,9 @@ respawn_timer(delay)
 {
 	self endon("disconnect");
 
+	if (!game["matchstarted"])
+		return;
+
 	self.WaitingToSpawn = true;
 
 	if(level.respawndelay > 0)
@@ -1716,5 +1688,36 @@ updateTimer()
 			self.respawntimer.alpha = 1;
 		else
 			self.respawntimer.alpha = 0;
+	}
+}
+sayMoveIn()
+{
+	wait 2;
+
+	switch(game["allies"]) {
+		case "american":
+			alliedsoundalias = "US_mp_cmd_movein";
+			break;
+		case "russian":
+			alliedsoundalias = "RU_mp_cmd_movein";
+			break;
+		case "british":
+			alliedsoundalias = "UK_mp_cmd_movein";
+			break;
+		default:
+			alliedsoundalias = "US_mp_cmd_movein";
+			break;
+	}
+	axissoundalias = "GE_mp_cmd_movein";
+
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+	{
+		player = players[i];
+
+		if(player.pers["team"] == "allies")
+			player playLocalSound(alliedsoundalias);
+		else if(player.pers["team"] == "axis")
+			player playLocalSound(axissoundalias);
 	}
 }

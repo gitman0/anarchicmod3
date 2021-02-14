@@ -15,6 +15,8 @@ init()
 		precacheItem("springfield_mp");
 		precacheItem("greasegun_mp");
 		precacheItem("shotgun_mp");
+		precacheItem("enfield_mp");
+		precacheItem("mosin_nagant_mp");
 		//precacheItem("30cal_mp");
 		//precacheItem("M9_Bazooka");
 		break;
@@ -28,8 +30,9 @@ init()
 		precacheItem("bren_mp");
 		precacheItem("enfield_scope_mp");
 		precacheItem("m1garand_mp");
-		precacheItem("thompson_mp");
+		precacheItem("thompson_british_mp");
 		precacheItem("shotgun_mp");
+		precacheItem("mosin_nagant_mp");
 		//precacheItem("30cal_mp");
 		//precacheItem("M9_Bazooka");
 		break;
@@ -44,6 +47,7 @@ init()
 		precacheItem("ppsh_mp");
 		precacheItem("mosin_nagant_sniper_mp");
 		precacheItem("shotgun_mp");
+		precacheItem("enfield_mp");
 		//precacheItem("dp28_mp");
 		//precacheItem("M9_Bazooka");
 		break;
@@ -88,6 +92,7 @@ init()
 	level.weaponnames[20] = "shotgun_mp";
 	level.weaponnames[21] = "fraggrenade";
 	level.weaponnames[22] = "smokegrenade";
+	level.weaponnames[23] = "thompson_british_mp";
 
 	level.weapons = [];
 	level.weapons["greasegun_mp"] = spawnstruct();
@@ -205,6 +210,11 @@ init()
 	level.weapons["smokegrenade"].client_allowcvar = "ui_allow_smokegrenades";
 	level.weapons["smokegrenade"].allow_default = 1;
 
+	level.weapons["thompson_british_mp"] = spawnstruct();
+	level.weapons["thompson_british_mp"].server_allowcvar = "scr_allow_thompson_british";
+	level.weapons["thompson_british_mp"].client_allowcvar = "ui_allow_thompson_british";
+	level.weapons["thompson_british_mp"].allow_default = 1;
+
 	for(i = 0; i < level.weaponnames.size; i++)
 	{
 		weaponname = level.weaponnames[i];
@@ -316,7 +326,12 @@ givePistol()
 
 		//self giveWeapon(pistoltype);
 		self setWeaponSlotWeapon("primaryb", pistoltype);
-		self giveMaxAmmo(pistoltype);
+		if (getcvar("g_gametype") == "rtdm") {
+			self setWeaponClipAmmo("primaryb", 0);
+			self setWeaponSlotAmmo("primaryb", 0);
+			self setWeaponSlotClipAmmo("primaryb", 0);
+		}
+		else self giveMaxAmmo(pistoltype);
 	}
 }
 
@@ -367,7 +382,9 @@ giveGrenades()
 
 	if(getcvarint("scr_allow_fraggrenades"))
 	{
-		fraggrenadecount = getWeaponBasedGrenadeCount(self.pers["weapon"]);
+		if (level.static_nade_count > 0)
+			fraggrenadecount = level.static_nade_count;
+		else fraggrenadecount = getWeaponBasedGrenadeCount(self.pers["weapon"]);
 		if(fraggrenadecount)
 		{
 			self giveWeapon(grenadetype);
@@ -377,7 +394,18 @@ giveGrenades()
 
 	if(getcvarint("scr_allow_smokegrenades"))
 	{
-		smokegrenadecount = getWeaponBasedSmokeGrenadeCount(self.pers["weapon"]);
+		switch (getcvar("g_gametype")) {
+			case "tdm":
+				if (isdefined(self.score) && self.score >= 60)
+					smokegrenadecount = 1;
+				else smokegrenadecount = 0;
+				break;
+			case "sd":
+			default:
+				smokegrenadecount = getWeaponBasedSmokeGrenadeCount(self.pers["weapon"]);
+				break;
+		}
+		
 		if(smokegrenadecount)
 		{
 			self giveWeapon(smokegrenadetype);
@@ -412,7 +440,7 @@ dropWeapon()
 		clipsize = self getweaponslotclipammo(currentslot);
 		reservesize = self getweaponslotammo(currentslot);
 
-		if(clipsize || reservesize)
+		if ((clipsize || reservesize) && (maps\mp\gametypes\_anarchic::dropSniper(current, self.pers["team"])))
 			self dropItem(current);
 	}
 }
@@ -424,9 +452,46 @@ dropOffhand()
 	{
 		ammosize = self getammocount(current);
 
-		if(ammosize)
+		if ((ammosize) && (level.dropnades))
 			self dropItem(current);
 	}
+}
+dropSmoke()
+{
+	if (randomint(2))
+		return;
+
+	if(self.pers["team"] == "allies")
+	{
+		switch(game["allies"])
+		{
+		case "american":
+			smokegrenadetype = "smoke_grenade_american_mp";
+			break;
+		case "british":
+			smokegrenadetype = "smoke_grenade_british_mp";
+			break;
+		default:
+			assert(game["allies"] == "russian");
+			smokegrenadetype = "smoke_grenade_russian_mp";
+			break;
+		}
+	}
+	else
+	{
+		assert(self.pers["team"] == "axis");
+		switch(game["axis"])
+		{
+		default:
+			assert(game["axis"] == "german");
+			smokegrenadetype = "smoke_grenade_german_mp";
+			break;
+		}
+	}
+
+	ammosize = self getammocount(smokegrenadetype);
+	if (ammosize)
+		self dropItem(smokegrenadetype);
 }
 
 getWeaponBasedGrenadeCount(weapon)
@@ -451,6 +516,7 @@ getWeaponBasedGrenadeCount(weapon)
 		return 2;
 	default:
 	case "thompson_mp":
+	case "thompson_british_mp":
 	case "sten_mp":
 	case "ppsh_mp":
 	case "mp40_mp":
@@ -466,6 +532,7 @@ getWeaponBasedSmokeGrenadeCount(weapon)
 	switch(weapon)
 	{
 	case "thompson_mp":
+	case "thompson_british_mp":
 	case "sten_mp":
 	case "ppsh_mp":
 	case "mp40_mp":
@@ -475,18 +542,22 @@ getWeaponBasedSmokeGrenadeCount(weapon)
 		return 1;
 	case "m1carbine_mp":
 	case "m1garand_mp":
-	case "enfield_mp":
-	case "mosin_nagant_mp":
-	case "SVT40_mp":
-	case "kar98k_mp":
 	case "g43_mp":
+	case "SVT40_mp":
+		return 0;
+	case "mosin_nagant_mp":
+	case "enfield_mp":
+	case "kar98k_mp":
+		return 0;
 	case "bar_mp":
 	case "bren_mp":
 	case "mp44_mp":
+		return 1;
 	case "springfield_mp":
 	case "enfield_scope_mp":
 	case "mosin_nagant_sniper_mp":
 	case "kar98k_sniper_mp":
+		return 0;
 	default:
 		return 0;
 	}
@@ -544,6 +615,7 @@ isMainWeapon(weapon)
 	case "m1carbine_mp":
 	case "m1garand_mp":
 	case "thompson_mp":
+	case "thompson_british_mp":
 	case "bar_mp":
 	case "springfield_mp":
 	case "sten_mp":
@@ -661,6 +733,14 @@ restrictWeaponByServerCvars(response)
 		}
 		break;
 
+	case "thompson_british_mp":
+		if(!getcvarint("scr_allow_thompson_british"))
+		{
+			self iprintln(&"MP_THOMPSON_IS_A_RESTRICTED");
+			response = "restricted";
+		}
+		break;
+
 	// Russian
 	case "mosin_nagant_mp":
 		if(!getcvarint("scr_allow_nagant"))
@@ -760,7 +840,7 @@ restrictWeaponByServerCvars(response)
 		break;
 
 	default:
-		//self iprintln(&"MP_UNKNOWN_WEAPON_SELECTED");
+		self iprintln(&"MP_UNKNOWN_WEAPON_SELECTED");
 		response = "restricted";
 		break;
 	}
@@ -829,6 +909,10 @@ getWeaponName(weapon)
 	// British
 	case "enfield_mp":
 		weaponname = &"WEAPON_LEEENFIELD";
+		break;
+
+	case "thompson_british_mp":
+		weaponname = &"WEAPON_THOMPSON_BRITISH";
 		break;
 
 	case "sten_mp":

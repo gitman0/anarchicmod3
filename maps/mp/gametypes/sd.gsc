@@ -101,6 +101,9 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
+
+	level.spawnspectator = ::spawnspectator;
+	maps\mp\gametypes\_anarchic::main();
 }
 
 Callback_StartGameType()
@@ -182,6 +185,8 @@ Callback_StartGameType()
 		thread maps\mp\gametypes\_richpresence::init();
 	else // PC only
 		thread maps\mp\gametypes\_quickmessages::init();
+
+	maps\mp\gametypes\_anarchic::Callback_StartGametype();
 
 	game["gamestarted"] = true;
 
@@ -334,7 +339,9 @@ Callback_PlayerConnect()
 	level notify("connected", self);
 
 	if(!isdefined(self.pers["team"]) && !level.splitscreen)
-		iprintln(&"MP_CONNECTED", self);
+		iprintln(&"MP_CONNECTED", self.name);
+
+	maps\mp\gametypes\_anarchic::Callback_PlayerConnect();
 
 	lpselfnum = self getEntityNumber();
 	lpselfguid = self getGuid();
@@ -348,18 +355,12 @@ Callback_PlayerConnect()
 
 	level endon("intermission");
 
-	if(level.splitscreen)
-	{
-		if(isdefined(self.pers["weapon"]))
-			scriptMainMenu = game["menu_ingame_onteam"];
-		else
-			scriptMainMenu = game["menu_ingame_spectator"];
-	}
-	else
-		scriptMainMenu = game["menu_ingame"];
+	scriptMainMenu = game["menu_ingame"];
 
 	if(isdefined(self.pers["team"]) && self.pers["team"] != "spectator")
 	{
+		maps\mp\gametypes\_anarchic::checkSnipers();
+
 		self setClientCvar("ui_allow_weaponchange", "1");
 
 		if(isdefined(self.pers["weapon"]))
@@ -386,13 +387,11 @@ Callback_PlayerConnect()
 	{
 		self setClientCvar("ui_allow_weaponchange", "0");
 
-		if(!level.xenon)
+		if(!isDefined(self.pers["skipserverinfo"]))
 		{
-			if(!isdefined(self.pers["skipserverinfo"]))
-				self openMenu(game["menu_serverinfo"]);
+			self openMenu(game["menu_serverinfo"]);
+			self.pers["skipserverinfo"] = true;
 		}
-		else
-			self openMenu(game["menu_team"]);
 
 		self.pers["team"] = "spectator";
 		self.sessionteam = "spectator";
@@ -406,7 +405,7 @@ Callback_PlayerConnect()
 Callback_PlayerDisconnect()
 {
 	if(!level.splitscreen)
-		iprintln(&"MP_DISCONNECTED", self);
+		iprintln(&"MP_DISCONNECTED", self.name);
 
 	if(isdefined(self.pers["team"]))
 	{
@@ -442,61 +441,12 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 	{
 		if(isPlayer(eAttacker) && (self != eAttacker) && (self.pers["team"] == eAttacker.pers["team"]))
 		{
-			if(level.friendlyfire == "0")
-			{
-				return;
-			}
-			else if(level.friendlyfire == "1")
-			{
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-
-				// Shellshock/Rumble
-				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
-				self playrumble("damage_heavy");
-			}
-			else if(level.friendlyfire == "2")
-			{
-				eAttacker.friendlydamage = true;
-
-				iDamage = int(iDamage * .5);
-
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				eAttacker finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker.friendlydamage = undefined;
-
-				friendly = true;
-			}
-			else if(level.friendlyfire == "3")
-			{
-				eAttacker.friendlydamage = true;
-
-				iDamage = int(iDamage * .5);
-
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker.friendlydamage = undefined;
-
-				// Shellshock/Rumble
-				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
-				self playrumble("damage_heavy");
-
-				friendly = true;
-			}
+			self maps\mp\gametypes\_anarchic::friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 		}
 		else
 		{
 			// Make sure at least one point of damage is done
+			iDamage = self maps\mp\gametypes\_anarchic::getdamage(iDamage, sMeansOfDeath);
 			if(iDamage < 1)
 				iDamage = 1;
 
@@ -559,6 +509,13 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 
 	if(self.sessionteam == "spectator")
 		return;
+
+	if (isplayer(attacker)) {
+		if ( isdefined(attacker.sessionteam) && (attacker.sessionteam == "spectator"))
+			return;
+	}
+
+	maps\mp\gametypes\_anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
 
 	// If the player was killed by a head shot, let players know it was a head shot kill
 	if(sHitLoc == "head" && sMeansOfDeath != "MOD_MELEE")
@@ -817,6 +774,8 @@ spawnPlayer()
 
 	waittillframeend;
 	self notify("spawned_player");
+
+	self thread maps\mp\gametypes\_anarchic::spawnplayer();
 }
 
 spawnSpectator(origin, angles)
@@ -824,6 +783,8 @@ spawnSpectator(origin, angles)
 	self notify("spawned");
 
 	resettimeout();
+
+	maps\mp\gametypes\_anarchic::checkSnipers();
 
 	// Stop shellshock and rumble
 	self stopShellshock();
@@ -898,9 +859,6 @@ startRound()
 {
 	level endon("bomb_planted");
 	level endon("round_ended");
-
-	if(!level.splitscreen)
-		thread sayObjective();
 
 	level.clock = newHudElem();
 	level.clock.horzAlign = "left";
@@ -1018,7 +976,7 @@ endRound(roundwinner)
 
 	// End bombzone threads and remove related hud elements and objectives
 	level notify("round_ended");
-	level notify("update_allhud_score");
+	level notify("update_teamscore_hud");
 
 	players = getentarray("player", "classname");
 	for(i = 0; i < players.size; i++)
@@ -1314,7 +1272,6 @@ updateGametypeCvars()
 		{
 			level.scorelimit = scorelimit;
 			setCvar("ui_sd_scorelimit", level.scorelimit);
-			level notify("update_allhud_score");
 
 			if(game["matchstarted"])
 				checkScoreLimit();
@@ -1986,21 +1943,23 @@ printJoinedTeam(team)
 	}
 }
 
-sayObjective()
+sayMoveIn()
 {
 	wait 2;
 
-	attacksounds["american"] = "US_mp_cmd_movein";
-	attacksounds["british"] = "UK_mp_cmd_movein";
-	attacksounds["russian"] = "RU_mp_cmd_movein";
-	attacksounds["german"] = "GE_mp_cmd_movein";
-	defendsounds["american"] = "US_mp_defendbomb";
-	defendsounds["british"] = "UK_mp_defendbomb";
-	defendsounds["russian"] = "RU_mp_defendbomb";
-	defendsounds["german"] = "GE_mp_defendbomb";
+	alliedsoundalias = game["allies"] + "_move_in";
+	axissoundalias = game["axis"] + "_move_in";
 
-	level playSoundOnPlayers(attacksounds[game[game["attackers"]]], game["attackers"]);
-	level playSoundOnPlayers(defendsounds[game[game["defenders"]]], game["defenders"]);
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+	{
+		player = players[i];
+
+		if(player.pers["team"] == "allies")
+			player playLocalSound(alliedsoundalias);
+		else if(player.pers["team"] == "axis")
+			player playLocalSound(axissoundalias);
+	}
 }
 
 showBombTimers()
@@ -2085,12 +2044,6 @@ playSoundOnPlayers(sound, team)
 
 menuAutoAssign()
 {
-	if(!level.xenon && isdefined(self.pers["team"]) && (self.pers["team"] == "allies" || self.pers["team"] == "axis"))
-	{
-		self openMenu(game["menu_team"]);
-		return;
-	}
-	
 	numonteam["allies"] = 0;
 	numonteam["axis"] = 0;
 
@@ -2099,7 +2052,7 @@ menuAutoAssign()
 	{
 		player = players[i];
 
-		if(!isdefined(player.pers["team"]) || player.pers["team"] == "spectator")
+		if(!isdefined(player.pers["team"]) || player.pers["team"] == "spectator" || player == self)
 			continue;
 
 		numonteam[player.pers["team"]]++;
@@ -2112,7 +2065,7 @@ menuAutoAssign()
 		{
 			teams[0] = "allies";
 			teams[1] = "axis";
-			assignment = teams[randomInt(2)];	// should not switch teams if already on a team
+			assignment = teams[randomInt(2)];
 		}
 		else if(getTeamScore("allies") < getTeamScore("axis"))
 			assignment = "allies";
@@ -2172,12 +2125,6 @@ menuAllies()
 {
 	if(self.pers["team"] != "allies")
 	{
-		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("allies"))
-		{
-			self openMenu(game["menu_team"]);
-			return;
-		}
-
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
@@ -2207,12 +2154,6 @@ menuAxis()
 {
 	if(self.pers["team"] != "axis")
 	{
-		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("axis"))
-		{
-			self openMenu(game["menu_team"]);
-			return;
-		}
-
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;

@@ -3,7 +3,7 @@ init()
 	precacheShader("overlay_low_health");
 
 	level.healthOverlayCutoff = 0.35;
-	level.playerHealth_RegularRegenDelay = 5000;
+	level.playerHealth_RegularRegenDelay = 4000;
 
 	level thread onPlayerConnect();
 }
@@ -80,7 +80,7 @@ playerHealthRegen()
 	player = self;
 	health_add = 0;
 	
-	regenRate = 0.1; // 0.017;
+	regenRate = 0.007; // 0.017;
 	veryHurt = false;
 	
 	thread playerBreathingSound(maxhealth * 0.35);
@@ -122,14 +122,14 @@ playerHealthRegen()
 				self playLocalSound("breathing_better");
 			}
 	
-			if (veryHurt)
-			{
+			//if (veryHurt)
+			//{
 				newHealth = ratio;
-				if (gettime() > hurtTime + 3000)
+				if (gettime() > hurtTime + 0.05)
 					newHealth += regenRate;
-			}
-			else
-				newHealth = 1;
+			//}
+			//else
+			//	newHealth = 1;
 							
 			if (newHealth > 1.0)
 				newHealth = 1.0;

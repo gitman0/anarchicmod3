@@ -344,7 +344,6 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 		else
 		{
 			// Make sure at least one point of damage is done
-			iDamage = self maps\mp\gametypes\_anarchic::getdamage(iDamage, sMeansOfDeath);
 			if(iDamage < 1)
 				iDamage = 1;
 
@@ -945,9 +944,9 @@ printJoinedTeam(team)
 	if(!level.splitscreen)
 	{
 		if(team == "allies")
-			iprintln(&"MP_JOINED_ALLIES", self.name);
+			iprintln(&"MP_JOINED_ALLIES", self);
 		else if(team == "axis")
-			iprintln(&"MP_JOINED_AXIS", self.name);
+			iprintln(&"MP_JOINED_AXIS", self);
 	}
 }
 

@@ -19,15 +19,21 @@ updateGrenadeIndicators()
 	
 	for(;;)
 	{
-		// Fullscreen scale
-		self setClientCvar("cg_hudGrenadeIconHeight", "25");
-		self setClientCvar("cg_hudGrenadeIconWidth", "25");
-		self setClientCvar("cg_hudGrenadeIconOffset", "50");
-		//self setClientCvar("cg_hudGrenadeIconInScope", "0");
-		//self setClientCvar("cg_hudGrenadeIconMaxRange", "250");
-		self setClientCvar("cg_hudGrenadePointerHeight", "12");
-		self setClientCvar("cg_hudGrenadePointerWidth", "25");
+		if (level.grenadeicons == 1) {
+			// Fullscreen scale
+			self setClientCvar("cg_hudGrenadeIconHeight", "25");
+			self setClientCvar("cg_hudGrenadeIconWidth", "25");
+			self setClientCvar("cg_hudGrenadePointerHeight", "12");
+			self setClientCvar("cg_hudGrenadePointerWidth", "25");
+		}
+		else {
+			self setClientCvar("cg_hudGrenadeIconHeight", "0");
+			self setClientCvar("cg_hudGrenadeIconWidth", "0");
+			self setClientCvar("cg_hudGrenadePointerHeight", "0");
+			self setClientCvar("cg_hudGrenadePointerWidth", "0");
+		}
 		self setClientCvar("cg_hudGrenadePointerPivot", "12 27");
+		self setClientCvar("cg_hudGrenadeIconOffset", "50");
 		self setClientCvar("cg_fovscale", "1");
 
 		while(!isSplitScreen())

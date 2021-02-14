@@ -2,6 +2,9 @@
 
 init()
 {
+	if (level.show_teamscore == 0)
+		return;
+
 	switch(game["allies"])
 	{
 	case "american":

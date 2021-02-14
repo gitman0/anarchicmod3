@@ -5,6 +5,9 @@ init()
 
 shellshockOnDamage(cause, damage)
 {
+	if (level.shellshock == 0)
+		return;
+
 	if( cause == "MOD_EXPLOSIVE" ||
 		cause == "MOD_GRENADE" ||
 		cause == "MOD_GRENADE_SPLASH" ||

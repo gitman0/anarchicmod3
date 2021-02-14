@@ -72,6 +72,7 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
+	maps\mp\gametypes\_anarchic::main();
 }
 
 Callback_StartGameType()
@@ -232,14 +233,17 @@ Callback_StartGameType()
 	level.DefendingRadioTeam = "none";
 	level.NeutralizingPoints = 10;
 	level.MultipleCaptureBias = 1;
-	level.respawndelay = 10;
+	level.respawndelay = 5;
+
+	maps\mp\gametypes\_anarchic::Callback_StartGametype();
 
 	hq_setup();
 
 	thread hq_points();
 	thread startGame();
 	thread updateGametypeCvars();
-	//thread maps\mp\gametypes\_teams::addTestClients();
+	thread maps\mp\gametypes\_teams::addTestClients();
+
 }
 
 dummy()
@@ -261,7 +265,9 @@ Callback_PlayerConnect()
 	level notify("connected", self);
 
 	if(!level.splitscreen)
-		iprintln(&"MP_CONNECTED", self);
+		iprintln(&"MP_CONNECTED", self.name);
+
+	maps\mp\gametypes\_anarchic::Callback_PlayerConnect();
 
 	lpselfnum = self getEntityNumber();
 	lpGuid = self getGuid();
@@ -331,7 +337,7 @@ Callback_PlayerConnect()
 Callback_PlayerDisconnect()
 {
 	if(!level.splitscreen)
-		iprintln(&"MP_DISCONNECTED", self);
+		iprintln(&"MP_DISCONNECTED", self.name);
 
 	if(isdefined(self.pers["team"]))
 	{
@@ -364,61 +370,12 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 	{
 		if(isPlayer(eAttacker) && (self != eAttacker) && (self.pers["team"] == eAttacker.pers["team"]))
 		{
-			if(level.friendlyfire == "0")
-			{
-				return;
-			}
-			else if(level.friendlyfire == "1")
-			{
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-
-				// Shellshock/Rumble
-				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
-				self playrumble("damage_heavy");
-			}
-			else if(level.friendlyfire == "2")
-			{
-				eAttacker.friendlydamage = true;
-
-				iDamage = int(iDamage * .5);
-
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				eAttacker finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker.friendlydamage = undefined;
-
-				friendly = true;
-			}
-			else if(level.friendlyfire == "3")
-			{
-				eAttacker.friendlydamage = true;
-
-				iDamage = int(iDamage * .5);
-
-				// Make sure at least one point of damage is done
-				if(iDamage < 1)
-					iDamage = 1;
-
-				self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
-				eAttacker.friendlydamage = undefined;
-
-		        // Shellshock/Rumble
-		        self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
-		        self playrumble("damage_heavy");
-
-				friendly = true;
-			}
+			self maps\mp\gametypes\_anarchic::friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 		}
 		else
 		{
 			// Make sure at least one point of damage is done
+			iDamage = self maps\mp\gametypes\_anarchic::getdamage(iDamage, sMeansOfDeath);
 			if(iDamage < 1)
 				iDamage = 1;
 
@@ -481,6 +438,12 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 
 	if(self.sessionteam == "spectator")
 		return;
+	if (isplayer(attacker)) {
+		if ( isdefined(attacker.sessionteam) && (attacker.sessionteam == "spectator"))
+			return;
+	}
+
+	maps\mp\gametypes\_anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
 
 	doKillcam = false;
 
@@ -538,8 +501,10 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			attackerNum = attacker getEntityNumber();
 			doKillcam = true;
 
-			if(self.pers["team"] == attacker.pers["team"]) // killed by a friendly
+			if(self.pers["team"] == attacker.pers["team"])  { // killed by a friendly
 				attacker.score--;
+				attacker.teamkills++; //anarchicmod
+			}
 			else
 				attacker.score++;
 		}
@@ -685,6 +650,7 @@ spawnPlayer()
 
 	waittillframeend;
 	self notify("spawned_player");
+	self thread maps\mp\gametypes\_anarchic::spawnplayer();
 }
 
 spawnSpectator(origin, angles)
@@ -693,6 +659,8 @@ spawnSpectator(origin, angles)
 	self notify("end_respawn");
 
 	resettimeout();
+
+	maps\mp\gametypes\_anarchic::checkSnipers();
 
 	// Stop shellshock and rumble
 	self stopShellshock();
@@ -2155,12 +2123,6 @@ menuAllies()
 {
 	if(self.pers["team"] != "allies")
 	{
-		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("allies"))
-		{
-			self openMenu(game["menu_team"]);
-			return;
-		}
-
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
@@ -2188,12 +2150,6 @@ menuAxis()
 {
 	if(self.pers["team"] != "axis")
 	{
-		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("axis"))
-		{
-			self openMenu(game["menu_team"]);
-			return;
-		}
-
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;

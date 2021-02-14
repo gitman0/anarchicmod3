@@ -146,7 +146,7 @@ addTeamObjpoint(origin, name, team, material)
 			newobjpoint.alpha = .61;
 			newobjpoint.archived = objpoint.archived;
 			newobjpoint setShader(objpoint.material, level.objpoint_scale, level.objpoint_scale);
-			newobjpoint setwaypoint(true);
+			//newobjpoint setwaypoint(true);
 			
 			level.objpoints_allplayers.hudelems[level.objpoints_allplayers.hudelems.size] = newobjpoint;
 		}
@@ -174,7 +174,7 @@ addTeamObjpoint(origin, name, team, material)
 					newobjpoint.alpha = .61;
 					newobjpoint.archived = objpoint.archived;
 					newobjpoint setShader(objpoint.material, level.objpoint_scale, level.objpoint_scale);
-					newobjpoint setwaypoint(true);
+					//newobjpoint setwaypoint(true);
 					
 					player.objpoints[player.objpoints.size] = newobjpoint;
 				}
@@ -253,7 +253,7 @@ updatePlayerObjpoints()
 			newobjpoint.alpha = .61;
 			newobjpoint.archived = objpoint.archived;
 			newobjpoint setShader(objpoint.material, level.objpoint_scale, level.objpoint_scale);
-			newobjpoint setwaypoint(true);
+			//newobjpoint setwaypoint(true);
 			
 			self.objpoints[self.objpoints.size] = newobjpoint;
 		}

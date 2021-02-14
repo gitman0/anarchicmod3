@@ -9,7 +9,8 @@ init()
 	level.deathicons["spectator"] = spawnstruct();
 	level.deathicons["spectator"].array = [];
 
-	level thread onPlayerConnect();
+	if (level.disable_deathicon == 0)
+		level thread onPlayerConnect();
 }
 
 onPlayerConnect()
@@ -44,6 +45,9 @@ onPlayerDisconnect()
 
 addDeathIcon(entity, id, team, timeout)
 {
+	if (level.disable_deathicon == 1)
+		return;
+
 	assert(team == "allies" || team == "axis");
 
 	newdeathicon = newTeamHudElem(team);

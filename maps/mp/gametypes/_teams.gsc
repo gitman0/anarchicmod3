@@ -211,8 +211,10 @@ balanceTeams()
 
 			if(getcvar("g_gametype") == "sd")
 				MostRecent changeTeam_RoundBased("allies");
-			else
-				MostRecent changeTeam("allies");
+			else {
+				if (isdefined(MostRecent))
+					MostRecent changeTeam("allies");
+			}
 		}
 
 		MostRecent = undefined;

@@ -1,22 +1,29 @@
 init()
 {
 	game["menu_ingame"] = "ingame";
+	game["menu_serverinfo"] = "serverinfo_" + getCvar("g_gametype");
 	game["menu_team"] = "team_" + game["allies"] + game["axis"];
-	game["menu_weapon_allies"] = "weapon_" + game["allies"];
-	game["menu_weapon_axis"] = "weapon_" + game["axis"];
+	if (getcvar("g_gametype") == "rtdm") {
+		game["menu_weapon_allies"] = "weapon_rifles";
+		game["menu_weapon_axis"] = "weapon_rifles";
+	}
+	else {
+		game["menu_weapon_allies"] = "weapon_" + game["allies"];
+		game["menu_weapon_axis"] = "weapon_" + game["axis"];
+	}
 
 	precacheMenu(game["menu_ingame"]);
+	precacheMenu(game["menu_serverinfo"]);
 	precacheMenu(game["menu_team"]);
 	precacheMenu(game["menu_weapon_allies"]);
 	precacheMenu(game["menu_weapon_axis"]);
+	precacheMenu("addfavorite");
 
 	if(!level.xenon)
 	{
-		game["menu_serverinfo"] = "serverinfo_" + getCvar("g_gametype");
 		game["menu_callvote"] = "callvote";
 		game["menu_muteplayer"] = "muteplayer";
 
-		precacheMenu(game["menu_serverinfo"]);
 		precacheMenu(game["menu_callvote"]);
 		precacheMenu(game["menu_muteplayer"]);
 	}
@@ -56,12 +63,23 @@ onMenuResponse()
 	for(;;)
 	{
 		self waittill("menuresponse", menu, response);
-		//iprintln("^6", response);
+
+		if(menu == game["menu_serverinfo"] && response == "close")
+		{
+			if (!isdefined(self.pers["team"]) || self.pers["team"] == "spectator")
+				self openMenu(game["menu_team"]);
+			else self closeMenu();
+		}
+
+		if(response == "open" || response == "close")
+			continue;
 
 		if(response == "back")
 		{
 			self closeMenu();
 			self closeInGameMenu();
+
+			maps\mp\gametypes\_anarchic::checkSnipers();
 
 			if(menu == game["menu_team"])
 			{
@@ -84,24 +102,10 @@ onMenuResponse()
 		if(response == "endgame")
 		{
 			if(level.splitscreen)
-			{
 				level thread [[level.endgameconfirmed]]();
-			}
-			else if (level.xenon)
-			{
-				endparty();
-				level thread [[level.endgameconfirmed]]();
-			}
 				
 			continue;
 		}
-
-		if(response == "endround")
-		{
-			level thread [[level.endgameconfirmed]]();
-			continue;
-		}
-
 
 		if(menu == game["menu_ingame"] || (level.splitscreen && (menu == game["menu_ingame_onteam"] || menu == game["menu_ingame_spectator"])))
 		{
@@ -139,22 +143,42 @@ onMenuResponse()
 					self openMenu(game["menu_callvote"]);
 				}
 				break;
+			case "serverinfo":
+				self closeMenu();
+				self closeInGameMenu();
+				self openMenu(game["menu_serverinfo"]);
+				break;
+			case "addfavorite":
+				self closeMenu();
+				self closeInGameMenu();
+				self setClientCvar("ui_favoriteName", getcvar("sv_hostname"));
+				self setClientCvar("ui_favoriteAddress", getcvar("sv_address"));
+				self openMenu("addfavorite");
+				break;
 			}
 		}
 		else if(menu == game["menu_team"])
 		{
+			outofbalance = self maps\mp\gametypes\_anarchic::isBalanced(response);
+			if (outofbalance) {
+				self closeMenu();
+				self closeInGameMenu();
+				continue;
+			}
 			switch(response)
 			{
 			case "allies":
 				self closeMenu();
 				self closeInGameMenu();
-				self [[level.allies]]();
+				if (!self.cannot_play)
+					self [[level.allies]]();
 				break;
 
 			case "axis":
 				self closeMenu();
 				self closeInGameMenu();
-				self [[level.axis]]();
+				if (!self.cannot_play)
+					self [[level.axis]]();
 				break;
 
 			case "autoassign":
@@ -172,9 +196,17 @@ onMenuResponse()
 		}
 		else if(menu == game["menu_weapon_allies"] || menu == game["menu_weapon_axis"])
 		{
-			self closeMenu();
-			self closeInGameMenu();
-			self [[level.weapon]](response);
+			if (response == "changeteam") {
+				self closeMenu();
+				self closeInGameMenu();
+				self openMenu(game["menu_team"]);
+			}
+			else {
+				self closeMenu();
+				self closeInGameMenu();
+				self [[level.weapon]](response);
+			}
+			maps\mp\gametypes\_anarchic::checkSnipers();
 		}
 		else if(!level.xenon)
 		{
@@ -184,13 +216,6 @@ onMenuResponse()
 				maps\mp\gametypes\_quickmessages::quickstatements(response);
 			else if(menu == game["menu_quickresponses"])
 				maps\mp\gametypes\_quickmessages::quickresponses(response);
-			else if(menu == game["menu_serverinfo"] && response == "close")
-			{
-				self closeMenu();
-				self closeInGameMenu();
-				self openMenu(game["menu_team"]);
-				self.pers["skipserverinfo"] = true;
-			}
 		}
 	}
 }
