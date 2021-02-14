@@ -7,7 +7,7 @@ main()
 	maps\mp\mp_mariupol_v2_elevator::main();
 	maps\mp\mp_mariupol_v2_doors::main();
 	maps\mp\mp_mariupol_v2_stuka::main();
-	maps\mp\mp_mariupol_v2_toilet::main();
+	//maps\mp\mp_mariupol_v2_toilet::main();
 	maps\mp\mp_mariupol_v2_bomb::main();
 	maps\mp\mp_mariupol_v2_shields::main();
 	maps\mp\mp_mariupol_v2_mortars::main();

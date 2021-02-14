@@ -3,15 +3,21 @@ main()
 	maps\mp\mp_harbor_fx::main();
 	maps\mp\_load::main();
 
-	//setExpFog(0.00045, .58, .57, .57, 0);
 	setExpFog(0.00028, .58, .57, .57, 0);
 	ambientPlay("ambient_russia");
-	
-	game["allies"] = "russian";
+
+	if (getcvarint("scr_avsg") != 1) {
+		game["allies"] = "russian";
+		game["russian_soldiertype"] = "padded";	
+	}
+	else {
+		game["allies"] = "american";
+		game["american_soldiertype"] = "normandy";
+	}
+
 	game["axis"] = "german";
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	game["russian_soldiertype"] = "padded";
 	game["german_soldiertype"] = "winterlight";
 
 	setcvar("r_glowbloomintensity0","1");

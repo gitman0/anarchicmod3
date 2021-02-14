@@ -57,4 +57,10 @@ main()
 		level.radio[11] = spawn("script_model", (1180.95, 949.952, -30));
 		level.radio[11].angles = (0, 84.2, 0);
 	}
+	if (getcvar("g_gametype") == "ctf")
+	{
+		allied_flag = getentarray("allied_flag", "targetname");
+		for (i=0;i<allied_flag.size;i++)
+			allied_flag[i].origin = (889, -202, -103);
+	}
 }

@@ -6,11 +6,15 @@ main()
 	setExpFog(0.00015, 0.15, 0.14, 0.13, 0);
 	ambientPlay("ambient_france");
 
-	game["allies"] = "american";
+	if (getcvarint("scr_rifles_only") != 1) {
+		game["allies"] = "american";
+		game["american_soldiertype"] = "normandy";
+	}
+	else maps\mp\gametypes\_anarchic::setRandomAllied();
+
 	game["axis"] = "german";
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	game["american_soldiertype"] = "normandy";
 	game["german_soldiertype"] = "normandy";
 
 	setcvar("r_glowbloomintensity0","1");
@@ -19,7 +23,7 @@ main()
 
 	if(getcvar("g_gametype") == "hq")
 	{
-		level.radio = [];
+	level.radio = [];
 		level.radio[0] = spawn("script_model", (-3513.59, -1361.81, -35.665));
 		level.radio[0].angles = (359.639, 269.643, 0.227865);
 
@@ -40,26 +44,26 @@ main()
 
 		level.radio[6] = spawn("script_model", (841.004, 13.4426, 181.043));
 		level.radio[6].angles = (4.21794, 231.32, 2.38887);
-
+		
 		level.radio[7] = spawn("script_model", (-323.344, 1183.38, 103.457));
 		level.radio[7].angles = (1.56637, 300.056, 2.24019);
-
+		
 		level.radio[8] = spawn("script_model", (1231.23, -199.082, 211.32));
 		level.radio[8].angles = (0.169897, 294.644, 0.388363);
-
+		
 		level.radio[9] = spawn("script_model", (-2792.75, 1316.81, -15));
 		level.radio[9].angles = (0, 135.929, 0);
-
+		
 		level.radio[10] = spawn("script_model", (-2907.03, -866.834, 27));
 		level.radio[10].angles = (0, 11.929, 0);
-
+		
 		level.radio[11] = spawn("script_model", (-1125.98, -425.723, -57.8988));
 		level.radio[11].angles = (0.789996, 292.829, 1.08254);
-
+		
 		level.radio[12] = spawn("script_model", (-538.039, -82.2693, 56.7781));
 		level.radio[12].angles = (1.50739, 310.182, -1.78412);
-	}
 
+	}
 	level.killtriggers[0] = spawnstruct();
 	level.killtriggers[0].origin = (-2808, 1308, 241);
 	level.killtriggers[0].radius = 280;

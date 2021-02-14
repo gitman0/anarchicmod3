@@ -4,14 +4,22 @@ main()
 	maps\mp\_load::main();
 
 	setExpFog(0.0001, 0.55, 0.6, 0.55, 0);
+//	setCullFog(0, 16500, 0.55, 0.6, 0.55, 0);
 	ambientPlay("ambient_france");
 
-	game["allies"] = "american";
+	if (getcvarint("scr_rifles_only") != 1) {
+		game["allies"] = "american";
+		game["american_soldiertype"] = "normandy";
+	}
+	else maps\mp\gametypes\_anarchic::setRandomAllied();
+
 	game["axis"] = "german";
+	game["german_soldiertype"] = "normandy";
+
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	game["american_soldiertype"] = "normandy";
-	game["german_soldiertype"] = "normandy";
+
+
 
 	setCvar("r_glowbloomintensity0", ".25");
 	setCvar("r_glowbloomintensity1", ".25");
@@ -37,7 +45,6 @@ main()
 		level.radio[7] = spawn("script_model", (478.177, 1983.88, -93.9855));
 		level.radio[7].angles = (0, 136, 0);
 	}
-
 	level.killtriggers[0] = spawnstruct();
 	level.killtriggers[0].origin = (976, 600, 316);
 	level.killtriggers[0].radius = 375;

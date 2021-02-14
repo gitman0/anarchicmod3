@@ -90,6 +90,12 @@ main(){
        thread monitorBoat(4);
        thread monitorBoat(5);
        thread bombingRun();
+	if (getcvar("g_gametype") == "ctf")
+	{
+		axis_flag = getentarray("axis_flag", "targetname");
+		for (i=0;i<axis_flag.size;i++)
+			axis_flag[i].origin = (-228, 3916, 385);
+	}
 }
 
 //[Nip] Fix the attacker's spawns, so they don't spawn in the ocean

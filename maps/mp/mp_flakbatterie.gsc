@@ -1,14 +1,18 @@
 main()
 {
-       maps\mp\mp_flakbatterie_fx::main();
-       maps\mp\_load::main(); 
+	ambientPlay("ambient_mp_flakbatterie");
+	setExpFog(0.0003, 0.30, 0.31, 0.34, 0);
 
-ambientPlay("ambient_mp_flakbatterie");
+	maps\mp\mp_flakbatterie_fx::main();
+	maps\mp\_load::main(); 
 
-setExpFog(0.0001, 0.30, 0.31, 0.34, 0);
+	game["allies"] = "american"; // or british or russian
+	game["axis"] = "german";
+	game["american_soldiertype"] = "normandy";
+	game["german_soldiertype"] = "normandy";
 
-game["allies"] = "american"; // or british or russian
-game["axis"] = "german";
+	game["attackers"] = "allies";
+	game["defenders"] = "axis";
 
 	game["sd_attackers_obj_text"] = &"SD_OBJ_ATTACKERS";
 	game["sd_defenders_obj_text"] = &"SD_OBJ_DEFENDERS";
@@ -18,7 +22,7 @@ game["axis"] = "german";
 	setcvar("r_glowskybleedintensity0",".4");
 
 	if(getcvar("g_gametype") == "hq")
-      {
+	{
 		level.radio = [];
 		level.radio[0] = spawn("script_model", (-940.818, -1780.13, 50));
 		level.radio[0].angles = (0, 18.3, 0);
@@ -46,13 +50,6 @@ game["axis"] = "german";
 
 		level.radio[8] = spawn("script_model", (3582.13, -1965.9, 56));
 		level.radio[8].angles = (0, 256.8, 0);
-      }
+	}
 
-game["american_soldiertype"] = "normandy";
-game["german_soldiertype"] = "normandy";
-
-game["attackers"] = "allies";
-game["defenders"] = "axis";
-
-
- }
+}

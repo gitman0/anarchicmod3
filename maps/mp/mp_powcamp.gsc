@@ -1,4 +1,3 @@
-#include maps\mp\_utility;
 main()
 {
 	maps\mp\_load::main();
@@ -7,11 +6,11 @@ main()
 //	setCullFog(0, 16500, 0.55, 0.6, 0.55, 0);
 	ambientPlay("ambient_mp_powcamp");
 
-	game["allies"] = "russian";
+	game["allies"] = "american";
 	game["axis"] = "german";
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	game["russian_soldiertype"] = "coats";
+	game["american_soldiertype"] = "normandy";
 	game["german_soldiertype"] = "normandy";
 
 	setCvar("r_glowbloomintensity0", ".25");
@@ -38,9 +37,4 @@ main()
 	level.radio[7] = spawn("script_model", (-261, -548, 8)); 
 	level.radio[7].angles = (0, 0, 0);
 	}
-
-	if(getcvar("scr_allow_turrets") != "" && getcvarint("scr_allow_turrets") < 1) 
-	{ 
-		deletePlacedEntity("weapon_mp44_mp");
-	} 
 }

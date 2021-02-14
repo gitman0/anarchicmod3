@@ -252,6 +252,9 @@ changeTeam(team)
 	self.pers["spawnweapon"] = undefined;
 	self.pers["savedmodel"] = undefined;
 	self.sessionteam = self.pers["team"];
+
+	if (isdefined(self.pers["flag_caps"]))
+		self.pers["flag_caps"] = 0;
 	
 	// update spectator permissions immediately on change of team
 	self maps\mp\gametypes\_spectating::setSpectatePermissions();
@@ -375,6 +378,9 @@ CountPlayers()
 
 addTestClients()
 {
+        if (getcvar("g_gametype") == "ctf" && isdefined(game["matchstarted"]) && !game["matchstarted"])
+                return;
+
 	wait 5;
 
 	for(;;)

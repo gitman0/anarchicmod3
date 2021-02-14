@@ -65,9 +65,9 @@ main()
 	if (level.use_raviradmin) {
 		level._effect["bombfire"] = loadfx("fx/props/barrelexp.efx");
 	}
-	level.teamkill_tier1 = cvardef("scr_teamkill_tier1", 5, 0, 999, "int");
-	level.teamkill_tier2 = cvardef("scr_teamkill_tier2", 10, (level.teamkill_tier1+1), 999, "int");
-	level.teamkill_tier3 = cvardef("scr_teamkill_tier3", 300, 0, 999, "int");
+	level.teamkill_tier1	= cvardef("scr_teamkill_tier1", 5, 0, 999, "int");
+	level.teamkill_tier2	= cvardef("scr_teamkill_tier2", 10, (level.teamkill_tier1+1), 999, "int");
+	level.teamkill_tier3	= cvardef("scr_teamkill_tier3", 300, 0, 999, "int");
 
 	level.show_healthbar	= cvardef("scr_show_healthbar", 0, 0, 1, "int");
 	level.shellshock	= cvardef("scr_shellshock", 1, 0, 1, "int");
@@ -75,14 +75,6 @@ main()
 	level.show_rulehud	= cvardef("scr_show_rules", 1, 0, 1, "int");
 
 	level.antiflop		= cvardef("scr_antiflop", 1, 0, 1, "int");
-
-	level.server_moved	= getcvar("scr_server_moved");
-	if (level.server_moved == "")
-		level.server_moved = undefined;
-
-	//level.server_moving	= cvardef("scr_server_moving", 0, 0, 1, "int");
-	//if (level.server_moving)
-	//	level.server_moving_n = &"^1ATTENTION^7! This server will be moving Oct 20th! Visit the forums for details!";
 
 	level.spawn_assist	= cvardef("scr_spawn_assist", 0, 0, 99, "int");
 	level.static_crosshair	= cvardef("scr_static_crosshair", 0, 0, 1, "int");
@@ -94,6 +86,29 @@ main()
 	level.anarchic_debug	= getcvarint("anarchic_debug");
 
 	level.allow_turrets	= cvardef("scr_allow_turrets", 1, 0, 1, "int");
+	level.ctf_sudden_death	= cvardef("scr_ctf_sudden_death", 1, 0, 1, "int");
+
+	level.server_moving	= cvardef("scr_server_moving", 0, 0, 1, "int");
+	if (level.server_moving)
+	{
+		level.server_moving_ip = cvardef("scr_server_moving_ip", "0.0.0.0", "", "", "str");
+		level.redirect_delay = cvardef("scr_redirect_delay", 15, 0, 3600, "int");
+
+		// some overrides
+		level.ctf_startup_override = true;
+		level.show_rulehud = false;
+		level.show_kdhud = false;
+		level.show_teamscore = false;
+
+		level.server_moving_notif =[];
+		level.server_moving_notif[level.server_moving_notif.size] = &"^1ATTENTION^7!";
+		level.server_moving_notif[level.server_moving_notif.size] = &"This server is no longer at this IP and will be ^1decomissioned soon^7.";
+		level.server_moving_notif[level.server_moving_notif.size] = &"You will be automatically ^1redirected^7 to the new server in a few seconds.";
+		level.server_moving_notif[level.server_moving_notif.size] = &"Please add the new IP to your favorites with the ^1in-game^7 favorites menu after being redirected!";
+		level.server_moving_notif[level.server_moving_notif.size] = &"Visit www.anarchic-x.com for more details.";
+
+	}
+
 }
 
 Callback_StartGametype()
@@ -133,8 +148,13 @@ Callback_StartGametype()
 			precacheString(level.ruleset[i]);
 		if (level.spawn_assist > 1)
 			precacheString(&"AX_SPAWN_ASSIST");
-		//if (isdefined(level.server_moving_n))
-		//	precacheString(level.server_moving_n);
+		if (level.server_moving)
+		{
+			game["menu_clientcmd"] = "clientcmd";
+			precacheMenu(game["menu_clientcmd"]);
+			for (i=0;i<level.server_moving_notif.size;i++)
+				precacheString(level.server_moving_notif[i]);
+		}
 	}
 	game["objid_allies"] = 15;
 	game["objid_axis"] = 14;
@@ -146,7 +166,7 @@ Callback_StartGametype()
 	checksnipers();
 	thread modHud();
 	thread ruleHud();
-	//thread serverMoving();
+	thread serverMoving();
 	if (level.use_raviradmin) {
 		thread switchteam();
 		thread killum();
@@ -177,7 +197,10 @@ Callback_StartGametype()
 	}
 	setcvar("scr_offset", offset);	
 	if (level.gametype == "ctf")
+	{
 		thread fixflags(offset);
+		level.ctf_sudden_death_norespawn = false;
+	}
 	if (getcvar("debug") == "1")
 		showspawns();
 	//getmapdim();
@@ -197,6 +220,9 @@ Callback_StartGametype()
 
 	if (!level.allow_turrets)
 		thread delete_turrets();
+
+	shitlist_setup();
+
 }
 delete_turrets()
 {
@@ -233,96 +259,218 @@ fixflags(offset) {
 		axis_flags[i].basemodel.origin = axis_flags[i].basemodel.origin + (0, 0, offset);
 	}
 }
-server_moved() {
+redirectClient(redirect_delay) {
 	self endon("disconnect");
+
 	self.pers["team"] = "axis";
 	self [[level.spectator]]();
 	self.cannot_play = true;
+
+	self allowSpectateTeam("allies", false);
+	self allowSpectateTeam("axis", false);
+	self allowSpectateTeam("freelook", false);
+	self allowSpectateTeam("none", true);
+
+	redirect_str = "disconnect; wait 100; connect " + level.server_moving_ip + ";";
+	self setClientCvar("ui_ax_clientcmd", redirect_str);
+
+	wait redirect_delay;
+
+	self openMenuNoMouse(game["menu_clientcmd"]);
+
 	wait 0.05;
-	while(1) {
-		clientAnnouncement(self, "^1Attention!^7");
-		clientAnnouncement(self, "This server has ^1moved^7 to a faster host with NO lag! Use the following instructions to connect to the new server!");
-		wait 8;
-		clientAnnouncement(self, "The address for the new server is ^1" + level.server_moved);
-		clientAnnouncement(self, "Please update your ^3favorites^7 and your game server monitoring software!");
-		wait 8;
-		clientAnnouncement(self, "Open your console with the tilde key (~) and type ^3/connect " + level.server_moved);
-		wait 8;
-	}
 }
 serverMoving() {
 	level endon("intermission");
 	if (!level.server_moving)
 		return;
+
 	if (!isdefined(level.server_moving_hud))
+		level.server_moving_hud =[];
+
+	y_start = 140;
+	y_add   = 30;
+	y = y_start;
+
+	for (i=0;i<level.server_moving_notif.size;i++)
 	{
-		level.server_moving_hud = newHudElem();
-		level.server_moving_hud.archived = false;
-		level.server_moving_hud.x = 320;
-		level.server_moving_hud.y = 32;
-		level.server_moving_hud.alignx = "center";
-		level.server_moving_hud.aligny = "top";
-		level.server_moving_hud.fontscale = 0.9;
-		level.server_moving_hud setText(level.server_moving_n);
+		if (!isdefined(level.server_moving_hud[i]))
+		{
+			level.server_moving_hud[i] = newHudElem();
+			level.server_moving_hud[i].archived = false;
+			level.server_moving_hud[i].x = 320;
+			level.server_moving_hud[i].y = y;
+			level.server_moving_hud[i].alignx = "center";
+			level.server_moving_hud[i].aligny = "top";
+			level.server_moving_hud[i].fontscale = 1.5;
+			level.server_moving_hud[i] setText(level.server_moving_notif[i]);
+		}
+		y += y_add;
 	}
 }
+
 Callback_PlayerConnect()
 {
-	if (isdefined(level.server_moved))
-		self server_moved();
+	if (isdefined(level.server_moving) && level.server_moving)
+		self redirectClient(level.redirect_delay);
+
+	guid = self getGuid();
+	if (isdefined(game["matchstarted"]) && game["matchstarted"]) {
+		if (isdefined(level.lostplayer) && isdefined(level.lostplayer[guid]))
+		{
+			self.pers["kills"]	= level.lostplayer[guid].kills;
+			self.score		= level.lostplayer[guid].score;
+			self.deaths		= level.lostplayer[guid].deaths;
+			self.pers["team"]	= level.lostplayer[guid].team;
+			self.pers["headshots"]	= level.lostplayer[guid].headshots;
+			self.pers["melees"]	= level.lostplayer[guid].melees;
+			self.pers["flag_caps"]	= level.lostplayer[guid].flag_caps;
+			self.teamkills		= level.lostplayer[guid].teamkills;
+			self.muted		= level.lostplayer[guid].muted;
+			self.cannot_play	= level.lostplayer[guid].cannot_play;
+			if (isdefined(level.lostplayer[guid].weapon))
+				self.pers["weapon"] = level.lostplayer[guid].weapon;
+			self.onjoin_welcome_back = true;
+		}
+	}
 
 	if (!isdefined(self.kills))
 		self.kills = 0;
 	if (!isdefined(self.pers["kills"]))
 		self.pers["kills"] = 0;
-
-	self.pers["flag_caps"] = 0;
+	if (!isdefined(self.pers["flag_caps"]))
+		self.pers["flag_caps"] = 0;
+	if (!isdefined(self.pers["headshots"]))
+		self.pers["headshots"] = 0;
 
 	if (level.forcedownload)
 		self setClientCvar("cl_allowdownload", 1);
+
 	self checkName();
+
 	if (level.forcerate > 0) 
 		self setClientCvar("rate", level.forcerate);
 	self setClientCvar("cg_chattime", "12000");
+
 	//self thread disableRedCrosshair();
 	//self thread disableEnemyRadar();
+	//self thread tweakAmbientFix();
+
 	self thread oldHeadIcons();
 	self thread oldObjPoints();
 	self thread forceSayPos();
-	//self thread tweakAmbientFix();
 
 	if ((level.show_kdhud) && (level.gametype != "cnq"))
 		self thread miniscore_myscore();
 
-	self.teamkills = 0;
+	if (!isdefined(self.teamkills))
+		self.teamkills = 0;
 	self.teamkill_tier = 0;
 	self.team_damage = 0;
 	self.teamkill_timeout = 3;
-	self.cannot_play = false;
+	if (!isdefined(self.cannot_play))
+		self.cannot_play = false;
 	self.teamkill_counter = false;
+
 	self.spawn_assist = false;
-	self.muted = false;
-	self.pers["headshots"] = 0;
+
+	if (!isdefined(self.muted))
+		self.muted = false;
+
 	self.pers["hop_denial"] = 0.0;
 	self thread hopwatch();
 	self.hopping = false;
 
-	self thread guid_shitlist();
+	self thread shitlist();
 }
-guid_shitlist()
+
+rememberinfo(player)
+{
+	if (level.gametype != "ctf")
+		return;
+
+	if (isdefined(game["matchstarted"]) && !game["matchstarted"])
+		return;
+
+	if (!isdefined(player.pers["team"]) || !isdefined(player.deaths) || !isdefined(player.score) || !isdefined(player.pers["kills"]))
+		return;
+
+	if (!isdefined(level.lostplayer))
+		level.lostplayer = [];
+
+	guid = player getGuid();
+
+	if (isdefined(level.lostplayer[guid]))
+		level.lostplayer[guid] = undefined;
+
+	level.lostplayer[guid] = spawnstruct();
+
+	level.lostplayer[guid].score = player.score;
+	level.lostplayer[guid].deaths = player.deaths;
+	level.lostplayer[guid].team = player.pers["team"];
+	level.lostplayer[guid].kills = player.pers["kills"];
+	level.lostplayer[guid].headshots = player.pers["headshots"];
+	level.lostplayer[guid].melees = player.pers["melees"];
+	level.lostplayer[guid].flag_caps = player.pers["flag_caps"];
+	if (isdefined(player.pers["weapon"]))
+		level.lostplayer[guid].weapon =	player.pers["weapon"];
+	level.lostplayer[guid].teamkills = player.teamkills;
+	level.lostplayer[guid].muted = player.muted;
+	level.lostplayer[guid].cannot_player = player.cannot_play;
+
+	level thread timedundefined(guid, 600);
+}
+
+timedundefined(idx, time)
+{
+        wait time;
+        level.lostplayer[idx] = undefined;
+}
+
+shitlist_setup()
+{
+	level.shitlist = [];
+
+	// Shanny
+	//level.shitlist[445041] = spawnstruct();
+	//level.shitlist[445041].name = "^1|^9ax^1|^9 Shanny";
+
+	// DangerUS
+	//level.shitlist[664286] = spawnstruct();
+	//level.shitlist[664286].chat = "blocked";
+}
+
+shitlist()
+{
+	guid = self getGUID();
+	if (!isdefined(level.shitlist[guid]))
+		return;
+	if (isdefined(level.shitlist[guid].name))
+		self thread shitlist_name(level.shitlist[guid].name);
+	if (isdefined(level.shitlist[guid].chat) && level.shitlist[guid].chat == "blocked")
+		self thread shitlist_chat();
+}
+
+shitlist_name(name)
 {
 	self endon("disconnect");
-	shitlist = [];
-	shitlist[445041] = "^1|^9ax^1|^9 Shanny";
-	myguid = self getGUID();
-	if (!isdefined(shitlist[myguid]))
-		return;
 	for (;;)
 	{
-		self setclientcvar("name", shitlist[myguid]);
+		self setclientcvar("name", name);
 		wait 1;
 	}
 }
+
+shitlist_chat()
+{
+	self endon("disconnect");
+	for (;;)
+	{
+		self setclientcvar("cg_chattime", 0);
+		wait 1;
+	}
+}
+
 hopwatch()
 {
 	self endon("disconnect");
@@ -354,6 +502,7 @@ hopwatch()
 		wait 0.05;
 	}
 }
+
 hop_deny_notify()
 {
 	self endon("disconnect");
@@ -369,6 +518,7 @@ hop_deny_notify()
 		}
 	}
 }
+
 hopwatch2()
 {
 	self.hopping = false;
@@ -443,6 +593,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	if (isdefined(self.obj_id))
 		objective_delete(self.obj_id);
 }
+
 pickupFlag(player) {
 	player endon("flag_dropped");
 	player endon("killed_player");
@@ -454,12 +605,14 @@ pickupFlag(player) {
 	objective_team(obj_id, self.pers["team"]);
 	player thread dropFlag();
 }
+
 dropFlag() {
 	self endon("killed_player");
 	self waittill("flag_dropped");
 	objective_delete(self.obj_id);
 	self.obj_id = undefined;
 }
+
 friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
 {
 	if(level.friendlyfire == "0")
@@ -698,6 +851,8 @@ spawnPlayer() {
 
 		if (!isdefined(self.pers["seen_onjoin"]))
 			self.pers["seen_onjoin"] = false;
+		if (!isdefined(self.onjoin_welcome_back))
+			self.onjoin_welcome_back = false;
 
 		if (!self.pers["seen_onjoin"]) {
 			if (level.patch_announce != "")
@@ -705,15 +860,25 @@ spawnPlayer() {
 				clientAnnouncement(self, "^1ATTENTION ^7" + nocolors(self.name) + "!");
 				clientAnnouncement(self, "This server will be switching to ^1PATCH 1.3^7 on the 2nd of July! Visit ^3anarchic-x.com^7 to download.");
 			}
-			else {	
-				clientAnnouncement(self, "Welcome " + nocolors(self.name) + "^7!");
-				clientAnnouncement(self, " ");
-				clientAnnouncement(self, &"AX_MOTD_DEFAULT");
-				clientAnnouncement(self, "Remember, friendly fire is ^1ON^7, don't shoot your teammates!");
-				//clientAnnouncement(self, "Join the forums and review the custom maps - www.^1anarchic-x^7.com");
-				//clientAnnouncement(self, "^1Attention^7!");
-				//clientAnnouncement(self, "This server will be moving to Chicago on October 20th!");
-				//clientAnnouncement(self, "Check the forums for the new IP address! We need your help!");
+			else {
+				// override
+				clientAnnouncement(self, "Welcome to the NEW ^1anarchic^7CTF");
+				clientAnnouncement(self, "Use the game menu to add the new server to your favorites");
+				clientAnnouncement(self, "Thanks for all your support!");
+
+/*				if (!self.onjoin_welcome_back)
+				{
+					clientAnnouncement(self, "Welcome " + nocolors(self.name) + "^7!");
+					clientAnnouncement(self, " ");
+					clientAnnouncement(self, &"AX_MOTD_DEFAULT");
+					clientAnnouncement(self, "Remember, friendly fire is ^1ON^7, don't shoot your teammates!");
+				}
+				else {
+					clientAnnouncement(self, "Welcome back " + nocolors(self.name) + "^7!");
+					clientAnnouncement(self, " ");
+					clientAnnouncement(self, "Your previous score has been restored.");
+				}
+*/
 			}
 		}
 		self.pers["seen_onjoin"] = true;
@@ -791,14 +956,120 @@ spawnPlayer() {
 
 	self thread make_crosshair();
 	if (level.gametype == "ctf")
+	{
 		self thread maps\mp\gametypes\_spectating::setSpectatePermissions();
+		//self thread idleWatchdog();
+	}
 }
+/*
+idleWatchdog()
+{
+	self endon("killed_player");
+
+	idle_limit = spawnstruct();
+	idle_limit.warn = int;
+	idle_limit.spec = int;
+	idle_kick = int; // do we want this?
+	origin = self.origin;
+	angles = self getplayerangles();
+	last_warn = 0;
+	while (conditions)
+	{
+		wait 5;
+		origin_latest = self.origin;
+		angles_latest = self getplayerangles();
+		if (origin == origin_latest) && (angles = angles_latest)
+			// then we haven't moved at all
+			idle_time++;
+		if (idle_time > idle_kick)
+			self idle_kick();
+		else if (idle_time > idle_spec)
+			//self idle_spec();
+			[[level.spawnspectator]]();
+		else if 
+			// warn player: "Warning: You will be forced to spectator in (idle_spec - idle_time) seconds"
+			// but we only want to warn them every X seconds instead of every 5
+			
+		// new values become old values
+		origin = origin_latest;
+		angles = angles_latest;
+	}
+	return;
+}
+*/
+checkTimeLimit()
+{
+	if(level.timelimit <= 0)
+		return;
+
+	timepassed = (getTime() - level.starttime) / 1000;
+	timepassed = timepassed / 60.0;
+
+	if(timepassed < level.timelimit)
+		return;
+
+	if(level.mapended)
+		return;
+
+	if ((level.ctf_sudden_death) && (getcvar("g_gametype") == "ctf"))
+	{
+		players = maps\mp\gametypes\_teams::CountPlayers();
+		if (players["allies"] > 1 && players["axis"] > 1)
+		{
+			score_axis = getTeamScore("axis");
+			score_allies = getTeamScore("allies");
+
+			if (score_axis > score_allies)
+			{
+				score_diff = score_axis - score_allies;
+				winning_team = "axis";
+				losing_team = "allied";
+			}
+			else {
+				score_diff = score_allies - score_axis;
+				winning_team = "allied";
+				losing_team = "axis";
+			}
+
+			if (!flagAtHome("axis") || !flagAtHome("allied"))
+			{
+				level.clock.color = (1, 0, 0);
+				if (score_diff == 0)
+				{
+					// disable respawns
+					level.ctf_sudden_death_norespawn = true;
+					return;
+				}
+				if (score_diff == 1 && !flagAtHome(winning_team))
+					return;
+			}
+		}
+	}
+
+	level.mapended = true;
+
+	if(!level.splitscreen)
+		iprintln(&"MP_TIME_LIMIT_REACHED");
+
+	level thread [[level.endGameConfirmed]]();
+}
+
+flagAtHome(team)
+{
+	ent = team + "_flag";
+	flag = getent(ent, "targetname");
+	if (flag.origin != flag.home_origin)
+		return false;
+	else return true;
+}
+
 endmap()
 {
 	pastrotation();
 	if (level.awe_mapvote)
 		maps\mp\gametypes\_mapvote::Initialise();
 }
+
 pastrotation() {
 	limit = cvardef("scr_past_rotation_mem", 10, 0, 30, "int");
 	r = getcvar("scr_past_rotation");
@@ -829,6 +1100,7 @@ pastrotation() {
 		setcvar("scr_past_rotation", past);
 	}
 }
+
 make_crosshair()
 {
 	if (!level.static_crosshair)
@@ -843,6 +1115,7 @@ make_crosshair()
 		self.crosshair setshader(level.crosshair, 64, 64);
 	}
 }
+
 check_ax()
 {
 	//self iprintln(nocolors(name));
@@ -850,8 +1123,8 @@ check_ax()
 	nc = nocolors(self.name);
 	if (nc.size > tags.size)
 		return;
-		
 }
+
 nocolors(str)
 {
 	tmp = "";
@@ -861,14 +1134,15 @@ nocolors(str)
 		else tmp = tmp + str[i];
 	}
 	return tmp;
-			
 }
+
 isnum(x)
 {
 	if (x >= 0 || x <= 0)
 		return true;
 	else return false;
 }
+
 isturret(w)
 {
 	switch(w)
@@ -887,6 +1161,7 @@ isturret(w)
 /* spawn assist
 	06/01/08; added cancellation of spawn assist if player discharges their weapon
 */		
+
 spawn_assist()
 {
 	self endon("killed_player");
@@ -900,6 +1175,7 @@ spawn_assist()
 	wait level.spawn_assist;
 	self spawn_assist_cleanup();
 }
+
 spawn_assist_discharge()
 {
 	self endon("disconnect");
@@ -923,12 +1199,14 @@ spawn_assist_discharge()
 		self spawn_assist_cleanup();
 	}
 }			
+
 spawn_assist_cleanup()
 {
 	if (isplayer(self))
 		self.spawn_assist = false;
 	self spawn_assist_hud_destroy();
 }
+
 spawn_assist_hud() 
 {
 	if (!isdefined(self.spawn_assist_display_title)) {
@@ -956,16 +1234,14 @@ spawn_assist_hud()
 		self.spawn_assist_display_sec setTimer(level.spawn_assist);
 	}
 }
+
 spawn_assist_hud_destroy()
 {
 	if (isdefined(self.spawn_assist_display_title))
 		self.spawn_assist_display_title destroy();
 	if (isdefined(self.spawn_assist_display_sec))
 		self.spawn_assist_display_sec destroy();
-
 }
-
-
 
 start_antiflop() {
 	self endon("killed_player");
@@ -1017,6 +1293,7 @@ antiflop() {
 		self.prior_stance = self getstance(0);
 	}
 }
+
 isProne() {
 	switch (self getStance(0)) {
 		case "prone":
@@ -1025,6 +1302,7 @@ isProne() {
 			return false;
 	}
 }
+
 isSniper(weapon) {
 	switch (weapon) {
 		case "enfield_scope_mp":
@@ -1036,6 +1314,7 @@ isSniper(weapon) {
 			return false;
 	}
 }
+
 teamkill_counter_update() {
 	self endon("killed_player");
 	if (!isalive(self) || !isplayer(self))
@@ -1051,6 +1330,7 @@ teamkill_counter_update() {
 	wait 3;
 	self thread teamkill_counter_fade(0, 1);
 }		
+
 teamkill_counter_fade(in_out, time) {
 	self endon("killed_player");
 	if (!isdefined(self.teamkill_display) || !isdefined(self.teamkill_display_counter))
@@ -1061,6 +1341,7 @@ teamkill_counter_fade(in_out, time) {
 	self.teamkill_display_counter.alpha = in_out;
 	self.teamkill_counter = false;
 }
+
 teamkill_counter_destroy() {
 	self.teamkill_counter = false;
 	if (isdefined(self.teamkill_display))
@@ -1068,6 +1349,7 @@ teamkill_counter_destroy() {
 	if (isdefined(self.teamkill_display_counter))
 		self.teamkill_display_counter destroy();
 }
+
 disableRedCrosshair() {
 	self endon("disconnect");
 	for (;;) 
@@ -1229,6 +1511,7 @@ modHud() {
 	}
 	level.mod_title setText(level.modstr);
 }
+
 // shows the server rules
 ruleHud() {
 	level endon("intermission");
@@ -1259,6 +1542,7 @@ ruleHud() {
 		}
 	}
 }
+
 /////////////////////////////////////////
 // code loosely based on PRM for CoD 1.1
 /////////////////////////////////////////
@@ -1334,7 +1618,6 @@ dropsniper(weapon, team)
 		return true;
 
 	count = 0;
-
 	no_weapon = 0;
 
 	lplayers = getentarray("player", "classname");
@@ -1369,6 +1652,7 @@ limitShotgun(axis_limit, allied_limit, axis_count, allied_count) {
 		updateAllowedByTeam("allies", "shotgun", 0);
 	else updateAllowedByTeam("allies", "shotgun", 1);
 }
+
 updateAllowedByTeam(team, weapon, val) {
 	players = getentarray("player", "classname");
 	for(i = 0; i < players.size; i++) {
@@ -1376,6 +1660,7 @@ updateAllowedByTeam(team, weapon, val) {
 			players[i] setClientCvar("ui_allow_" + weapon, val);
 	}
 }
+
 limitweapon(weapon, count, limit) {
 	if (count < limit) {
 		if (getcvarint("scr_allow_" + weapon) != 1)
@@ -1387,9 +1672,6 @@ limitweapon(weapon, count, limit) {
 	}
 	maps\mp\gametypes\_weapons::updateallowed();
 }
-
-
-
 
 // some AWE here	
 shownextmap() {
@@ -1413,6 +1695,7 @@ shownextmap() {
 		wait level.nextmap_delay;
 	}
 }
+
 localizedGametype(gt) {
 	switch (gt) {
 		case "tdm": return &"MPUI_TEAM_DEATHMATCH";
@@ -1474,8 +1757,6 @@ miniscore_seps() {
 	sep_y = -208;
 	//sep_x = 616;
 	//sep_y = 32;
-
-
 
 	level.kdhud_sep = [];
 	level.kdhud_ratio = [];

@@ -327,6 +327,9 @@ Callback_PlayerDisconnect()
 
 	lpselfnum = self getEntityNumber();
 	lpGuid = self getGuid();
+
+	maps\mp\gametypes\_anarchic::rememberinfo(self);
+
 	logPrint("Q;" + lpGuid + ";" + lpselfnum + ";" + self.name + "\n");
 }
 
@@ -471,7 +474,11 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			}
 
 			if(isdefined(attacker.friendlydamage))
-				attacker iprintln(&"MP_FRIENDLY_FIRE_WILL_NOT");
+			{
+				attacker iprintlnbold(&"MP_FRIENDLY_FIRE_WILL_NOT");
+				if (attacker.teamkills >= level.teamkill_tier1)
+					attacker.score--;
+			}
 		}
 		else
 		{
@@ -520,7 +527,10 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	thread maps\mp\gametypes\_deathicons::addDeathicon(body, self.clientid, self.pers["team"], 5);
 
 	delay = 2;	// Delay the player becoming a spectator till after he's done dying
-	self thread respawn_timer(delay);
+
+	if (!level.ctf_sudden_death_norespawn)
+		self thread respawn_timer(delay);
+	else self.WaitingToSpawn = true;
 
 	wait delay;	// ?? Also required for Callback_PlayerKilled to complete before respawn/killcam can execute
 
@@ -672,6 +682,7 @@ respawn()
 {
 	self endon("disconnect");
 	self endon("end_respawn");
+	level endon("intermission");
 
 	if(!isDefined(self.pers["weapon"]))
 		return;
@@ -794,6 +805,9 @@ startGame()
 {
 	if (!isdefined(game["matchstarted"]))
 	{
+		if (isdefined(level.ctf_startup_override))
+			return;
+
 		if (isdefined(level.ctf_warmup))
 			warmup = level.ctf_warmup;
 		else warmup = 50;
@@ -825,7 +839,7 @@ startGame()
 	
 		for(;;)
 		{
-			checkTimeLimit();
+			maps\mp\gametypes\_anarchic::checkTimeLimit();
 			wait 1;
 		}
 	}
@@ -1514,6 +1528,8 @@ menuAllies()
 		self.pers["team"] = "allies";
 		self.pers["weapon"] = undefined;
 		self.pers["savedmodel"] = undefined;
+		if (isdefined(self.pers["flag_caps"]))
+			self.pers["flag_caps"] = 0;
 
 		self setClientCvar("ui_allow_weaponchange", "1");
 		self setClientCvar("g_scriptMainMenu", game["menu_weapon_allies"]);
@@ -1541,6 +1557,8 @@ menuAxis()
 		self.pers["team"] = "axis";
 		self.pers["weapon"] = undefined;
 		self.pers["savedmodel"] = undefined;
+		if (isdefined(self.pers["flag_caps"]))
+			self.pers["flag_caps"] = 0;
 
 		self setClientCvar("ui_allow_weaponchange", "1");
 		self setClientCvar("g_scriptMainMenu", game["menu_weapon_axis"]);

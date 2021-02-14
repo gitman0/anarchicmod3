@@ -8,11 +8,11 @@ main()
 	setExpFog(0.00045, .58, .57, .57, 0);
 	ambientPlay("ambient_mp_borisovka");
 	
-	game["allies"] = "russian";
+	game["allies"] = "american";
 	game["axis"] = "german";
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	game["russian_soldiertype"] = "padded";
+	game["american_soldiertype"] = "normandy";
 	game["german_soldiertype"] = "winterlight";
 
 	setcvar("r_glowbloomintensity0","1");

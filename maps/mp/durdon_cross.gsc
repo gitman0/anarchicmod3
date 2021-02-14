@@ -22,7 +22,10 @@ main()
 	 setcvar("r_glowbloomintensity1","1");
 	 setcvar("r_glowskybleedintensity0",".25");
 
-
+	badmg = getentarray("misc_turret", "classname");
+	for (i=0;i<badmg.size;i++)
+		if (badmg[i].origin == (66, 486, 184))
+			badmg[i] delete();
 
 }
 

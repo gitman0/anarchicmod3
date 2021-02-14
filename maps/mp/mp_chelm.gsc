@@ -75,8 +75,8 @@ main(){
 	//Random passage block loader
 	level thread doRandom();
 	
-	level thread maps\mp\chelm_flak::main();
-	level thread maps\mp\chelm_mortar::main();
+	//level thread maps\mp\chelm_flak::main();
+	//level thread maps\mp\chelm_mortar::main();
 }
 
 //bomb at the church that explodes on damage and makes a big hole

@@ -1,7 +1,7 @@
 main()
 {
-	maps\mp\_load::main();
 	maps\mp\mp_depot_fx::main();
+	maps\mp\_load::main();
 
 	setExpFog(0.0001, 0.55, 0.7, 0.6, 0);
 	ambientPlay("ambient_france");
@@ -56,5 +56,10 @@ main()
 		level.radio[10] = spawn("script_model", (-187.743, 489.327, 63));
 		level.radio[10].angles = (0, 180, 0);
 	}
-
+	if (getcvar("g_gametype") == "ctf")
+	{
+		axis_flag = getentarray("axis_flag", "targetname");
+		for (i=0;i<axis_flag.size;i++)
+			axis_flag[i].origin = (-618,-3059,17);
+	}
 }

@@ -5,11 +5,20 @@ main()
 
 	ambientPlay("ambient_africa");
 
-	game["allies"] = "british";
+	if (getcvarint("scr_avsg") != 1) {
+		game["allies"] = "british";
+		game["british_soldiertype"] = "africa";
+	}
+	else {
+		game["allies"] = "american";
+		game["american_soldiertype"] = "normandy";
+	}
+
+
 	game["axis"] = "german";
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	game["british_soldiertype"] = "africa";
+
 	game["german_soldiertype"] = "africa";
 
 	setcvar("r_glowbloomintensity0","0");

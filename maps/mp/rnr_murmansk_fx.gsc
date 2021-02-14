@@ -1,7 +1,7 @@
 main()
 {
 	precacheFX();
-	ambientFX();
+	//ambientFX();
 	level.scr_sound["flak88_explode"]	= "flak88_explode"; 
 }
 
