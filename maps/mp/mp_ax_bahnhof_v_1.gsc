@@ -7,7 +7,7 @@ main()
         maps\mp\mp_ax_bahnhof_v_1_snow::main();
         maps\mp\mp_ax_bahnhof_v_1_trigger::main();
 	
-        setCullFog(0, 2000, .562, .57, .59, 0);
+        setCullFog(0, 4000, .562, .57, .59, 0);
 	ambientPlay("ambient_russia");
 
 	game["allies"] = "russian";
@@ -49,3 +49,4 @@ main()
 	level.radio[7].angles = (0, 90, 0);
        }
 }
+
