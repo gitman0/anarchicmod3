@@ -7,15 +7,11 @@ main()
 	setExpFog(0.000125, 0.7, 0.85, 1.0, 0);
 	ambientPlay("ambient_france");
 
-	if (getcvarint("scr_rifles_only") != 1) {
-		game["allies"] = "american";
-		game["american_soldiertype"] = "normandy";
-	}
-	else maps\mp\gametypes\_anarchic::setRandomAllied();
-
+	game["allies"] = "american";
 	game["axis"] = "german";
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
+	game["american_soldiertype"] = "normandy";
 	game["german_soldiertype"] = "normandy";
 
 	setcvar("r_glowbloomintensity0","1");

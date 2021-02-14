@@ -79,7 +79,7 @@ onMenuResponse()
 			self closeMenu();
 			self closeInGameMenu();
 
-			maps\mp\gametypes\_anarchic::checkSnipers();
+			anarchicmod\weapons::checkSnipers();
 
 			if(menu == game["menu_team"])
 			{
@@ -159,7 +159,7 @@ onMenuResponse()
 		}
 		else if(menu == game["menu_team"])
 		{
-			outofbalance = self maps\mp\gametypes\_anarchic::isBalanced(response);
+			outofbalance = self anarchicmod\anarchic::isBalanced(response);
 			if (outofbalance) {
 				self closeMenu();
 				self closeInGameMenu();
@@ -206,7 +206,7 @@ onMenuResponse()
 				self closeInGameMenu();
 				self [[level.weapon]](response);
 			}
-			maps\mp\gametypes\_anarchic::checkSnipers();
+			anarchicmod\weapons::checkSnipers();
 		}
 		else if(!level.xenon)
 		{

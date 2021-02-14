@@ -1,3 +1,5 @@
+#include anarchicmod\utility;
+
 //***********************************************************************************************************
 // MAP VOTE PACKAGE
 // ORIGINALLY MADE BY NC-17 (codam, powerserver), REWORKED BY wizard220, MODIFIED BY FrAnCkY55, Modified again by bell
@@ -241,8 +243,8 @@ RunMapVote()
 	}
 
 	//past stuff
-	past_candidates = maps\mp\gametypes\_anarchic::explode( getcvar("scr_past_candidates"), ",");
-	past_rotation	= maps\mp\gametypes\_anarchic::explode( getcvar("scr_past_rotation"), ",");
+	past_candidates = explode( getcvar("scr_past_candidates"), ",");
+	past_rotation	= explode( getcvar("scr_past_rotation"), ",");
 
 	logPrint("\** MAP VOTE **\ Candidate selection started...\n");
 	//get candidates
@@ -262,7 +264,7 @@ RunMapVote()
 			break;
 
 		level.mapcandidate[j]["map"] = maps[i]["map"];
-		level.mapcandidate[j]["mapname"] = maps\mp\gametypes\_anarchic::getMapName(maps[i]["map"]);
+		level.mapcandidate[j]["mapname"] = getMapName(maps[i]["map"]);
 		level.mapcandidate[j]["gametype"] = maps[i]["gametype"];
 		level.mapcandidate[j]["votes"] = 0;
 
@@ -753,22 +755,11 @@ isGametype(gt)
 }
 isConfig(cfg)
 {
-	temparr = maps\mp\gametypes\_anarchic::explode(cfg,".");
+	temparr = explode(cfg,".");
 	if(temparr.size == 2 && temparr[1] == "cfg")
 		return true;
 	else
 		return false;
-}
-getMapName(map)
-{
-	switch(map)
-	{
-		default:
-			mapname = map;
-			break;
-	}
-
-	return mapname;
 }
 getGametypeName(gt)
 {
@@ -845,38 +836,7 @@ getGametypeName(gt)
 
 	return gtname;
 }
-strip(s)
-{
-	if(s=="")
-		return "";
 
-	s2="";
-	s3="";
-
-	i=0;
-	while(i<s.size && s[i]==" ")
-		i++;
-
-	// String is just blanks?
-	if(i==s.size)
-		return "";
-	
-	for(;i<s.size;i++)
-	{
-		s2 += s[i];
-	}
-
-	i=s2.size-1;
-	while(s2[i]==" " && i>0)
-		i--;
-
-	for(j=0;j<=i;j++)
-	{
-		s3 += s2[j];
-	}
-		
-	return s3;
-}
 spawnSpectator(origin, angles)
 {
 	self notify("spawned");
