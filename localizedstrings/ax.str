@@ -13,6 +13,9 @@ VERSION             "1"
 CONFIG              "C:\trees\cod2\bin\StringEd_PC.cfg"
 FILENOTES           ""
 
+REFERENCE	MOD_STRING
+LANG_ENGLISH	"^9anarchicmod^13.0^7 - anarchic-x.com"
+
 REFERENCE	MOTD_DEFAULT
 LANG_ENGLISH	"Please visit our website at ^3www.anarchic-x.com^7!"
 
@@ -139,6 +142,30 @@ LANG_ENGLISH	"&&1 Auto-Assigned Allies"
 REFERENCE	JOINED_AUTO_AXIS
 LANG_ENGLISH	"&&1 Auto-Assigned Axis"
 
+REFERENCE	SUDDEN_DEATH
+LANG_ENGLISH	"The game has entered sudden death!"
+
+REFERENCE	RESPAWNS_DISABLED
+LANG_ENGLISH	"Respawns are disabled - don't die!"
+
+REFERENCE	ENEMY_FLAG_TAKEN
+LANG_ENGLISH	"Enemy Flag Taken By &&1^7!"
+
+REFERENCE	ENEMY_FLAG_CAPTURED
+LANG_ENGLISH	"Enemy Flag Captured By &&1^7!"
+
+REFERENCE	HOPPER_MISSED_POINTS
+LANG_ENGLISH	"Your hopping denied you of ^1&&1^7 damage points"
+
+REFERENCE	HUD_TEAMKILLS
+LANG_ENGLISH	"^1Teamkills^7:"
+
+REFERENCE	HUD_TEAMKILL_PENALTY
+LANG_ENGLISH	"You have been forced to spectate due to having too many team kills. Your penalty time is ^1&&1^7 minute(s). You may rejoin after that."
+
+REFERENCE	HUD_TEAMKILL_PENALTY_REJOIN
+LANG_ENGLISH	"You may rejoin the game. Please don't shoot your teammates!"
+
 REFERENCE	1_GREASEGUN
 LANG_ENGLISH	"1. M3 Grease Gun"
 
@@ -156,5 +183,50 @@ LANG_ENGLISH	"8. M1903 Springfield"
 
 REFERENCE	THE_SPRINGFIELD_NOSCOPE
 LANG_ENGLISH	"The M1903 Springfield rifle is a bolt-action rifle, powerful and effective at long range. It carries up to five rounds, has a slow rate of fire, and reloads one round at a time."
+
+REFERENCE	CONNECT_FREEZE
+LANG_ENGLISH	"^1Warning:^7 Your Call of Duty 2 may lock up, or act as if it is locked up, while attempting to connect. If you have this problem, type /reconnect in the console."
+
+REFERENCE	CANTJOINTEAM_UNBALANCED
+LANG_ENGLISH	"Joining &&1 would result in an unbalanced number of players on that team. Try joining &&2."
+
+REFERENCE	AMERICAN
+LANG_ENGLISH	"American"
+
+REFERENCE	BRITISH
+LANG_ENGLISH	"British"
+
+REFERENCE	RUSSIAN
+LANG_ENGLISH	"Russian"
+
+REFERENCE	GERMAN
+LANG_ENGLISH	"German"
+
+REFERENCE	UNKNOWN_NATIONALITY
+LANG_ENGLISH	"Unknown"
+
+REFERENCE	ADMIN_TOOLS_GIVETAGS
+LANG_ENGLISH	"Lo, the admin has blessed &&1^7 with the official tags. With great power comes great responsibility!"
+
+REFERENCE	ADMIN_TOOLS_KILLUM
+LANG_ENGLISH	"Lo, the admin has slaughtered &&1^7, and rightfully so!"
+
+REFERENCE	ADMIN_TOOLS_SMITE
+LANG_ENGLISH	"Lo, the admin smote &&1^7 with fire!"
+
+REFERENCE	ADMIN_TOOLS_FREEZE
+LANG_ENGLISH	"Lo, the admin has frozen &&1^7 where they stand! Free kill!"
+
+REFERENCE	ADMIN_TOOLS_KICKSPECS
+LANG_ENGLISH	"Lo, the admin has decided to kick out &&1 spectators in the next &&2 seconds. Join up!"
+
+REFERENCE	ADMIN_TOOLS_KICKTOSPEC
+LANG_ENGLISH	"Lo, the admin has forced &&1^7 to spectate!"
+
+REFERENCE	ADMIN_TOOLS_MUTE
+LANG_ENGLISH	"Lo, the admin did not appreciate the noise coming from &&1^7..."
+
+REFERENCE	ADMIN_TOOLS_UNMUTE
+LANG_ENGLISH	"Lo, the admin has let &&1^7 speak again. Use it wisely!"
 
 ENDMARKER

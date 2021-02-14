@@ -455,7 +455,7 @@ dropWeapon()
 		clipsize = self getweaponslotclipammo(currentslot);
 		reservesize = self getweaponslotammo(currentslot);
 
-		if ((clipsize || reservesize) && (maps\mp\gametypes\_anarchic::dropSniper(current, self.pers["team"])))
+		if ((clipsize || reservesize) && (ax\weapons::dropSniper(current, self.pers["team"])))
 			self dropItem(current);
 	}
 }

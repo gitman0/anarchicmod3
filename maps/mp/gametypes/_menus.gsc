@@ -79,8 +79,6 @@ onMenuResponse()
 			self closeMenu();
 			self closeInGameMenu();
 
-			maps\mp\gametypes\_anarchic::checkSnipers();
-
 			if(menu == game["menu_team"])
 			{
 				if(level.splitscreen)
@@ -205,8 +203,8 @@ onMenuResponse()
 				self closeMenu();
 				self closeInGameMenu();
 				self [[level.weapon]](response);
+				ax\weapons::updateAvailableWeapons();
 			}
-			maps\mp\gametypes\_anarchic::checkSnipers();
 		}
 		else if(!level.xenon)
 		{

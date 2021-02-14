@@ -2,12 +2,14 @@ init()
 {
 	precacheShader("damage_feedback");
 
-	if (level.disable_hitblip == 0)
-		level thread onPlayerConnect();
+	level thread onPlayerConnect();
 }
 
 onPlayerConnect()
 {
+	if ( isDefined(level.disable_hitblip) && level.disable_hitblip )
+		return;
+
 	for(;;)
 	{
 		level waittill("connecting", player);
@@ -25,10 +27,7 @@ onPlayerConnect()
 
 updateDamageFeedback()
 {
-	if (level.disable_hitblip == 1)
-		return;
-
-	if(isPlayer(self))
+	if( isPlayer(self) && isDefined(self.hud_damagefeedback) )
 	{
 		self.hud_damagefeedback.alpha = 1;
 		self.hud_damagefeedback fadeOverTime(1);

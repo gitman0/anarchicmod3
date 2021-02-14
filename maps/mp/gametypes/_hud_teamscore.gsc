@@ -1,10 +1,7 @@
-// Consider moving timer to this script
+// warning: this script is from iw_07.iwd, NOT from iw_15.iwd which is the latest patched version
 
 init()
 {
-	if (level.show_teamscore == 0)
-		return;
-
 	switch(game["allies"])
 	{
 	case "american":
@@ -88,7 +85,8 @@ onPlayerSpawned()
 			self.hud_enemyicon.horzAlign = "left";
 			self.hud_enemyicon.vertAlign = "top";
 			self.hud_enemyicon.x = 6;
-			self.hud_enemyicon.y = 50;
+			//self.hud_enemyicon.y = 50;
+			self.hud_enemyicon.y = 46;
 			self.hud_enemyicon.archived = false;
 		}
 
@@ -97,10 +95,12 @@ onPlayerSpawned()
 			self.hud_teamscore = newClientHudElem(self);
 			self.hud_teamscore.horzAlign = "left";
 			self.hud_teamscore.vertAlign = "top";
-			self.hud_teamscore.x = 36;
-			self.hud_teamscore.y = 26;
+			//self.hud_teamscore.x = 36;
+			self.hud_teamscore.x = 30;
+			self.hud_teamscore.y = 25;
 			self.hud_teamscore.font = "default";
-			self.hud_teamscore.fontscale = 2;
+			//self.hud_teamscore.fontscale = 2;
+			self.hud_teamscore.fontscale = 1.7;
 			self.hud_teamscore.archived = false;
 		}
 
@@ -109,22 +109,30 @@ onPlayerSpawned()
 			self.hud_enemyscore = newClientHudElem(self);
 			self.hud_enemyscore.horzAlign = "left";
 			self.hud_enemyscore.vertAlign = "top";
-			self.hud_enemyscore.x = 36;
-			self.hud_enemyscore.y = 48;
+			//self.hud_enemyscore.x = 36;
+			self.hud_enemyscore.x = 30;
+			//self.hud_enemyscore.y = 48;
+			self.hud_enemyscore.y = 43;
 			self.hud_enemyscore.font = "default";
-			self.hud_enemyscore.fontscale = 2;
+			//self.hud_enemyscore.fontscale = 2;
+			self.hud_enemyscore.fontscale = 1.7;
 			self.hud_enemyscore.archived = false;
 		}
 
 		if(self.pers["team"] == "allies")
 		{
-			self.hud_teamicon setShader(game["hudicon_allies"], 24, 24);
-			self.hud_enemyicon setShader(game["hudicon_axis"], 24, 24);
+			//self.hud_teamicon setShader(game["hudicon_allies"], 24, 24);
+			//self.hud_enemyicon setShader(game["hudicon_axis"], 24, 24);
+			self.hud_teamicon setShader(game["hudicon_allies"], 16, 16);
+			self.hud_enemyicon setShader(game["hudicon_axis"], 16, 16);
+
 		}
 		else if(self.pers["team"] == "axis")
 		{
-			self.hud_teamicon setShader(game["hudicon_axis"], 24, 24);
-			self.hud_enemyicon setShader(game["hudicon_allies"], 24, 24);
+			//self.hud_teamicon setShader(game["hudicon_axis"], 24, 24);
+			//self.hud_enemyicon setShader(game["hudicon_allies"], 24, 24);
+			self.hud_teamicon setShader(game["hudicon_axis"], 16, 16);
+			self.hud_enemyicon setShader(game["hudicon_allies"], 16, 16);
 		}
 		
 		self thread updatePlayerScoreHUD();

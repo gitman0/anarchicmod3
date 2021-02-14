@@ -251,7 +251,7 @@ changeTeam(team)
 	self.pers["savedmodel"] = undefined;
 	self.sessionteam = self.pers["team"];
 
-	if (isdefined(self.pers["flag_caps"]))
+	if (isdefined(self.pers["flag_caps"])) // ax
 		self.pers["flag_caps"] = 0;
 	
 	// update spectator permissions immediately on change of team
@@ -376,7 +376,7 @@ CountPlayers()
 
 addTestClients()
 {
-        if (getcvar("g_gametype") == "ctf" && isdefined(game["matchstarted"]) && !game["matchstarted"])
+        if (getcvar("g_gametype") == "ctf" && isdefined(game["matchstarted"]) && !game["matchstarted"]) // ax
                 return;
 
 	wait 5;

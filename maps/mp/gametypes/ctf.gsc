@@ -132,13 +132,15 @@ Callback_StartGameType()
 	thread maps\mp\gametypes\_scoreboard::init();
 	thread maps\mp\gametypes\_killcam::init();
 	thread maps\mp\gametypes\_shellshock::init();
-	thread maps\mp\gametypes\_hud_teamscore::init();
+	if ( !isDefined(level.show_teamscore) || level.show_teamscore )
+		thread maps\mp\gametypes\_hud_teamscore::init();
 	thread maps\mp\gametypes\_deathicons::init();
 	thread maps\mp\gametypes\_damagefeedback::init();
 	thread maps\mp\gametypes\_healthoverlay::init();
 	thread maps\mp\gametypes\_friendicons::init();
 	thread maps\mp\gametypes\_spectating::init();
-	thread maps\mp\gametypes\_grenadeindicators::init();
+	if ( !isDefined(level.disable_grenade_icons) || !level.disable_grenade_icons )
+		thread maps\mp\gametypes\_grenadeindicators::init();
 
 	level.xenon = (getcvar("xenonGame") == "true");
 	if(level.xenon) // Xenon only
@@ -330,8 +332,6 @@ Callback_PlayerDisconnect()
 	lpselfnum = self getEntityNumber();
 	lpGuid = self getGuid();
 
-	maps\mp\gametypes\_anarchic::rememberinfo(self);
-
 	logPrint("Q;" + lpGuid + ";" + lpselfnum + ";" + self.name + "\n");
 }
 
@@ -363,7 +363,8 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 			self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 			// Shellshock/Rumble
-			self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
+			if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 			self playrumble("damage_heavy");
 		}
 
@@ -522,11 +523,12 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	self.leaving_team = undefined;
 
 	body = self cloneplayer(deathAnimDuration);
-	thread maps\mp\gametypes\_deathicons::addDeathicon(body, self.clientid, self.pers["team"], 5);
+	if ( !isDefined(level.disable_deathicon) || !level.disable_deathicon )
+		thread maps\mp\gametypes\_deathicons::addDeathicon(body, self.clientid, self.pers["team"], 5);
 
 	delay = 2;	// Delay the player becoming a spectator till after he's done dying
 
-	if (!level.ctf_sudden_death_norespawn)
+	if ( !isdefined(level.sudden_death_norespawn) || !level.sudden_death_norespawn )
 		self thread respawn_timer(delay);
 	else self.WaitingToSpawn = true;
 
@@ -562,10 +564,7 @@ spawnPlayer()
 	self.dead_origin = undefined;
 	self.dead_angles = undefined;
 
-	if(self.pers["team"] == "allies")
-		spawnpointname = "mp_ctf_spawn_allied";
-	else
-		spawnpointname = "mp_ctf_spawn_axis";
+	spawnpointname = self ax\ctfmods::spawnpointName();
 
 	spawnpoints = getentarray(spawnpointname, "classname");
 	spawnpoint = maps\mp\gametypes\_spawnlogic::getSpawnpoint_NearTeam(spawnpoints);
@@ -612,8 +611,6 @@ spawnSpectator(origin, angles)
 	self notify("end_respawn");
 
 	resettimeout();
-
-	maps\mp\gametypes\_anarchic::checkSnipers();
 
 	// Stop shellshock and rumble
 	self stopShellshock();
@@ -804,7 +801,7 @@ startGame()
 	if (!isdefined(game["matchstarted"]))
 	{
 		game["matchstarted"] = false;
-		wait_for_players = 120;
+/*		wait_for_players = 30;
 		wait_time = 0;
 		players = maps\mp\gametypes\_teams::CountPlayers();
 		if (!getCvarInt("ax_debug_ctf_warmup"))
@@ -818,7 +815,7 @@ startGame()
 			}
 		}
 		level notify( "end_wait_for_players" );
-
+*/
 		if (isdefined(level.ctf_warmup))
 			warmup = level.ctf_warmup;
 		else warmup = 50;
@@ -849,7 +846,7 @@ startGame()
 	
 		for(;;)
 		{
-			maps\mp\gametypes\_anarchic::checkTimeLimit();
+			ax\ctfmods::checkTimeLimit();
 			wait 1;
 		}
 	}
@@ -859,8 +856,6 @@ endMap()
 {
 	game["state"] = "intermission";
 	level notify("intermission");
-
-	maps\mp\gametypes\_anarchic::endMap();
 
 	alliedscore = getTeamScore("allies");
 	axisscore = getTeamScore("axis");
@@ -1177,8 +1172,7 @@ flag()
 						if(!level.splitscreen)
 							thread playSoundOnPlayers(enemyAlias, enemy);
 
-						//thread printOnTeam(&"MP_ENEMY_FLAG_CAPTURED", self.team);
-						thread printOnTeam("Enemy Flag Captured By " + other.name + "^7!", self.team);
+						thread ax\ctfmods::printOnTeamWithArg(&"AX_ENEMY_FLAG_CAPTURED", other.name, self.team);
 						thread printOnTeam(&"MP_YOUR_FLAG_WAS_CAPTURED", enemy);
 
 						lpselfnum = other getEntityNumber();
@@ -1235,8 +1229,7 @@ flag()
 					thread playSoundOnPlayers(enemyAlias, enemy);
 
 				thread printOnTeam(&"MP_YOUR_FLAG_WAS_TAKEN", self.team);
-				//thread printOnTeam(&"MP_ENEMY_FLAG_TAKEN", enemy);
-				thread printOnTeam("Enemy Flag Taken By " + other.name + "^7!", enemy);
+				thread ax\ctfmods::printOnTeamWithArg(&"AX_ENEMY_FLAG_TAKEN", other.name, enemy);
 
 				lpselfnum = other getEntityNumber();
 				lpselfguid = other getGuid();
@@ -1292,7 +1285,7 @@ dropFlag()
 
 		self.flag createFlagWaypoint();
 
-		self.flag thread maps\mp\gametypes\_anarchic::autoReturn();
+		self.flag thread ax\ctfmods::autoReturn();
 		self detachFlag(self.flag);
 
 		//check if it's in a flag_returner
@@ -1362,7 +1355,7 @@ attachFlag()
 		self.flagAttached setShader(level.hudflag_allies, iconSize, iconSize);
 	}
 	self attach(flagModel, "J_Spine4", true);
-	thread maps\mp\gametypes\_anarchic::pickupFlag(self);
+	thread ax\ctfmods::pickupFlag(self);
 
 }
 

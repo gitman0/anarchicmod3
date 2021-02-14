@@ -95,7 +95,8 @@ Callback_StartGameType()
 	thread maps\mp\gametypes\_deathicons::init();
 	thread maps\mp\gametypes\_damagefeedback::init();
 	thread maps\mp\gametypes\_healthoverlay::init();
-	thread maps\mp\gametypes\_grenadeindicators::init();
+	if ( !isDefined(level.disable_grenade_icons) ||	!level.disable_grenade_icons )
+		thread maps\mp\gametypes\_grenadeindicators::init();
 
 	level.xenon = (getcvar("xenonGame") == "true");
 	if(level.xenon) // Xenon only
@@ -195,8 +196,6 @@ Callback_PlayerConnect()
 
 	if(isdefined(self.pers["team"]) && self.pers["team"] != "spectator")
 	{
-		maps\mp\gametypes\_anarchic::checkSnipers();
-
 		self setClientCvar("ui_allow_weaponchange", "1");
 		self.sessionteam = "none";
 
@@ -272,7 +271,8 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 	self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 	// Shellshock/Rumble
-	self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
+	if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+		self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 	self playrumble("damage_heavy");
 	if(isdefined(eAttacker) && eAttacker != self)
 		eAttacker thread maps\mp\gametypes\_damagefeedback::updateDamageFeedback();
@@ -385,7 +385,8 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	self.leaving_team = undefined;
 
 	body = self cloneplayer(deathAnimDuration);
-	thread maps\mp\gametypes\_deathicons::addDeathicon(body, self.clientid, self.pers["team"]);
+	if ( !isDefined(level.disable_deathicon) || !level.disable_deathicon )
+		thread maps\mp\gametypes\_deathicons::addDeathicon(body, self.clientid, self.pers["team"]);
 
 	delay = 2;	// Delay the player becoming a spectator till after he's done dying
 	wait delay;	// ?? Also required for Callback_PlayerKilled to complete before respawn/killcam can execute
@@ -461,8 +462,6 @@ spawnSpectator(origin, angles)
 	self notify("end_respawn");
 
 	resettimeout();
-
-	maps\mp\gametypes\_anarchic::checkSnipers();
 
 	// Stop shellshock and rumble
 	self stopShellshock();
