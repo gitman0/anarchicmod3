@@ -20,7 +20,7 @@ REFERENCE	MOTDSD
 LANG_ENGLISH	"Please go to ^3www.anarchic-x.com^7 for all anarchic info."
 
 REFERENCE	MOTD_DEFAULT
-LANG_ENGLISH	"Please go to ^3www.anarchic-x.com^7 for all anarchic info."
+LANG_ENGLISH	"Please visit our website at ^3www.anarchic-x.com^7!"
 
 REFERENCE	MOREKILLS
 LANG_ENGLISH	"^2More kills with less XBox frills."
@@ -80,16 +80,16 @@ REFERENCE	SPAM4
 LANG_ENGLISH	"Keep ^3in-game chat^7 to a minimum. We kick for off-topic chat!"
 
 REFERENCE	SPAM5
-LANG_ENGLISH	"Insults, racism, political debates, and swearing are ^3not tolerated"
+LANG_ENGLISH	"Insults, racism, political debates, and swearing are ^3not tolerated^7. Focus on the game!"
 
 REFERENCE	SPAM6
-LANG_ENGLISH	"^3Recruiting^7 in any way, shape, or form is ^3prohibited"
+LANG_ENGLISH	"^3Recruiting^7 in ANY way, shape, or form is ^3prohibited"
 
 REFERENCE	SPAM7
-LANG_ENGLISH	"If you need to go away from your keyboard, please ^3go to spectate^7"
+LANG_ENGLISH	"If you need to stop playing for a short period of time, please ^3go to spectate^7"
 
 REFERENCE	SPAM8
-LANG_ENGLISH	"Our admins will not hesitate to ^3remove you^7 permanently for misbehavior"
+LANG_ENGLISH	"An ^1admin^7 is usually always available, either in game, AIM, XFire, or the forums."
 
 REFERENCE	SPAM9
 LANG_ENGLISH	"Please install and use ^3Teamspeak^7 - Visit the site for info"
@@ -109,6 +109,12 @@ LANG_ENGLISH	"Visit the website for ^3player stats^7 and our informative forums!
 REFERENCE	SPAM14
 LANG_ENGLISH	"Interested in joining ^1|^9ax^1|^7? Visit our ^3forums^7 and introduce yourself!"
 
+REFERENCE	SPAM15
+LANG_ENGLISH	"Interested in playing in ^1|^9ax^1|^7 matches? Stop by our forums and sign up. Theres new ones each month!"
+
+REFERENCE	SPAM16
+LANG_ENGLISH	"Please do not accuse others of cheating without ^1first^7 providing proof to an admin!"
+
 REFERENCE	ALL_RIFLES
 LANG_ENGLISH	"All Rifles"
 
@@ -127,4 +133,9 @@ LANG_ENGLISH	"7. Add This Server To Your Favorites"
 REFERENCE	SPAWN_ASSIST
 LANG_ENGLISH	"SpawnAssist:"
 
+REFERENCE	MATCHSTARTING
+LANG_ENGLISH	"Match Starting"
+
+REFERENCE	1_AUTOASSIGN
+LANG_ENGLISH	"1. Auto-Assign ^1(recommended)^7"
 ENDMARKER

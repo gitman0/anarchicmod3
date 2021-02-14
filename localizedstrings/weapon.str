@@ -85,6 +85,9 @@ LANG_ENGLISH        "Army Engineer"
 REFERENCE           THOMPSON
 LANG_ENGLISH        "Thompson"
 
+REFERENCE	    THOMPSON_BRITISH
+LANG_ENGLISH	    "Thompson"
+
 REFERENCE           FASTAUTO
 LANG_ENGLISH        "Fast-Auto"
 

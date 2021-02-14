@@ -691,4 +691,6 @@ generic_meleecharge_russianfem_2,4,,voiceovers/generic/allied/ru_fem1/genericf_a
 generic_meleeattack_russianfem_2,1,,voiceovers/generic/allied/ru_fem1/genericf_a_meleeattack1.wav,0.6,0.6,reactional,,,50,3200,voice,streamed,,,,,,,reaction
 generic_meleeattack_russianfem_2,2,,voiceovers/generic/allied/ru_fem1/genericf_a_meleeattack2.wav,0.6,0.6,reactional,,,50,3200,voice,streamed,,,,,,,reaction
 
+flak_explosion,,,explosions/explo_distant02.wav,0.4,0.6,,,,10000,,auto,streamed
+
 ##END OF FILE,,,,,,,,,,,,,,,,,,,
