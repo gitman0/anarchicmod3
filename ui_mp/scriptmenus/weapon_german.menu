@@ -29,6 +29,8 @@
 		onEsc 
 		{
 			close weapon_german;
+			scriptmenuresponse "changeteam";
+
 		}
 		onOpen 
 		{

@@ -34,7 +34,7 @@ name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max
 null,,null.wav,,,,,,,,,,,,,,,,,,,,
 
 music_mainmenu,,music/menu_GRTEMP.mp3,0.3,,music,,,,,menu,streamed,,looping,,menu,,,,,,music,
-music_mainmenu_mp,,music/menu_GRTEMP.mp3,0.3,,music,,,,,menu,streamed,,looping,,menu,,,,,,music,
+music_mainmenu_mp,,music/menu_GRTEMP.mp3,1,,music,,,,,menu,streamed,,looping,,menu,,,,,,music,
 
 mouse_over,,misc/mouse_ylover.wav,0.65,,interface,,,,,menu,,,,,menu,,,,,,,nowetlevel
 mouse_click,,misc/mouse_ylselect.wav,0.65,,interface,,,,,menu,,,,,menu,,,,,,,nowetlevel

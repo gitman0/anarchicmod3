@@ -1,6 +1,11 @@
 #include "ui_mp/menudef.h"
 
 #define WEAPON_TEXTSCALE .3
+#define COMPASS_NEEDLE_XOFF		60	// 96
+#define COMPASS_NEEDLE_YOFF		50	// 80
+#define COMPASS_NEEDLE_WIDTH		40	// 64
+#define COMPASS_NEEDLE_HEIGHT		40	// 64
+
 
 {
 	assetGlobalDef
@@ -264,6 +269,17 @@
 			visible MENU_TRUE
 			decoration
 		}
+		itemDef
+		{
+			name "compassneedle"
+			rect COMPASS_NEEDLE_XOFF COMPASS_NEEDLE_YOFF COMPASS_NEEDLE_WIDTH COMPASS_NEEDLE_HEIGHT
+			forecolor 1.0 1.0 1.0 1.0
+			background "gfx/hud/hud@compass_arrow.tga"
+			ownerdraw CG_PLAYER_COMPASS_BACK
+			visible MENU_TRUE
+			decoration
+		}
+
     	itemDef // Objective pointers
     	{
 			name "compasspointers"

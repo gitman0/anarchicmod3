@@ -1,0 +1,17 @@
+#include "ui_mp/menudef.h"
+
+{
+	menuDef
+	{
+		name			"addfavorite"
+		rect			0 0 640 480
+		focuscolor		GLOBAL_FOCUSED_COLOR
+		style			WINDOW_STYLE_EMPTY
+		blurWorld		5.0
+		onOpen 
+		{
+			uiScript CreateFavorite ;
+			open fav_message_popmenu ;
+			close addfavorite ;
+		}
+}

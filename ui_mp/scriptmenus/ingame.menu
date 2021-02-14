@@ -6,6 +6,8 @@
 #define ORIGIN_CHOICE3	80 132
 #define ORIGIN_CHOICE4	80 156
 #define ORIGIN_CHOICE5	80 180
+#define ORIGIN_CHOICE6	80 204
+#define ORIGIN_CHOICE7	80 228
 
 {
 	menuDef
@@ -51,6 +53,8 @@
 		execKey "3" { play "mouse_click"; scriptMenuResponse "muteplayer" }
 		execKey "4" { play "mouse_click"; scriptMenuResponse "callvote" }
 		execKey "5" { play "mouse_click"; close ingame; open leavegame }
+		execKey "6" { play "mouse_click"; scriptMenuResponse "serverinfo" }
+		execKey "7" { play "mouse_click"; scriptMenuResponse "addfavorite" }
 		
 		itemDef
 		{
@@ -210,6 +214,56 @@
 				play "mouse_over";
 			}
 		}
+
+		itemDef 
+		{
+			name			"button_serverinfo"
+			visible			1
+			rect			0 0 128 24
+			origin			ORIGIN_CHOICE6
+			forecolor		GLOBAL_UNFOCUSED_COLOR
+			type			ITEM_TYPE_BUTTON
+			text			"@AX_6_SERVERINFO"
+			textfont		UI_FONT_NORMAL
+			textscale		GLOBAL_TEXT_SIZE
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textaligny		20
+			dvar			"ui_hostname"
+			action
+			{
+				play "mouse_click";
+				ScriptMenuResponse "serverinfo";
+			}
+			onFocus
+			{
+				play "mouse_over";
+			}
+		}
+
+		itemDef 
+		{
+			name			"button_addfavorite"
+			visible			1
+			rect			0 0 128 24
+			origin			ORIGIN_CHOICE7
+			forecolor		GLOBAL_UNFOCUSED_COLOR
+			type			ITEM_TYPE_BUTTON
+			text			"@AX_7_ADDFAVORITE"
+			textfont		UI_FONT_NORMAL
+			textscale		GLOBAL_TEXT_SIZE
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textaligny		20
+			action
+			{
+				play "mouse_click";
+				ScriptMenuResponse "addfavorite";
+			}
+			onFocus
+			{
+				play "mouse_over";
+			}
+		}
+
 
 		itemDef 
 		{

@@ -8,6 +8,7 @@
 #define ORIGIN_CHOICE5				80 180
 #define ORIGIN_CHOICE6				80 204
 #define ORIGIN_CHOICE7				80 228
+#define ORIGIN_CHOICE8				80 252
 
 #define ORIGIN_WEAPONIMAGE			296 84
 #define ORIGIN_WEAPONTEXT			296 220
@@ -30,6 +31,7 @@
 		onEsc 
 		{
 			close weapon_american;
+			scriptmenuresponse "changeteam";
 		}
 		onOpen 
 		{
@@ -44,6 +46,7 @@
 			hide bar_info;
 			hide springfield_info;
 			hide shotgun_info;
+			hide enfield_info;
 		}
 
 		// Gradient
@@ -79,6 +82,7 @@
 		execKey "5" { play "mouse_click"; scriptMenuResponse "shotgun_mp" }
 		execKey "6" { play "mouse_click"; scriptMenuResponse "thompson_mp" }
 		execKey "7" { play "mouse_click"; scriptMenuResponse "bar_mp" }
+		execKey "8" { play "mouse_click"; scriptMenuResponse "enfield_mp"; }
 
 		itemDef 
 		{
@@ -108,6 +112,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show greasegun_info;
 				show weapon_propertiestext;
@@ -136,6 +141,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show greasegun_info;
 				show weapon_propertiestext;
@@ -170,6 +176,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show m1carbine_info;
 				show weapon_propertiestext;
@@ -198,6 +205,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show m1carbine_info;
 				show weapon_propertiestext;
@@ -232,6 +240,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show m1garand_info;
 				show weapon_propertiestext;
@@ -260,6 +269,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show m1garand_info;
 				show weapon_propertiestext;
@@ -294,6 +304,7 @@
 				hide thompson_info;
 				hide bar_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show springfield_info;
 				show weapon_propertiestext;
@@ -322,6 +333,7 @@
 				hide thompson_info;
 				hide bar_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show springfield_info;
 				show weapon_propertiestext;
@@ -356,6 +368,7 @@
 				hide m1garand_info;
 				hide bar_info;
 				hide springfield_info;
+				hide enfield_info;
 				play "mouse_over";
 				show shotgun_info;
 				show weapon_propertiestext;
@@ -384,6 +397,7 @@
 				hide m1garand_info;
 				hide bar_info;
 				hide springfield_info;
+				hide enfield_info;
 				play "mouse_over";
 				show shotgun_info;
 				show weapon_propertiestext;
@@ -418,6 +432,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show thompson_info;
 				show weapon_propertiestext;
@@ -446,6 +461,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show thompson_info;
 				show weapon_propertiestext;
@@ -480,6 +496,7 @@
 				hide thompson_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show bar_info;
 				show weapon_propertiestext;
@@ -508,12 +525,77 @@
 				hide thompson_info;
 				hide springfield_info;
 				hide shotgun_info;
+				hide enfield_info;
 				play "mouse_over";
 				show bar_info;
 				show weapon_propertiestext;
 			}
 		}
 		
+		itemDef 
+		{
+			name			"button_enfield"
+			visible			1
+			rect			0 0 128 24
+			origin			ORIGIN_CHOICE8
+			forecolor		GLOBAL_UNFOCUSED_COLOR
+			type			ITEM_TYPE_BUTTON
+			text			"@MPUI_2_LEEENFIELD"
+			textfont		UI_FONT_NORMAL
+			textscale		GLOBAL_TEXT_SIZE
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textaligny		20
+			dvartest		"ui_allow_enfield"
+			showDvar		{ "1" }
+			action
+			{
+				play "mouse_click";
+				scriptMenuResponse "enfield_mp";
+			}
+			onFocus
+			{
+				hide greasegun_info;
+				hide m1carbine_info;
+				hide m1garand_info;
+				hide thompson_info;
+				hide springfield_info;
+				hide shotgun_info;
+				hide bar_info;
+				play "mouse_over";
+				show enfield_info;
+				show weapon_propertiestext;
+			}
+		}
+		itemDef 
+		{
+			name			"button_enfield"
+			visible			1
+			rect			0 0 128 24
+			origin			ORIGIN_CHOICE8
+			forecolor		GLOBAL_DISABLED_COLOR
+			type			ITEM_TYPE_BUTTON
+			text			"@MPUI_2_LEEENFIELD"
+			textfont		UI_FONT_NORMAL
+			textscale		GLOBAL_TEXT_SIZE
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textaligny		20
+			dvartest		"ui_allow_enfield"
+			showDvar		{ "2" }
+			onFocus
+			{
+				hide greasegun_info;
+				hide m1carbine_info;
+				hide m1garand_info;
+				hide thompson_info;
+				hide springfield_info;
+				hide shotgun_info;
+				hide bar_info;
+				play "mouse_over";
+				show enfield_info;
+				show weapon_propertiestext;
+			}
+		}
+
 		itemDef 
 		{
 			#include "ui_mp/button_mainmenu.menu"
@@ -531,6 +613,17 @@
 		}
 		
 // WEAPON IMAGES
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 -2 224 112
+			origin			ORIGIN_WEAPONIMAGE
+	 		style			WINDOW_STYLE_SHADER
+			background		"weapon_enfield"
+			decoration
+		}
+
 		itemDef
 		{
 			name			"thompson_info"
@@ -604,6 +697,20 @@
 
 /*
 // WEAPON DESCRIPTIONS
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 224 64
+			origin			ORIGIN_WEAPONTEXT
+			forecolor		1 1 1 1
+			autowrapped
+			text			"@MPUI_THE_LEEENFIELD_RIFLE"
+			textfont		UI_FONT_NORMAL
+			textscale		GLOBAL_TEXT_SIZE
+			decoration
+		}
+
 		itemDef
 		{
 			name			"thompson_info"
@@ -684,6 +791,68 @@
 			decoration
 		}
 
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 128 10
+			origin			ORIGIN_WEAPONACCURACY
+			backcolor		1 1 1 .125
+	 		style			WINDOW_STYLE_FILLED
+			decoration
+		}
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 128 10
+			origin			ORIGIN_WEAPONACCURACY
+			backcolor		1 1 1 1
+	 		style			WINDOW_STYLE_FILLED
+			decoration
+		}
+
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 128 10
+			origin			ORIGIN_WEAPONDAMAGE
+			backcolor		1 1 1 .125
+	 		style			WINDOW_STYLE_FILLED
+			decoration
+		}
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 128 10
+			origin			ORIGIN_WEAPONDAMAGE
+			backcolor		1 1 1 1
+	 		style			WINDOW_STYLE_FILLED
+			decoration
+		}
+
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 128 10
+			origin			ORIGIN_WEAPONMOBILITY
+			backcolor		1 1 1 .125
+	 		style			WINDOW_STYLE_FILLED
+			decoration
+		}
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 80 10
+			origin			ORIGIN_WEAPONMOBILITY
+			backcolor		1 1 1 1
+	 		style			WINDOW_STYLE_FILLED
+			decoration
+		}
 		itemDef
 		{
 			name			"thompson_info"
@@ -1126,6 +1295,37 @@
 		}
 
 // GRENADE LOADOUT
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 32 32
+			origin			ORIGIN_GRENADESLOT1
+	 		style			WINDOW_STYLE_SHADER
+			background		"gfx/icons/hud@british_grenade_C.tga"
+			decoration
+		}
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 32 32
+			origin			ORIGIN_GRENADESLOT2
+	 		style			WINDOW_STYLE_SHADER
+			background		"gfx/icons/hud@british_grenade_C.tga"
+			decoration
+		}
+		itemDef
+		{
+			name			"enfield_info"
+			visible 		0
+			rect			0 0 32 32
+			origin			ORIGIN_GRENADESLOT3
+	 		style			WINDOW_STYLE_SHADER
+			background		"gfx/icons/hud@british_grenade_C.tga"
+			decoration
+		}
+
 		itemDef
 		{
 			name			"thompson_info"

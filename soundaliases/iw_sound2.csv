@@ -1193,8 +1193,8 @@ weap_fg42_fire,,weapons/fg42/fg42_01_temp.wav,0.52,0.58,wpnai,1.05,0.96,35,8400,
 weap_kar98k_fire,,weapons/kar98k/wpnfire_k98_1b.wav,0.6,0.65,wpnai,0.96,1.32,35,8400,weapon,,,,0.7,,,,,weapon2
 weap_luger_fire,,weapons/luger/wpnfire_Luger_plyr_blnc2.wav,0.72,0.77,wpnai,0.9,1,35,8400,weapon,,,,0.7,,,,,weapon2
 weap_m1carbine_fire,,weapons/m1carbine/mrk_m1carbine_1.wav,0.73,0.79,wpnai,0.85,0.9,35,8400,weapon,,,,0.7,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,weapon2
-weap_m1garand_fire,,weapons/m1garand/wpnfire_m1_plyr_blnc1.wav,0.64,0.7,wpnai,1.4,1.5,35,8400,weapon,,,,0.7,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,weapon2
-weap_m1garand_lastshot,,weapons/m1garand/wpnfire_m1_plyr_meaty4_ping.wav,0.64,0.7,wpnai,1.3,1.4,35,8400,weapon,,,,0.7,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,weapon2
+weap_m1garand_fire,,weapons/m1garand/wpnfire_m1_plyr_blnc1.wav,0.64,0.7,wpnai,0.98,1.02,35,8400,weapon,,,,0.7,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,weapon2
+weap_m1garand_lastshot,,weapons/m1garand/wpnfire_m1_plyr_meaty4_ping.wav,0.64,0.7,wpnai,0.95,0.99,35,8400,weapon,,,,0.7,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,weapon2
 weap_m3_fire,1,weapons/sten/wpnfire_sten_plyr_punch1.wav,0.65,0.7,wpnai,1.3,1.4,35,8400,weapon,,10,,0.7,all_mp,,,,weapon2
 weap_m3_fire,2,weapons/sten/wpnfire_sten_plyr_punch1.wav,0.6,0.65,wpnai,1.2,1.5,35,8400,weapon,,,,0.7,all_mp,,,,weapon2
 weap_nagant_fire,,weapons/nagant/nagant_01.wav,0.6,0.65,wpnai,1.05,0.96,35,8400,weapon,,,,0.7,!toujane !elalamein !eldaba !duhoc_assault !duhoc_town !decoytrenches !decoytown !toujane_ride !matmata !libya !88ridge !duhoc_defend !silotown_assault !beltot !crossroads !newvillers !breakout !bergstein !hill400_assault !hill400_defend,,,,weapon2
@@ -1205,7 +1205,7 @@ weap_ppsh42_fire,,weapons/ppsh/wpnfire_ppsh_plyr_blnc_ed3.wav,0.55,0.61,wpnai,0.
 weap_springfield_fire,,weapons/springfield/wpnfire_sprfld_plyr_pnchy6.wav,0.6,0.65,wpnai,1.05,0.96,35,8400,weapon,,,,0.7,!moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper,,,,weapon2
 weap_sten_fire,1,weapons/sten/wpnfire_sten_plyr_punch1.wav,0.54,0.59,wpnai,0.95,1.3,35,8400,weapon,,10,,0.7,!duhoc_assault !duhoc_town !duhoc_defend !silotown_assault !bergstein !hill400_assault !hill400_defend !rhine !moscow !demolition !tankhunt !trainyard !downtown_assault !cityhall !downtown_sniper,,,,weapon2
 weap_sten_fire,2,weapons/sten/wpnfire_sten_plyr_punch1.wav,0.5,0.55,wpnai,0.9,1.35,35,8400,weapon,,,,0.7,!duhoc_assault !duhoc_town !duhoc_defend !silotown_assault !bergstein !hill400_assault !hill400_defend !rhine !moscow !demolition !tankhunt !trainyard !downtown_assault !cityhall !downtown_sniper,,,,weapon2
-weap_thompson_fire,,weapons/m1garand/wpnfire_m1_plyr_blnc1.wav,0.69,0.74,wpnai,1.5,1.6,35,8400,weapon,,10,,0.7,!moscow !demolition !tankhunt !trainyard !downtown_assault !cityhall !downtown_sniper,,,,weapon2
+weap_thompson_fire,,weapons/thompson/wpnfire_thompson_plyr02.wav,0.69,0.74,wpnai,1,1.05,35,8400,weapon,,10,,0.7,!moscow !demolition !tankhunt !trainyard !downtown_assault !cityhall !downtown_sniper,,,,weapon2
 weap_panzerfaust_fire,,weapons/panzerfaust/panzerfaust_fire.wav,0.93,0.98,wpnai,0.9,0.95,35,8400,weapon,,,,0.7,,,,,weapon2
 weap_mg42_loop,,weapons/mg42/mrk_mg42loop_1b.wav,0.54,0.59,wpnai,0.95,1.05,35,11000,weapon,,,looping,0.5,!libya 88ridge,,,,weapon2
 weap_mg42_loop,,weapons/mg42/mrk_mg42loop_1b.wav,0.35,0.4,wpnai,0.95,1.05,35,11000,weapon,,,looping,0.5,libya 88ridge,,,,weapon2
@@ -1247,8 +1247,8 @@ weap_drop,1,null.wav,0.38,0.45,wpnplyr,0.9,0.9,7,500,auto,,,,,,,,,
 weap_drop,2,null.wav,0.38,0.45,wpnplyr,0.9,0.9,7,500,auto,,,,,,,,,
 weap_bar_reload,,weapons/bar/bar_reload.wav,0.83,1,wpnplyr,,,7,500,music,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,end_of_autoclip,
 weap_bar_reload_not_empty,,weapons/bar/bar_reload_not_empty.wav,0.83,1,wpnplyr,,,7,500,music,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,,
-weap_bar_pickup,,misc/PU_Weapon03.wav,0.76,0.83,wpnplyr,,,7,500,music,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,,
-weap_bar_ammopickup,,misc/PU_Weapon02.wav,0.76,0.83,wpnplyr,,,7,500,music,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,,
+weap_bar_pickup,,misc/PU_Weapon03.wav,0.76,0.83,wpnplyr,,,7,500,auto,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,,
+weap_bar_ammopickup,,misc/PU_Weapon02.wav,0.76,0.83,wpnplyr,,,7,500,auto,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,,
 weap_bar_raise,,misc/Equip_Rifle02.wav,0.76,0.83,wpnplyr,,,7,500,music,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,,
 weap_bar_putaway,,null.wav,0.76,0.83,wpnplyr,,,7,500,music,,,,,!toujane !elalamein !eldaba !decoytrenches !decoytown !moscow !demolition !tankhunt !trainyard !cityhall !downtown_assault !downtown_sniper !toujane_ride !matmata !libya !88ridge !beltot !crossroads !newvillers !breakout,,,,,
 weap_bren_reload,,weapons/bren/bren_reload.wav,0.83,1,wpnplyr,,,7,500,music,,,,,!duhoc_assault !duhoc_town !duhoc_defend !silotown_assault !bergstein !hill400_assault !hill400_defend !rhine !moscow !demolition !tankhunt !trainyard !downtown_assault !cityhall !downtown_sniper,,,end_of_autoclip,,715
@@ -1313,7 +1313,7 @@ weap_webley_reload_not_empty,,weapons/webley/wpnrld_webley_rev.wav,0.83,1,wpnply
 weap_fraggrenade_pin,,weapons/grenade/US_Grenade_pin.wav,0.76,0.83,wpnplyr,,,7,500,weapon,,,,,,,,,
 weap_grenade_rechamber,,weapons/grenade/US_Grenade_pin.wav,0.76,0.83,wpnplyr,,,7,500,weapon,,,,,,,,,
 weap_boltrifle_rechamber,,weapons/foley/mrk_rifle_rechamber1b.wav,0.83,1,wpnplyr,,,7,500,music,,,,,,,,,
-weap_offhand_select,,misc/pu_weapon02.wav,0.38,0.53,wpnplyr,0.9,0.9,7,500,music,,,,,,,,,
+weap_offhand_select,,misc/pu_weapon02.wav,0.38,0.53,wpnplyr,0.9,0.9,7,500,auto,,,,,,,,,
 
 #Weapon Foley NPC,,,,,,,,,,,,,,,,,,,
 player_out_of_ammo_npc,,weapons/dry_fire.wav,0.3,0.38,wpnai,0.9,0.9,7,500,auto,,,,,,,,,weapon1
@@ -1437,59 +1437,93 @@ moscow_mannequin_layer,,bodyfalls/bodyfall_dirt03.wav,0.7,0.7,na,1.2,1.3,100,750
 moscow_fistfist,,weapons/melee/melee_hit02.wav,0.06,0.06,na,1.2,2,100,600,auto,,,,,,,,,,
 
 #Grenade Bounce,,,,,,,,,,,,,,,,,,,,
-grenade_bounce_default,1,misc/potato_hit_brick02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce,
-grenade_bounce_default,2,misc/potato_hit_brick02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_default,3,misc/potato_hit_brick02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_default,4,misc/potato_hit_brick02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_default,5,misc/potato_hit_brick02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_bark,1,weapons/grenade/Grenade_Bounce_Wood05.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_bark,2,weapons/grenade/Grenade_Bounce_Wood06.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_bark,3,weapons/grenade/Grenade_Bounce_Wood07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_brick,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_brick,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_brick,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_brick,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_brick,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_carpet,,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_cloth,,null.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_concrete,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_concrete,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_concrete,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_concrete,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_concrete,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_dirt,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_dirt,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_flesh,,misc/potato_hit_brick02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_foliage,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_foliage,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_default,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_default,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_default,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_default,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_default,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_carpet,,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_cloth,,null.wav,0.85,0.95,na,0.9,0.95,600,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_flesh,,misc/potato_hit_brick02.wav,0.85,0.95,na,0.9,0.95,600,1500,auto,,,,,,,,,weapon_grenadebounce
 grenade_bounce_glass,,null.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_grass,1,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_grass,2,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_gravel,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_gravel,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
 grenade_bounce_ice,,null.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_metal,,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_mud,,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
 grenade_bounce_paper,,null.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_plaster,,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_rock,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_rock,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_rock,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_rock,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_rock,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_sand,1,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_sand,2,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_snow,1,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_snow,2,weapons/grenade/Grenade_Bounce_Earth07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
 grenade_bounce_water,,null.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_wood,1,weapons/grenade/Grenade_Bounce_Wood05.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_wood,2,weapons/grenade/Grenade_Bounce_Wood06.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_wood,3,weapons/grenade/Grenade_Bounce_Wood07.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_asphalt,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_asphalt,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_asphalt,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_asphalt,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
-grenade_bounce_asphalt,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,10,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_asphalt,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_asphalt,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_asphalt,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_asphalt,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_asphalt,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_bark,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_bark,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_bark,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_bark,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_bark,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_brick,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_brick,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_brick,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_brick,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_brick,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_concrete,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_concrete,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_concrete,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_concrete,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_concrete,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_dirt,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_dirt,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_dirt,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_dirt,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_dirt,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_wood,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_wood,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_wood,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_wood,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_wood,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_foliage,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_foliage,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_foliage,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_foliage,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_foliage,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_grass,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_grass,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_grass,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_grass,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_grass,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_gravel,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_gravel,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_gravel,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_gravel,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_gravel,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_metal,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_metal,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_metal,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_metal,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_metal,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_mud,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_mud,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_mud,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_mud,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_mud,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_plaster,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_plaster,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_plaster,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_plaster,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_plaster,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_rock,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_rock,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_rock,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_rock,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_rock,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_sand,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_sand,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_sand,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_sand,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_sand,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_snow,1,weapons/grenade/Grenade_Bounce_Stone01.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_snow,2,weapons/grenade/Grenade_Bounce_Stone02.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_snow,3,weapons/grenade/Grenade_Bounce_Stone03.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_snow,4,weapons/grenade/Grenade_Bounce_Stone04.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
+grenade_bounce_snow,5,weapons/grenade/Grenade_Bounce_Stone05.wav,0.85,0.95,na,0.9,0.95,200,1500,auto,,,,,,,,,weapon_grenadebounce
 
 #Potato Bounce,,,,,,,,,,,,,,,,,,,
 potato_bounce_default,1,misc/potato_hit_brick02.wav,0.5,0.6,na,1.1,1.2,10,1500,auto,,,,,moscow,,,,weapon_grenadebounce

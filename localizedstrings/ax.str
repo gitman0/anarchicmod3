@@ -1,0 +1,130 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "C:\trees\cod2\bin\StringEd_PC.cfg"
+FILENOTES           ""
+
+REFERENCE	MOTDTDM
+LANG_ENGLISH	"Welcome to ^1anarchic^7TDM. Grenades have a 3.5 second cook time. Three snipers allowed per team. Three shotguns allowed per team. Smoke after 60 kills. Deathicons/hitblips off. Visit ^3Anarchic-X.com^7 for more information."
+
+REFERENCE	MOTDSD
+LANG_ENGLISH	"Please go to ^3www.anarchic-x.com^7 for all anarchic info."
+
+REFERENCE	MOTD_DEFAULT
+LANG_ENGLISH	"Please go to ^3www.anarchic-x.com^7 for all anarchic info."
+
+REFERENCE	MOREKILLS
+LANG_ENGLISH	"^2More kills with less XBox frills."
+
+REFERENCE	SPAWNPROTECTIONON
+LANG_ENGLISH	"* ^7Activating ^2&&1^7 second spawn protection"
+
+REFERENCE	SPAWNPROTECTIONOFF
+LANG_ENGLISH	"^3* Spawn protection is now OFF"
+
+REFERENCE	SPAWNPROTECTIONFIRED
+LANG_ENGLISH	"^3* Spawn protection off because you fired!"
+
+REFERENCE	NEXTMAP
+LANG_ENGLISH	"^3* NEXT MAP:^7 &&1"
+
+REFERENCE	NEXTMAP_SEP1
+LANG_ENGLISH	" ("
+
+REFERENCE	NEXTMAP_SEP2
+LANG_ENGLISH	")"
+
+REFERENCE	WELCOME_TO
+LANG_ENGLISH	"Welcome to "
+
+REFERENCE	MOTD
+LANG_ENGLISH	"Message of the Day:"
+
+REFERENCE	ALLOWED_SNIPERS_ALLIED
+LANG_ENGLISH	"Allied Snipers Allowed:"
+
+REFERENCE	ALLOWED_SNIPERS_AXIS
+LANG_ENGLISH	"Axis Snipers Allowed:"
+
+REFERENCE	ALLOWED_SHOTGUNS_ALLIED
+LANG_ENGLISH	"Allied Shotguns Allowed:"
+
+REFERENCE	ALLOWED_SHOTGUNS_AXIS
+LANG_ENGLISH	"Axis Shotguns Allowed:"
+
+REFERENCE	PENALTY_TIME_LEFT
+LANG_ENGLISH	"Penalty time left: "
+
+REFERENCE	SPAM0
+LANG_ENGLISH	"Visit ^3http:/^3/www.anarchic-x.com^7 for private slot information!"
+
+REFERENCE	SPAM1
+LANG_ENGLISH	"Want your own dedicated ^3private slot^7? Subscribe with Paypal today!"
+
+REFERENCE	SPAM2
+LANG_ENGLISH	"Private slots are available for ^3$7.50 a month for all of our servers!"
+
+REFERENCE	SPAM3
+LANG_ENGLISH	"Interested in joining the ^1Anarchic^7 community? Visit our forums!"
+
+REFERENCE	SPAM4
+LANG_ENGLISH	"Keep ^3in-game chat^7 to a minimum. We kick for off-topic chat!"
+
+REFERENCE	SPAM5
+LANG_ENGLISH	"Insults, racism, political debates, and swearing are ^3not tolerated"
+
+REFERENCE	SPAM6
+LANG_ENGLISH	"^3Recruiting^7 in any way, shape, or form is ^3prohibited"
+
+REFERENCE	SPAM7
+LANG_ENGLISH	"If you need to go away from your keyboard, please ^3go to spectate^7"
+
+REFERENCE	SPAM8
+LANG_ENGLISH	"Our admins will not hesitate to ^3remove you^7 permanently for misbehavior"
+
+REFERENCE	SPAM9
+LANG_ENGLISH	"Please install and use ^3Teamspeak^7 - Visit the site for info"
+
+REFERENCE	SPAM10
+LANG_ENGLISH	"Teamspeak enhances gameplay and provides a ^3tactical^7 experience"
+
+REFERENCE	SPAM11
+LANG_ENGLISH	"Our Teamspeak server is online @ ^3anarchic-x.com"
+
+REFERENCE	SPAM12
+LANG_ENGLISH	"If you like this server, please ^3add it to your favorites^7!"
+
+REFERENCE	SPAM13
+LANG_ENGLISH	"Visit the website for ^3player stats^7 and our informative forums!"
+
+REFERENCE	SPAM14
+LANG_ENGLISH	"Interested in joining ^1|^9ax^1|^7? Visit our ^3forums^7 and introduce yourself!"
+
+REFERENCE	ALL_RIFLES
+LANG_ENGLISH	"All Rifles"
+
+REFERENCE	WALLENDER_GERMANY_MP
+LANG_ENGLISH	"Wallender, Germany"
+
+REFERENCE	ROSTOV_RUSSIA_MP
+LANG_ENGLISH	"Rostov, Russia"
+
+REFERENCE	6_SERVERINFO
+LANG_ENGLISH	"6. Server Information"
+
+REFERENCE	7_ADDFAVORITE
+LANG_ENGLISH	"7. Add This Server To Your Favorites"
+
+REFERENCE	SPAWN_ASSIST
+LANG_ENGLISH	"SpawnAssist:"
+
+ENDMARKER

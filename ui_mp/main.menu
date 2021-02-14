@@ -76,9 +76,9 @@
 		{ 
 //			setitemcolor fadebox backcolor 0 0 0 1; 
 			setdvar ui_background "background_american_w";
-			setdvar ui_logo_show "1";
+			setdvar ui_logo_show "0";
 			setdvar ui_version_show "1";
-			setdvar ui_separator_show "1";
+			setdvar ui_separator_show "0";
 			setdvar ui_background_gradient_show "0";
 			uiScript stopRefresh ;
 		}

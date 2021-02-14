@@ -30,6 +30,7 @@
 		onEsc 
 		{
 			close weapon_british;
+			scriptmenuresponse "changeteam";
 		}
 		onOpen 
 		{
@@ -77,7 +78,7 @@
 		execKey "3" { play "mouse_click"; scriptMenuResponse "m1garand_mp"; }
 		execKey "4" { play "mouse_click"; scriptMenuResponse "enfield_scope_mp"; }
 		execKey "5" { play "mouse_click"; scriptMenuResponse "shotgun_mp"; }
-		execKey "6" { play "mouse_click"; scriptMenuResponse "thompson_mp"; }
+		execKey "6" { play "mouse_click"; scriptMenuResponse "thompson_british_mp"; }
 		execKey "7" { play "mouse_click"; scriptMenuResponse "bren_mp"; }
 
 		itemDef 
@@ -403,12 +404,12 @@
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textaligny		20
-			dvartest		"ui_allow_thompson"
+			dvartest		"ui_allow_thompson_british"
 			showDvar		{ "1" }
 			action
 			{
 				play "mouse_click";
-				scriptMenuResponse "thompson_mp";
+				scriptMenuResponse "thompson_british_mp";
 			}
 			onFocus
 			{
@@ -436,7 +437,7 @@
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textaligny		20
-			dvartest		"ui_allow_thompson"
+			dvartest		"ui_allow_thompson_british"
 			showDvar		{ "2" }
 			onFocus
 			{

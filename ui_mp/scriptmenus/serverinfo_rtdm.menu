@@ -12,7 +12,7 @@
 {
 	menuDef
 	{
-		name			"serverinfo_hq"
+		name			"serverinfo_rtdm"
 		rect			0 0 640 480
 		focuscolor		GLOBAL_FOCUSED_COLOR
 		style			WINDOW_STYLE_EMPTY
@@ -20,7 +20,7 @@
 		onEsc
 		{
 			scriptMenuResponse "close";
-			close serverinfo_hq;
+			close serverinfo_rtdm;
 		}
 		onClose
 		{
@@ -65,8 +65,8 @@
 		}
 
 		// MENU CHOICES
-		execKey "SPACE" { scriptMenuResponse "close"; close serverinfo_hq }
-		execKey "ENTER" { scriptMenuResponse "close"; close serverinfo_hq }
+		execKey "SPACE" { scriptMenuResponse "close"; close serverinfo_rtdm }
+		execKey "ENTER" { scriptMenuResponse "close"; close serverinfo_rtdm }
 
 		itemDef
 		{
@@ -99,19 +99,18 @@
 
 		itemDef
 		{
-			type			ITEM_TYPE_TEXT
 			name			"text_motd"
 			visible			1
-			rect			0 40 290 480
+			rect			0 40 290 213
 			origin			ORIGIN_MENUWINDOW
 			forecolor		1 1 1 1
 			autowrapped
 			dvar			"ui_motd"
 			textfont		UI_FONT_NORMAL
-			textscale		.25
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			textscale		.24
 			textalignx		8
 			textaligny		16
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			decoration
 		}
 		
@@ -121,11 +120,11 @@
 			visible 		1
 			origin			ORIGIN_GAMETYPE
 			forecolor		1 1 1 1
-			text			"@MPUI_HEADQUARTERS"
+			text			"@MPUI_TEAM_DEATHMATCH"
 			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textscale		.35
 			textalign		ITEM_ALIGN_CENTER
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			decoration
 		}
 
@@ -139,10 +138,10 @@
 			type			ITEM_TYPE_NUMERICFIELD
 			text			"@MENU_SCORE_LIMIT_TEAM_POINTS"
 			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textscale		.24
 			textalign		ITEM_ALIGN_RIGHT
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			dvar			"ui_hq_scorelimit"
+			dvar			"ui_tdm_scorelimit"
 			decoration
 		}
 
@@ -155,10 +154,10 @@
 			type			ITEM_TYPE_NUMERICFIELD
 			text			"@MENU_TIME_LIMIT"
 			textfont		UI_FONT_NORMAL
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textscale		.24
 			textalign		ITEM_ALIGN_RIGHT
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			dvar			"ui_hq_timelimit"
+			dvar			"ui_tdm_timelimit"
 			decoration
 		}
 
@@ -196,67 +195,6 @@
 			decoration
 		}
 
-		itemDef
-		{
-			visible			1
-			rect			0 60 350 12
-			origin			ORIGIN_SERVERSETTINGS
-			forecolor		1 1 1 1
-			type			ITEM_TYPE_NUMERICFIELD
-			text			"@AX_ALLOWED_SNIPERS_ALLIED"
-			textfont		UI_FONT_NORMAL
-			textscale		.24
-			textalign		ITEM_ALIGN_RIGHT
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			dvar			"ui_limit_sniper_allied"
-			decoration
-		}
-		itemDef
-		{
-			visible			1
-			rect			0 75 350 12
-			origin			ORIGIN_SERVERSETTINGS
-			forecolor		1 1 1 1
-			type			ITEM_TYPE_NUMERICFIELD
-			text			"@AX_ALLOWED_SNIPERS_AXIS"
-			textfont		UI_FONT_NORMAL
-			textscale		.24
-			textalign		ITEM_ALIGN_RIGHT
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			dvar			"ui_limit_sniper_axis"
-			decoration
-		}
-		itemDef
-		{
-			visible			1
-			rect			0 90 350 12
-			origin			ORIGIN_SERVERSETTINGS
-			forecolor		1 1 1 1
-			type			ITEM_TYPE_NUMERICFIELD
-			text			"@AX_ALLOWED_SHOTGUNS_ALLIED"
-			textfont		UI_FONT_NORMAL
-			textscale		.24
-			textalign		ITEM_ALIGN_RIGHT
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			dvar			"ui_limit_shotgun_allied"
-			decoration
-		}
-
-		itemDef
-		{
-			visible			1
-			rect			0 105 350 12
-			origin			ORIGIN_SERVERSETTINGS
-			forecolor		1 1 1 1
-			type			ITEM_TYPE_NUMERICFIELD
-			text			"@AX_ALLOWED_SHOTGUNS_AXIS"
-			textfont		UI_FONT_NORMAL
-			textscale		.24
-			textalign		ITEM_ALIGN_RIGHT
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
-			dvar			"ui_limit_shotgun_axis"
-			decoration
-		}
 
 
 // CLICK TO CONTINUE
@@ -268,7 +206,7 @@
 			action
 			{
 				scriptMenuResponse "close";
-				close serverinfo_hq;
+				close serverinfo_rtdm;
 			}
 		}
 		
@@ -277,8 +215,8 @@
 			visible 		1
 			origin			ORIGIN_CLICKTOCONTINUE
 			forecolor		1 1 1 1
-			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			text			"@MENU_CLICK_TO_CONTINUE"
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textfont		UI_FONT_NORMAL
 			textscale		.24
 			textalign		ITEM_ALIGN_RIGHT
