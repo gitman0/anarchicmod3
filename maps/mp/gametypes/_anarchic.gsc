@@ -54,6 +54,7 @@ main()
 	level.ctf_autoreturn_delay	= cvardef("scr_ctf_autoreturn_delay", 120, 0, 1440, "int");
 	level.idle_limit		= cvardef("scr_idle_limit", 0, 0, 3600, "int");
 	level.idle_warn_count		= cvardef("scr_idle_warn", 2, 0, 720, "int");
+	level.voting_minplayers		= cvardef("scr_voting_minplayers", 2, 0, 64, "int");
 
 	// weapon limits
 	level.allied_sniper		= cvardef("scr_limit_sniper_allied", 99, 0, 99, "int");
@@ -301,9 +302,9 @@ Callback_PlayerConnect()
 	//self thread disableEnemyRadar();
 	//self thread tweakAmbientFix();
 
-	self thread oldHeadIcons();
-	self thread oldObjPoints();
-	self thread forceSayPos();
+	self thread oldHeadIcons(); // scale the headicons according to view distance
+	self thread oldObjPoints(); // see the objpoints on the compass from farther away
+	self thread forceSayPos(); // reset the chat position in case we forced it off-screen
 
 	if ((level.show_kdhud) && (level.gametype != "cnq"))
 		self thread miniscore_myscore();
@@ -466,12 +467,12 @@ hop_deny_notify()
 
 Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc) {
 
-	if (getcvarint("g_debugdamage"))
+	/*if (getcvarint("g_debugdamage"))
 	{
 		attacker iprintln("sMeansOfDeath: " + sMeansOfDeath);
 		attacker iprintln("sHitLoc: " + sHitLoc);
 		attacker iprintln("sWeapon: " + sWeapon);
-	}
+	}*/
 	if ((!isplayer(attacker)) || (!isdefined(attacker.pers["kills"])))
 		return;
 
@@ -691,6 +692,14 @@ playerTimeout(time)
 
 getdamage(iDamage, sMeansOfDeath, eAttacker, sWeapon)
 {
+	if (getCvarInt("g_DebugDamage"))
+	{
+		if ( isDefined(self.origin) && isDefined(eAttacker.origin) )
+			attack_dist = distance(self.origin, eAttacker.origin);
+		else attack_dist = "unknown";
+		iprintln("iDamage: " + iDamage + ", distance: " + attack_dist + ", sMeansOfDeath: " + sMeansOfDeath + ", sWeapon: " + sWeapon);
+	}
+
 	mod_nade	= 0.15;
 	mod_nade_exp	= 0.01;
 	mod_bullet	= 0.35;
@@ -871,6 +880,131 @@ spawnPlayer() {
 	self thread idleWatchDog();
 }
 
+bodySearch(player)
+{
+	body = self;
+//	body.pack = player.ammo_pack;
+	unique_id = randomint(10000);
+//	while (!verifyBodyId(unique_id))
+//		unique_id = randomint(10000);
+	body.id = unique_id;
+	wait 0.05;
+	body thread waitForSearch();
+	level thread expireBody(body);
+	iprintln("body search thread kicked off");
+}
+
+expireBody(body)
+{
+	id = body.id;
+
+	while (isdefined(body))
+		wait 0.05;
+
+/*	players = getentarray("player", "classname");
+	for (i = 0; i < players.size; i++) {
+		player = players[i];
+		if (!isdefined(player))
+			continue;
+		if (isalive(player) && (isdefined(player.is_searching)) && (player.is_searching_from == id)) {
+			player search_cleanup();
+			player notify ("clear_search_hint");
+			level notify("body_" + id + "_clear");
+		}
+			
+	}
+*/
+	level notify("body_" + id + "_clear");
+	iprintln("body with id " + id + " expired");
+}
+
+waitForSearch()
+{
+	level endon("body_" + self.id + "_clear");
+
+	mindist = 64;
+	minhold = 0.25;
+
+	target = undefined;
+
+	for (;;)
+	{
+		players = getentarray("player", "classname");
+
+		for (i = 0; i < players.size; i++)
+		{
+			player = players[i];
+			dist = distance(player.origin, self.origin);
+			if ( ( dist < mindist ) && isPlayer( player ) && isAlive( player ) && ( player.sessionstate == "playing" ) && ( !player meleeButtonPressed() ) )
+			{
+				target = player;
+				break;
+			}
+		}
+		wait 0.05;
+		if (isdefined(target))
+			iprintln(target.name + " can search body " + self.id);
+		target = undefined;
+	}
+}
+
+displaySearchHint()
+{
+	if (!isdefined(self.search_hint1))
+		self.search_hint1 = self hudelemText("center", "middle", 570, 192, 0.8, 0.75, (1, 1, 1), 1, level.search_hint1);
+
+	if (!isdefined(self.search_hint2))
+		self.search_hint2 = self hudelemText("center", "middle", 570, 202, 0.8, 0.75, (1, 1, 1), 1, level.search_hint2);
+
+	if (!isdefined(self.search_icon))
+		self.search_icon = self hudelemShader("center", "middle", 570, 221, 0.8, (1, 0, 0), level.search_icon, 20, 20);
+
+	self waittill("clear_search_hint");
+
+	self searchHudCleanup();
+}
+
+searchHudCleanup()
+{
+	if(isdefined(self.progressbackground))
+		self.progressbackground destroy();
+	if(isdefined(self.progressbar))
+		self.progressbar destroy();
+	if (isdefined(self.search_hint1))
+		self.search_hint1 destroy();
+	if (isdefined(self.search_hint2))
+		self.search_hint2 destroy();
+	if (isdefined(self.search_icon))
+		self.search_icon destroy();
+}
+
+hudelemText(alignx, aligny, x, y, alpha, fontscale, color, sort, textval)
+{
+	text = newClientHudElem( self );
+	text.alignX = alignx;
+	text.alignY = aligny;
+	text.X = x;
+	text.Y = y;
+	text.alpha = alpha;
+	text.fontScale = fontscale;
+	text.color = color;
+	text.sort = sort;
+	text setText(textval);
+	return text;
+}
+
+hudelemShader(alignx, aligny, x, y, alpha, color, shaderval, w, h)
+{
+	shader = newClientHudElem( self );
+	shader.alignX = alignx;
+	shader.alignY = aligny;
+	shader.X = x;
+	shader.Y = y;
+	shader.alpha = alpha;
+	shader.color = color;
+	shader setShader(shaderval, w, h);
+	return shader;
+}
 idleWatchdog()
 {
 	if ( !level.idle_limit || !isdefined(game["matchstarted"]) || !game["matchstarted"] )
@@ -987,13 +1121,19 @@ checkTimeLimit()
 					level.clock.fontscale = 2;
 					level.clock setTimerUp(0);
 					if (debug) iprintln("settimerup has been called");
+
+					// create some kind of notification
 				}
 				level.in_sudden_death = true;
 
 				if (score_diff == 0)
 				{
 					// disable respawns if its a tie
-					level.ctf_sudden_death_norespawn = true;
+					if (!level.ctf_sudden_death_norespawn)
+					{
+						level.ctf_sudden_death_norespawn = true;
+						// create some kind of notification
+					}
 					return;
 				}
 				// don't end the game if the losing team has a chance to tie it up
@@ -1123,6 +1263,7 @@ isturret(w)
 
 spawn_assist()
 {
+	self endon("disconnect");
 	self endon("killed_player");
 	self endon("player_fired");
 	if (level.spawn_assist <= 0)
@@ -1321,6 +1462,26 @@ isSniper(weapon) {
 	}
 }
 
+isVotingAllowed()
+{
+	if (level.gametype == "ctf")
+	{
+		if ( !isdefined(game["matchstarted"]) || !game["matchstarted"] )
+			return false;
+	}
+	if (level.voting_minplayers > 0)
+	{
+		m = level.voting_minplayers % 2;
+		if (m > 0) level.voting_minplayers += m;
+		per_team = level.voting_minplayers / 2;
+		players = maps\mp\gametypes\_teams::CountPlayers();
+		if ( ( players["allies"] < per_team && players["axis"] < per_team ) || players.size < level.voting_minplayers )
+			return false;
+	}
+	return true;
+}
+
+
 takeFrags()
 {
 	self takeWeapon("frag_grenade_american_mp");
@@ -1396,6 +1557,8 @@ disableEnemyRadar() {
 		wait 10;
 	}
 }
+
+// scale the headicons according to view distance
 oldHeadIcons() {
 	self endon("disconnect");
 	for (;;)
@@ -1404,6 +1567,8 @@ oldHeadIcons() {
 		wait 10;
 	}
 }
+
+// see the objpoints on the compass from farther away
 oldObjPoints() {
 	self endon("disconnect");
 	for (;;)
@@ -1412,13 +1577,15 @@ oldObjPoints() {
 		wait 10;
 	}
 }
+
+// reset the chat position in case we forced it off-screen
 forceSayPos() {
 	self endon("disconnect");
-	for (;;)
-	{
+	//for (;;)
+	//{
 		self setClientCvar("cg_hudchatposition", "5 85");
-		wait 10;
-	}
+	//	wait 10;
+	//}
 }
 tweakAmbientFix() {
 	self endon("disconnect");
@@ -1613,10 +1780,6 @@ defineRuleSet()
 	level.ruleset[level.ruleset.size] = &"AX_SPAM10";
 	level.ruleset[level.ruleset.size] = &"AX_SPAM11";
 	level.ruleset[level.ruleset.size] = &"AX_SPAM12";
-	level.ruleset[level.ruleset.size] = &"AX_SPAM13";
-	level.ruleset[level.ruleset.size] = &"AX_SPAM14";
-	level.ruleset[level.ruleset.size] = &"AX_SPAM15";
-	level.ruleset[level.ruleset.size] = &"AX_SPAM16";
 }
 
 /////////////////////////////////////////
@@ -1793,6 +1956,7 @@ localizedGametype(gt) {
 		case "hq": return &"MPUI_HEADQUARTERS";
 		case "sd": return &"MPUI_SEARCH_AND_DESTROY";
 		case "rtdm": return "Rifles-Only TDM";
+		case "lts": return "Last Team Standing";
 	}
 }
 localizedMap(map) {
@@ -2108,7 +2272,8 @@ isadmin(player) {
 		case 122658: // rup
 		case 241669: // till
 		case 104995: // mancini
-		case 1274652: // C2theT
+		case 1274652: // ct
+		case 784264: // grim
 		// chev
 		//
 			return true;

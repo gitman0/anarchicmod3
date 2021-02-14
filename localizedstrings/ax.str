@@ -56,43 +56,58 @@ REFERENCE	PENALTY_TIME_LEFT
 LANG_ENGLISH	"Penalty time left: "
 
 REFERENCE	SPAM0
-LANG_ENGLISH	"Visit ^3http:/^3/www.anarchic-x.com^7 for info on becoming a premium member!"
+LANG_ENGLISH	"Visit ^3http:/^3/www.anarchic-x.com^7 for info on becoming a part of our community!"
 
 REFERENCE	SPAM1
-LANG_ENGLISH	"Premium members get access to special perks such as exclusive |ax| content!"
+LANG_ENGLISH	"Introduce yourself on the forums so you can wear the ^1|^9ax^1|^7 tags!"
 
 REFERENCE	SPAM2
-LANG_ENGLISH	"Premium membership is just ^3$7.50 a month!"
+LANG_ENGLISH	"Premium membership is available for just ^3$7.50^7 a month!"
 
 REFERENCE	SPAM3
-LANG_ENGLISH	"Interested in joining the ^1Anarchic-X^7 community? Visit our forums!"
+LANG_ENGLISH	"Your premium membership donation ensures that we can keep this server running!"
 
 REFERENCE	SPAM4
-LANG_ENGLISH	"Keep ^3in-game chat^7 to a minimum. We kick for off-topic chat!"
-
-REFERENCE	SPAM5
-LANG_ENGLISH	"Insults, racism, political debates, and swearing are ^3not tolerated^7. Focus on the game!"
-
-REFERENCE	SPAM6
-LANG_ENGLISH	"^3Recruiting^7 in ANY way, shape, or form is ^3prohibited"
-
-REFERENCE	SPAM7
-LANG_ENGLISH	"If you need to stop playing for a short period of time, please ^3go to spectate^7"
-
-REFERENCE	SPAM8
-LANG_ENGLISH	"Please do not accuse others of cheating without ^1first^7 providing proof to an admin!"
-
-REFERENCE	SPAM9
-LANG_ENGLISH	"An ^1admin^7 is usually always available, either in game, AIM, XFire, or the forums."
-
-REFERENCE	SPAM10
 LANG_ENGLISH	"If you like this server, please ^3ADD US TO YOUR FAVORITES^7 through the main menu!"
 
+REFERENCE	SPAM5
+LANG_ENGLISH	"We are one of the last few remaining CTF servers that uses ^3Punkbuster Anti-Cheat^7!"
+
+REFERENCE	SPAM6
+LANG_ENGLISH	"Player stats are available on www.anarchic-x.com! Updated on a daily basis..."
+
+REFERENCE	SPAM7
+LANG_ENGLISH	"While playing on this server, please be respectful of our server rules..."
+
+REFERENCE	SPAM8
+LANG_ENGLISH	"Keep ^1off-topic chat^7 to a minimum - it can be distracting to others."
+
+REFERENCE	SPAM9
+LANG_ENGLISH	"Insults, racism, political debates, and swearing are ^1not tolerated^7."
+
+REFERENCE	SPAM10
+LANG_ENGLISH	"^1Recruiting^7 or ^1advertising^7 in *any* way is prohibited."
+
 REFERENCE	SPAM11
-LANG_ENGLISH	"Player stats are available on the website! Updated daily!"
+LANG_ENGLISH	"If you need to go step away from your keyboard, please ^1switch to spectate first^7."
 
 REFERENCE	SPAM12
-LANG_ENGLISH	"Interested in joining ^1|^9ax^1|^7? Visit our ^3forums^7 and introduce yourself!"
+LANG_ENGLISH	"^1Found a cheater?^7 Report it to a server admin first before making public accusations."
+
+REFERENCE	SPAM13
+LANG_ENGLISH	"^1Server admins^7 can be found in game, on AOL IM, XFire, or the |ax| forums - just ask!"
+
+REFERENCE	SPAM14
+LANG_ENGLISH	"Kicked for ^1Losing Key Packets^7? Type /reconnect in the console and you'll be playing in no time."
+
+REFERENCE	LAST_TEAM_STANDING
+LANG_ENGLISH	"^7AnarchicX^1 LTS^7"
+
+REFERENCE	LTS_OBJ
+LANG_ENGLISH	"^1Last Team Standing^7: Eliminate the other team to win the round and score a point.         The first team that reaches &&1 points wins."
+
+REFERENCE	LTS_OBJ_NOSCORE
+LANG_ENGLISH	"^1Last Team Standing^7: Eliminate the other team to win the round and score a point.         There is no score limit."
 
 REFERENCE	ALL_RIFLES
 LANG_ENGLISH	"All Rifles"

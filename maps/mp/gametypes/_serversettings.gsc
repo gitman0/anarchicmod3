@@ -87,10 +87,13 @@ updateServerSettings()
 	}
 
 	g_allowvote = getCvar("g_allowvote");
-	if(level.allowvote != g_allowvote)
+	if( level.allowvote != g_allowvote || ( level.allowvote == "1" && !maps\mp\gametypes\_anarchic::isVotingAllowed() ) )
 	{
-		level.allowvote = g_allowvote;
-		setCvar("ui_allowvote", level.allowvote);
+		if (maps\mp\gametypes\_anarchic::isVotingAllowed())
+			level.allowvote = g_allowvote;
+		else level.allowvote = "0";
+		if (getCvar("ui_allowvote") != level.allowvote)
+			setCvar("ui_allowvote", level.allowvote);
 	}
 
 	g_allowvotemaprestart = getCvar("g_allowvotemaprestart");
