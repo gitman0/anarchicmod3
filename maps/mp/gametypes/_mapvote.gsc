@@ -371,6 +371,9 @@ PlayerVote()
 	//remove the scoreboard
 	self setClientCvar("g_scriptMainMenu", "");
 	self closeMenu();
+	self closeInGameMenu();
+	self notify("menuresponse", game["menu_ingame_onteam"], "close");
+	
 
 	//remove chat
 	self setClientCvar("cg_chattime", "0");
@@ -411,7 +414,7 @@ PlayerVote()
 			if (self.votechoice == 5)
 				self.votechoice = 0;
 
-			self iprintln("Vote changed to ^2" + level.mapcandidate[self.votechoice]["mapname"]);
+			self iprintln("You have voted for ^2" + level.mapcandidate[self.votechoice]["mapname"]);
 			self.vote_indicator.y = level.awe_mapvotehudoffset + 77 + self.votechoice * 16;				
 			self.vote_indicator.color = colors[self.votechoice];
 

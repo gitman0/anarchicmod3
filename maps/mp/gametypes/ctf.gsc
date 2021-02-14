@@ -64,6 +64,8 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
+	level.returnFlag = ::returnFlag;	// _anarchic::autoReturn()
+	level.printonteam = ::printOnTeam;	// _anarchic::autoReturn()
 
 	level.spawnspectator = ::spawnspectator;
 	maps\mp\gametypes\_anarchic::main();
@@ -405,7 +407,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 			lpattackname = lpselfname;
 			lpattackGuid = lpselfGuid;
 		}
-		if (game["matchstarted"])
+		if ( game["matchstarted"] )
 			logPrint("D;" + lpselfGuid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackGuid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
 	}
 }
@@ -443,7 +445,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 	self.dead_origin = self.origin;
 	self.dead_angles = self.angles;
 
-	if(!isdefined(self.switching_teams) && game["matchstarted"])
+	if ( !isdefined(self.switching_teams) && game["matchstarted"] )
 		self.deaths++;
 
 	lpselfnum = self getEntityNumber();
@@ -476,8 +478,6 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			if(isdefined(attacker.friendlydamage))
 			{
 				attacker iprintlnbold(&"MP_FRIENDLY_FIRE_WILL_NOT");
-				if (attacker.teamkills >= level.teamkill_tier1)
-					attacker.score--;
 			}
 		}
 		else
@@ -487,10 +487,8 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 
 			if (game["matchstarted"])
 			{
-				if(self.pers["team"] == attacker.pers["team"]) { // killed by a friendly
+				if(self.pers["team"] == attacker.pers["team"]) // killed by a friendly
 					attacker.score--;
-					attacker.teamkills++; //anarchicmod
-				}
 				else
 					attacker.score++;
 			}
@@ -805,14 +803,26 @@ startGame()
 {
 	if (!isdefined(game["matchstarted"]))
 	{
-		if (isdefined(level.ctf_startup_override))
-			return;
+		game["matchstarted"] = false;
+		wait_for_players = 120;
+		wait_time = 0;
+		players = maps\mp\gametypes\_teams::CountPlayers();
+		if (!getCvarInt("ax_debug_ctf_warmup"))
+		{
+			while ( ( players["allies"] == 0 || players["axis"] == 0 ) && wait_time < wait_for_players )
+			{
+				if ( wait_time == 0 )
+					thread make_permanent_announcement(&"AX_WAIT_FOR_PLAYERS", "end_wait_for_players", wait_for_players);
+				wait 1;
+				wait_time += 1;
+			}
+		}
+		level notify( "end_wait_for_players" );
 
 		if (isdefined(level.ctf_warmup))
 			warmup = level.ctf_warmup;
 		else warmup = 50;
 		thread make_permanent_announcement(&"AX_MATCHSTARTING", "cleanup match starting", warmup);
-		game["matchstarted"] = false;
 		wait warmup;
 		game["matchstarted"] = true;
 		level notify("cleanup match starting");
@@ -1066,6 +1076,8 @@ updateGametypeCvars()
 
 printJoinedTeam(team)
 {
+	return maps\mp\gametypes\_anarchic::printJoinedTeam(team);
+
 	if(!level.splitscreen)
 	{
 	    if(team == "allies")
@@ -1258,8 +1270,6 @@ pickupFlag(flag)
 	objective_state(self.flag.objective, "invisible");
 
 	self attachFlag();
-
-
 }
 
 dropFlag()
@@ -1282,7 +1292,7 @@ dropFlag()
 
 		self.flag createFlagWaypoint();
 
-		self.flag thread autoReturn();
+		self.flag thread maps\mp\gametypes\_anarchic::autoReturn();
 		self detachFlag(self.flag);
 
 		//check if it's in a flag_returner
@@ -1511,6 +1521,8 @@ menuAutoAssign()
 
 	self notify("joined_team");
 	self notify("end_respawn");
+
+	maps\mp\gametypes\_anarchic::menuAutoAssign();
 }
 
 menuAllies()

@@ -13,17 +13,8 @@ VERSION             "1"
 CONFIG              "C:\trees\cod2\bin\StringEd_PC.cfg"
 FILENOTES           ""
 
-REFERENCE	MOTDTDM
-LANG_ENGLISH	"Welcome to ^1anarchic^7TDM. Grenades have a 3.5 second cook time. Three snipers allowed per team. Three shotguns allowed per team. Smoke after 60 kills. Deathicons/hitblips off. Visit ^3Anarchic-X.com^7 for more information."
-
-REFERENCE	MOTDSD
-LANG_ENGLISH	"Please go to ^3www.anarchic-x.com^7 for all anarchic info."
-
 REFERENCE	MOTD_DEFAULT
 LANG_ENGLISH	"Please visit our website at ^3www.anarchic-x.com^7!"
-
-REFERENCE	MOREKILLS
-LANG_ENGLISH	"^2More kills with less XBox frills."
 
 REFERENCE	SPAWNPROTECTIONON
 LANG_ENGLISH	"* ^7Activating ^2&&1^7 second spawn protection"
@@ -65,16 +56,16 @@ REFERENCE	PENALTY_TIME_LEFT
 LANG_ENGLISH	"Penalty time left: "
 
 REFERENCE	SPAM0
-LANG_ENGLISH	"Visit ^3http:/^3/www.anarchic-x.com^7 for private slot information!"
+LANG_ENGLISH	"Visit ^3http:/^3/www.anarchic-x.com^7 for info on becoming a premium member!"
 
 REFERENCE	SPAM1
-LANG_ENGLISH	"Want your own dedicated ^3private slot^7? Subscribe with Paypal today!"
+LANG_ENGLISH	"Premium members get access to special perks such as exclusive |ax| content!"
 
 REFERENCE	SPAM2
-LANG_ENGLISH	"Private slots are available for ^3$7.50 a month for all of our servers!"
+LANG_ENGLISH	"Premium membership is just ^3$7.50 a month!"
 
 REFERENCE	SPAM3
-LANG_ENGLISH	"Interested in joining the ^1Anarchic^7 community? Visit our forums!"
+LANG_ENGLISH	"Interested in joining the ^1Anarchic-X^7 community? Visit our forums!"
 
 REFERENCE	SPAM4
 LANG_ENGLISH	"Keep ^3in-game chat^7 to a minimum. We kick for off-topic chat!"
@@ -89,31 +80,19 @@ REFERENCE	SPAM7
 LANG_ENGLISH	"If you need to stop playing for a short period of time, please ^3go to spectate^7"
 
 REFERENCE	SPAM8
-LANG_ENGLISH	"An ^1admin^7 is usually always available, either in game, AIM, XFire, or the forums."
+LANG_ENGLISH	"Please do not accuse others of cheating without ^1first^7 providing proof to an admin!"
 
 REFERENCE	SPAM9
-LANG_ENGLISH	"Please install and use ^3Teamspeak^7 - Visit the site for info"
+LANG_ENGLISH	"An ^1admin^7 is usually always available, either in game, AIM, XFire, or the forums."
 
 REFERENCE	SPAM10
-LANG_ENGLISH	"Teamspeak enhances gameplay and provides a ^3tactical^7 experience"
+LANG_ENGLISH	"If you like this server, please ^3ADD US TO YOUR FAVORITES^7 through the main menu!"
 
 REFERENCE	SPAM11
-LANG_ENGLISH	"Our Teamspeak server is online @ ^3anarchic-x.com"
+LANG_ENGLISH	"Player stats are available on the website! Updated daily!"
 
 REFERENCE	SPAM12
-LANG_ENGLISH	"If you like this server, please ^3add it to your favorites^7!"
-
-REFERENCE	SPAM13
-LANG_ENGLISH	"Visit the website for ^3player stats^7 and our informative forums!"
-
-REFERENCE	SPAM14
 LANG_ENGLISH	"Interested in joining ^1|^9ax^1|^7? Visit our ^3forums^7 and introduce yourself!"
-
-REFERENCE	SPAM15
-LANG_ENGLISH	"Interested in playing in ^1|^9ax^1|^7 matches? Stop by our forums and sign up. Theres new ones each month!"
-
-REFERENCE	SPAM16
-LANG_ENGLISH	"Please do not accuse others of cheating without ^1first^7 providing proof to an admin!"
 
 REFERENCE	ALL_RIFLES
 LANG_ENGLISH	"All Rifles"
@@ -138,4 +117,29 @@ LANG_ENGLISH	"Match Starting"
 
 REFERENCE	1_AUTOASSIGN
 LANG_ENGLISH	"1. Auto-Assign ^1(recommended)^7"
+
+REFERENCE	JOINED_AUTO_ALLIES
+LANG_ENGLISH	"&&1 Auto-Assigned Allies"
+
+REFERENCE	JOINED_AUTO_AXIS
+LANG_ENGLISH	"&&1 Auto-Assigned Axis"
+
+REFERENCE	1_GREASEGUN
+LANG_ENGLISH	"1. M3 Grease Gun"
+
+REFERENCE	4_SPRINGFIELD
+LANG_ENGLISH	"4. M1903 Springfield (Scoped)"
+
+REFERENCE	6_THOMPSON
+LANG_ENGLISH	"6. M1A1 Thompson"
+
+REFERENCE	7_BAR
+LANG_ENGLISH	"7. M1918 BAR"
+
+REFERENCE	8_SPRINGFIELD_NOSCOPE
+LANG_ENGLISH	"8. M1903 Springfield"
+
+REFERENCE	THE_SPRINGFIELD_NOSCOPE
+LANG_ENGLISH	"The M1903 Springfield rifle is a bolt-action rifle, powerful and effective at long range. It carries up to five rounds, has a slow rate of fire, and reloads one round at a time."
+
 ENDMARKER

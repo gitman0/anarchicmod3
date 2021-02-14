@@ -66,7 +66,7 @@ main()
 	{
 		axis_flag = getentarray("axis_flag", "targetname");
 		for (i=0;i<axis_flag.size;i++)
-			axis_flag[i].origin = (1790, 1019, 50);
+			axis_flag[i].origin = (1790, 1019, 45);
 
 		allied_flag = getentarray("allied_flag", "targetname");
 		for (i=0;i<allied_flag.size;i++)

@@ -12,10 +12,10 @@
 
 #define ORIGIN_WEAPONIMAGE			296 84
 #define ORIGIN_WEAPONTEXT			296 220
-#define ORIGIN_WEAPONPROPERTIESTEXT	296 290
-#define ORIGIN_WEAPONACCURACY		395 277
+#define ORIGIN_WEAPONPROPERTIESTEXT		296 290
+#define ORIGIN_WEAPONACCURACY			395 277
 #define ORIGIN_WEAPONDAMAGE			395 301
-#define ORIGIN_WEAPONMOBILITY		395 325
+#define ORIGIN_WEAPONMOBILITY			395 325
 #define ORIGIN_GRENADESLOT1			296 144
 #define ORIGIN_GRENADESLOT2			312 144
 #define ORIGIN_GRENADESLOT3			328 144
@@ -46,7 +46,7 @@
 			hide bar_info;
 			hide springfield_info;
 			hide shotgun_info;
-			hide enfield_info;
+			hide springfield_noscope_info;
 		}
 
 		// Gradient
@@ -82,7 +82,7 @@
 		execKey "5" { play "mouse_click"; scriptMenuResponse "shotgun_mp" }
 		execKey "6" { play "mouse_click"; scriptMenuResponse "thompson_mp" }
 		execKey "7" { play "mouse_click"; scriptMenuResponse "bar_mp" }
-		execKey "8" { play "mouse_click"; scriptMenuResponse "enfield_mp"; }
+		execKey "8" { play "mouse_click"; scriptMenuResponse "springfield_noscope_mp"; }
 
 		itemDef 
 		{
@@ -92,7 +92,7 @@
 			origin			ORIGIN_CHOICE1
 			forecolor		GLOBAL_UNFOCUSED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_1_GREASEGUN"
+			text			"@AX_1_GREASEGUN"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -112,7 +112,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show greasegun_info;
 				show weapon_propertiestext;
@@ -126,7 +126,7 @@
 			origin			ORIGIN_CHOICE1
 			forecolor		GLOBAL_DISABLED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_1_GREASEGUN"
+			text			"@AX_1_GREASEGUN"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -141,7 +141,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show greasegun_info;
 				show weapon_propertiestext;
@@ -176,7 +176,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show m1carbine_info;
 				show weapon_propertiestext;
@@ -205,7 +205,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show m1carbine_info;
 				show weapon_propertiestext;
@@ -240,7 +240,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show m1garand_info;
 				show weapon_propertiestext;
@@ -269,7 +269,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show m1garand_info;
 				show weapon_propertiestext;
@@ -284,7 +284,7 @@
 			origin			ORIGIN_CHOICE4
 			forecolor		GLOBAL_UNFOCUSED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_4_SPRINGFIELD"
+			text			"@AX_4_SPRINGFIELD"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -304,7 +304,7 @@
 				hide thompson_info;
 				hide bar_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show springfield_info;
 				show weapon_propertiestext;
@@ -318,7 +318,7 @@
 			origin			ORIGIN_CHOICE4
 			forecolor		GLOBAL_DISABLED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_4_SPRINGFIELD"
+			text			"@AX_4_SPRINGFIELD"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -333,7 +333,7 @@
 				hide thompson_info;
 				hide bar_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show springfield_info;
 				show weapon_propertiestext;
@@ -368,7 +368,7 @@
 				hide m1garand_info;
 				hide bar_info;
 				hide springfield_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show shotgun_info;
 				show weapon_propertiestext;
@@ -397,7 +397,7 @@
 				hide m1garand_info;
 				hide bar_info;
 				hide springfield_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show shotgun_info;
 				show weapon_propertiestext;
@@ -412,7 +412,7 @@
 			origin			ORIGIN_CHOICE6
 			forecolor		GLOBAL_UNFOCUSED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_6_THOMPSON"
+			text			"@AX_6_THOMPSON"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -432,7 +432,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show thompson_info;
 				show weapon_propertiestext;
@@ -446,7 +446,7 @@
 			origin			ORIGIN_CHOICE6
 			forecolor		GLOBAL_DISABLED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_6_THOMPSON"
+			text			"@AX_6_THOMPSON"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -461,7 +461,7 @@
 				hide bar_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show thompson_info;
 				show weapon_propertiestext;
@@ -476,7 +476,7 @@
 			origin			ORIGIN_CHOICE7
 			forecolor		GLOBAL_UNFOCUSED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_7_BAR"
+			text			"@AX_7_BAR"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -496,7 +496,7 @@
 				hide thompson_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show bar_info;
 				show weapon_propertiestext;
@@ -510,7 +510,7 @@
 			origin			ORIGIN_CHOICE7
 			forecolor		GLOBAL_DISABLED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_7_BAR"
+			text			"@AX_7_BAR"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
@@ -525,7 +525,7 @@
 				hide thompson_info;
 				hide springfield_info;
 				hide shotgun_info;
-				hide enfield_info;
+				hide springfield_noscope_info;
 				play "mouse_over";
 				show bar_info;
 				show weapon_propertiestext;
@@ -534,23 +534,23 @@
 		
 		itemDef 
 		{
-			name			"button_enfield"
+			name			"button_springfield_noscope"
 			visible			1
 			rect			0 0 128 24
 			origin			ORIGIN_CHOICE8
 			forecolor		GLOBAL_UNFOCUSED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_2_LEEENFIELD"
+			text			"@AX_8_SPRINGFIELD_NOSCOPE"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textaligny		20
-			dvartest		"ui_allow_enfield"
+			dvartest		"ui_allow_springfield_noscope"
 			showDvar		{ "1" }
 			action
 			{
 				play "mouse_click";
-				scriptMenuResponse "enfield_mp";
+				scriptMenuResponse "springfield_noscope_mp";
 			}
 			onFocus
 			{
@@ -562,24 +562,24 @@
 				hide shotgun_info;
 				hide bar_info;
 				play "mouse_over";
-				show enfield_info;
+				show springfield_noscope_info;
 				show weapon_propertiestext;
 			}
 		}
 		itemDef 
 		{
-			name			"button_enfield"
+			name			"button_springfield_noscope"
 			visible			1
 			rect			0 0 128 24
 			origin			ORIGIN_CHOICE8
 			forecolor		GLOBAL_DISABLED_COLOR
 			type			ITEM_TYPE_BUTTON
-			text			"@MPUI_2_LEEENFIELD"
+			text			"@AX_8_SPRINGFIELD_NOSCOPE"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			textstyle		ITEM_TEXTSTYLE_SHADOWED
 			textaligny		20
-			dvartest		"ui_allow_enfield"
+			dvartest		"ui_allow_springfield_noscope"
 			showDvar		{ "2" }
 			onFocus
 			{
@@ -591,7 +591,7 @@
 				hide shotgun_info;
 				hide bar_info;
 				play "mouse_over";
-				show enfield_info;
+				show springfield_noscope_info;
 				show weapon_propertiestext;
 			}
 		}
@@ -615,12 +615,12 @@
 // WEAPON IMAGES
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
-			rect			0 -2 224 112
+			rect			0 4 224 112
 			origin			ORIGIN_WEAPONIMAGE
 	 		style			WINDOW_STYLE_SHADER
-			background		"weapon_enfield"
+			background		"weapon_springfield_noscope"
 			decoration
 		}
 
@@ -699,13 +699,13 @@
 // WEAPON DESCRIPTIONS
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
 			rect			0 0 224 64
 			origin			ORIGIN_WEAPONTEXT
 			forecolor		1 1 1 1
 			autowrapped
-			text			"@MPUI_THE_LEEENFIELD_RIFLE"
+			text			"@AX_THE_SPRINGFIELD_NOSCOPE"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			decoration
@@ -771,7 +771,7 @@
 			origin			ORIGIN_WEAPONTEXT
 			forecolor		1 1 1 1
 			autowrapped
-			text			"@MPUI_THIS_IS_A_SNIPER_RIFLE"
+			text			"@AX_THE_SPRINGFIELD_NOSCOPE"
 			textfont		UI_FONT_NORMAL
 			textscale		GLOBAL_TEXT_SIZE
 			decoration
@@ -793,7 +793,7 @@
 
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
 			rect			0 0 128 10
 			origin			ORIGIN_WEAPONACCURACY
@@ -803,7 +803,7 @@
 		}
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
 			rect			0 0 128 10
 			origin			ORIGIN_WEAPONACCURACY
@@ -814,7 +814,7 @@
 
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
 			rect			0 0 128 10
 			origin			ORIGIN_WEAPONDAMAGE
@@ -824,7 +824,7 @@
 		}
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
 			rect			0 0 128 10
 			origin			ORIGIN_WEAPONDAMAGE
@@ -835,7 +835,7 @@
 
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
 			rect			0 0 128 10
 			origin			ORIGIN_WEAPONMOBILITY
@@ -845,7 +845,7 @@
 		}
 		itemDef
 		{
-			name			"enfield_info"
+			name			"springfield_noscope_info"
 			visible 		0
 			rect			0 0 80 10
 			origin			ORIGIN_WEAPONMOBILITY

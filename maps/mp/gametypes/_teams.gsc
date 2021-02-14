@@ -64,15 +64,13 @@ init()
 					if(!getTeamBalance())
 					{
 						iprintlnbold(&"MP_AUTOBALANCE_SECONDS", 15);
-					    wait 15;
-	
+						wait 15;
+
 						if(!getTeamBalance())
 							level balanceTeams();
 					}
-					
-					wait 59;
+					wait 29;
 				}
-				
 				wait 1;
 			}
 		}

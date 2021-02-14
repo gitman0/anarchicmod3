@@ -1,7 +1,7 @@
 main()
 {
 	ambientPlay("ambient_mp_flakbatterie");
-	setExpFog(0.0003, 0.30, 0.31, 0.34, 0);
+	setExpFog(0.0005, 0.30, 0.31, 0.34, 0);
 
 	maps\mp\mp_flakbatterie_fx::main();
 	maps\mp\_load::main(); 

@@ -60,6 +60,6 @@ main()
 	{
 		axis_flag = getentarray("axis_flag", "targetname");
 		for (i=0;i<axis_flag.size;i++)
-			axis_flag[i].origin = (-618,-3059,17);
+			axis_flag[i].origin = (-618,-3059,12);
 	}
 }
