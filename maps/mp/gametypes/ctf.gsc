@@ -84,13 +84,20 @@ Callback_StartGameType()
 
 	level.compassflag_allies = "compass_flag_" + game["allies"];
 	level.compassflag_axis = "compass_flag_" + game["axis"];
-	level.objpointflag_allies = "objpoint_flag_" + game["allies"];
-	level.objpointflag_axis = "objpoint_flag_" + game["axis"];
+	level.objpointflag_allies = "objpoint_flagpatch1_" + game["allies"];
+	level.objpointflag_axis = "objpoint_flagpatch1_" + game["axis"];
+	level.objpointflagmissing_allies = "objpoint_flagmissing_" + game["allies"];
+	level.objpointflagmissing_axis = "objpoint_flagmissing_" + game["axis"];
 	level.hudflag_allies = "compass_flag_" + game["allies"];
 	level.hudflag_axis = "compass_flag_" + game["axis"];
+	
+	level.hudflagflash_allies = "hud_flagflash_" + game["allies"];
+	level.hudflagflash_axis = "hud_flagflash_" + game["axis"];
 
 	precacheStatusIcon("hud_status_dead");
 	precacheStatusIcon("hud_status_connecting");
+	precacheStatusIcon(level.hudflag_allies);
+	precacheStatusIcon(level.hudflag_axis);
 	precacheRumble("damage_heavy");
 	precacheShader(level.compassflag_allies);
 	precacheShader(level.compassflag_axis);
@@ -98,8 +105,12 @@ Callback_StartGameType()
 	precacheShader(level.objpointflag_axis);
 	precacheShader(level.hudflag_allies);
 	precacheShader(level.hudflag_axis);
+	precacheShader(level.hudflagflash_allies);
+	precacheShader(level.hudflagflash_axis);
 	precacheShader(level.objpointflag_allies);
 	precacheShader(level.objpointflag_axis);
+	precacheShader(level.objpointflagmissing_allies);
+	precacheShader(level.objpointflagmissing_axis);
 	precacheModel("xmodel/prop_flag_" + game["allies"]);
 	precacheModel("xmodel/prop_flag_" + game["axis"]);
 	precacheModel("xmodel/prop_flag_" + game["allies"] + "_carry");
@@ -278,7 +289,12 @@ Callback_PlayerConnect()
 	{
 		self setClientCvar("ui_allow_weaponchange", "0");
 
-		if(!isDefined(self.pers["skipserverinfo"]))
+		if(!level.xenon)
+		{
+			if(!isdefined(self.pers["skipserverinfo"]))
+				self openMenu(game["menu_serverinfo"]);
+		}
+		else
 			self openMenu(game["menu_team"]);
 
 		self.pers["team"] = "spectator";
@@ -987,6 +1003,7 @@ updateGametypeCvars()
 		{
 			level.scorelimit = scorelimit;
 			setCvar("ui_ctf_scorelimit", level.scorelimit);
+			level notify("update_allhud_score");
 		}
 		checkScoreLimit();
 
@@ -1045,6 +1062,7 @@ initFlags()
 	allied_flag.objective = 0;
 	allied_flag.compassflag = level.compassflag_allies;
 	allied_flag.objpointflag = level.objpointflag_allies;
+	allied_flag.objpointflagmissing = level.objpointflagmissing_allies;
 	allied_flag thread flag();
 
 	axis_flag = getent("axis_flag", "targetname");
@@ -1061,6 +1079,7 @@ initFlags()
 	axis_flag.objective = 1;
 	axis_flag.compassflag = level.compassflag_axis;
 	axis_flag.objpointflag = level.objpointflag_axis;
+	axis_flag.objpointflagmissing = level.objpointflagmissing_axis;
 	axis_flag thread flag();
 }
 
@@ -1101,12 +1120,13 @@ flag()
 						other.flag returnFlag();
 						other detachFlag(other.flag);
 						other.flag = undefined;
+						other.statusicon = "";
 
 						other.score += 10;
 						teamscore = getTeamScore(other.pers["team"]);
 						teamscore += 1;
 						setTeamScore(other.pers["team"], teamscore);
-						level notify("update_teamscore_hud");
+						level notify("update_allhud_score");
 
 						checkScoreLimit();
 					}
@@ -1120,7 +1140,7 @@ flag()
 					self returnFlag();
 
 					other.score += 2;
-					level notify("update_teamscore_hud");
+					level notify("update_allhud_score");
 				}
 			}
 			else if(other.pers["team"] != self.team) // Touched by enemy
@@ -1156,11 +1176,19 @@ pickupFlag(flag)
 	flag.origin = flag.origin + (0, 0, -10000);
 	flag.flagmodel hide();
 	self.flag = flag;
+
+	if(self.pers["team"] == "allies")
+		self.statusicon = level.hudflag_axis;
+	else
+		self.statusicon = level.hudflag_allies;
+
 	self.dont_auto_balance = true;
 
 	flag deleteFlagWaypoint();
+	flag createFlagMissingWaypoint();
 
-	objective_state(self.flag.objective, "invisible");
+	objective_onEntity(self.flag.objective, self);
+	objective_team(self.flag.objective, self.pers["team"]);
 
 	self attachFlag();
 }
@@ -1177,10 +1205,10 @@ dropFlag()
 		self.flag.flagmodel.origin = self.flag.origin;
 		self.flag.flagmodel show();
 		self.flag.atbase = false;
+		self.statusicon = "";
 
-		// set compass flag position on player
 		objective_position(self.flag.objective, self.flag.origin);
-		objective_state(self.flag.objective, "current");
+		objective_team(self.flag.objective, "none");
 
 		self.flag createFlagWaypoint();
 
@@ -1212,11 +1240,11 @@ returnFlag()
 	self.flagmodel show();
 	self.atbase = true;
 
-	// set compass flag position on player
 	objective_position(self.objective, self.origin);
-	objective_state(self.objective, "current");
+	objective_team(self.objective, "none");
 
 	self createFlagWaypoint();
+	self deleteFlagMissingWaypoint();
 }
 
 autoReturn()
@@ -1229,45 +1257,93 @@ autoReturn()
 
 attachFlag()
 {
-	if (isdefined(self.flagAttached))
+	if(isdefined(self.flagAttached))
 		return;
 
-	//put icon on screen
-	self.flagAttached = newClientHudElem(self);
-	self.flagAttached.x = 30;
-	self.flagAttached.y = 95;
-	self.flagAttached.alignX = "center";
-	self.flagAttached.alignY = "middle";
-	self.flagAttached.horzAlign = "left";
-	self.flagAttached.vertAlign = "top";
-
-	iconSize = 40;
-
-	if (self.pers["team"] == "allies")
-	{
+	if(self.pers["team"] == "allies")
 		flagModel = "xmodel/prop_flag_" + game["axis"] + "_carry";
-		self.flagAttached setShader(level.hudflag_axis, iconSize, iconSize);
-	}
 	else
-	{
 		flagModel = "xmodel/prop_flag_" + game["allies"] + "_carry";
-		self.flagAttached setShader(level.hudflag_allies, iconSize, iconSize);
-	}
+	
 	self attach(flagModel, "J_Spine4", true);
+	self.flagAttached = true;
+	
+	self thread createHudIcon();
 }
 
 detachFlag(flag)
 {
-	if (!isdefined(self.flagAttached))
+	if(!isdefined(self.flagAttached))
 		return;
 
-	if (flag.team == "allies")
+	if(flag.team == "allies")
 		flagModel = "xmodel/prop_flag_" + game["allies"] + "_carry";
 	else
 		flagModel = "xmodel/prop_flag_" + game["axis"] + "_carry";
+		
 	self detach(flagModel, "J_Spine4");
+	self.flagAttached = undefined;
 
-	self.flagAttached destroy();
+	self thread deleteHudIcon();
+}
+
+createHudIcon()
+{
+	iconSize = 40;
+
+	self.hud_flag = newClientHudElem(self);
+	self.hud_flag.x = 30;
+	self.hud_flag.y = 95;
+	self.hud_flag.alignX = "center";
+	self.hud_flag.alignY = "middle";
+	self.hud_flag.horzAlign = "left";
+	self.hud_flag.vertAlign = "top";
+	self.hud_flag.alpha = 0;
+
+	self.hud_flagflash = newClientHudElem(self);
+	self.hud_flagflash.x = 30;
+	self.hud_flagflash.y = 95;
+	self.hud_flagflash.alignX = "center";
+	self.hud_flagflash.alignY = "middle";
+	self.hud_flagflash.horzAlign = "left";
+	self.hud_flagflash.vertAlign = "top";
+	self.hud_flagflash.alpha = 0;
+	self.hud_flagflash.sort = 1;
+
+	if(self.pers["team"] == "allies")
+	{
+		self.hud_flag setShader(level.hudflag_axis, iconSize, iconSize);
+		self.hud_flagflash setShader(level.hudflagflash_axis, iconSize, iconSize);
+	}
+	else
+	{
+		assert(self.pers["team"] == "axis");
+		self.hud_flag setShader(level.hudflag_allies, iconSize, iconSize);
+		self.hud_flagflash setShader(level.hudflagflash_allies, iconSize, iconSize);
+	}
+
+	self.hud_flagflash fadeOverTime(.2);
+	self.hud_flagflash.alpha = 1;
+
+	self.hud_flag fadeOverTime(.2);
+	self.hud_flag.alpha = 1;
+
+	wait .2;
+	
+	if(isdefined(self.hud_flagflash))
+	{
+		self.hud_flagflash fadeOverTime(1);
+		self.hud_flagflash.alpha = 0;
+	}
+}
+
+deleteHudIcon()
+{
+	if(isdefined(self.hud_flagflash))
+		self.hud_flagflash destroy();
+		
+	if(isdefined(self.hud_flag))
+		self.hud_flag destroy();
 }
 
 createFlagWaypoint()
@@ -1287,13 +1363,39 @@ createFlagWaypoint()
 		waypoint setShader(self.objpointflag, 7, 7);
 
 	waypoint setwaypoint(true);
-	self.waypoint = waypoint;
+	self.waypoint_flag = waypoint;
 }
 
 deleteFlagWaypoint()
 {
-	if(isdefined(self.waypoint))
-		self.waypoint destroy();
+	if(isdefined(self.waypoint_flag))
+		self.waypoint_flag destroy();
+}
+
+createFlagMissingWaypoint()
+{
+	self deleteFlagMissingWaypoint();
+
+	waypoint = newHudElem();
+	waypoint.x = self.home_origin[0];
+	waypoint.y = self.home_origin[1];
+	waypoint.z = self.home_origin[2] + 100;
+	waypoint.alpha = .61;
+	waypoint.archived = true;
+
+	if(level.splitscreen)
+		waypoint setShader(self.objpointflagmissing, 14, 14);
+	else
+		waypoint setShader(self.objpointflagmissing, 7, 7);
+
+	waypoint setwaypoint(true);
+	self.waypoint_base = waypoint;
+}
+
+deleteFlagMissingWaypoint()
+{
+	if(isdefined(self.waypoint_base))
+		self.waypoint_base destroy();
 }
 
 playSoundOnPlayers(sound, team)
@@ -1335,6 +1437,12 @@ printOnTeam(text, team)
 
 menuAutoAssign()
 {
+	if(!level.xenon && isdefined(self.pers["team"]) && (self.pers["team"] == "allies" || self.pers["team"] == "axis"))
+	{
+		self openMenu(game["menu_team"]);
+		return;
+	}
+
 	numonteam["allies"] = 0;
 	numonteam["axis"] = 0;
 
@@ -1343,7 +1451,7 @@ menuAutoAssign()
 	{
 		player = players[i];
 
-		if(!isDefined(player.pers["team"]) || player.pers["team"] == "spectator" || player == self)
+		if(!isDefined(player.pers["team"]) || player.pers["team"] == "spectator")
 			continue;
 
 		numonteam[player.pers["team"]]++;
@@ -1356,7 +1464,7 @@ menuAutoAssign()
 		{
 			teams[0] = "allies";
 			teams[1] = "axis";
-			assignment = teams[randomInt(2)];
+			assignment = teams[randomInt(2)];	// should not switch teams if already on a team
 		}
 		else if(getTeamScore("allies") < getTeamScore("axis"))
 			assignment = "allies";
@@ -1414,6 +1522,12 @@ menuAllies()
 {
 	if(self.pers["team"] != "allies")
 	{
+		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("allies"))
+		{
+			self openMenu(game["menu_team"]);
+			return;
+		}
+
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
@@ -1441,6 +1555,12 @@ menuAxis()
 {
 	if(self.pers["team"] != "axis")
 	{
+		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("axis"))
+		{
+			self openMenu(game["menu_team"]);
+			return;
+		}
+
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;

@@ -214,7 +214,12 @@ Callback_PlayerConnect()
 	{
 		self setClientCvar("ui_allow_weaponchange", "0");
 
-		if(!isdefined(self.pers["skipserverinfo"]))
+		if(!level.xenon)
+		{
+			if(!isdefined(self.pers["skipserverinfo"]))
+				self openMenu(game["menu_serverinfo"]);
+		}
+		else
 			self openMenu(game["menu_team"]);
 
 		self.pers["team"] = "spectator";
@@ -348,7 +353,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		lpattackguid = attacker getGuid();
 		lpattackname = attacker.name;
 
-		attacker notify("update_playerscore_hud");
+		attacker notify("update_playerhud_score");
 	}
 	else // If you weren't killed by a player, you were in the wrong place at the wrong time
 	{
@@ -360,7 +365,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		lpattackguid = "";
 		lpattackname = "";
 
-		self notify("update_playerscore_hud");
+		self notify("update_playerhud_score");
 	}
 
 	logPrint("K;" + lpselfguid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackguid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
@@ -764,6 +769,7 @@ updateGametypeCvars()
 		{
 			level.scorelimit = scorelimit;
 			setCvar("ui_dm_scorelimit", level.scorelimit);
+			level notify("update_allhud_score");
 
 			players = getentarray("player", "classname");
 			for(i = 0; i < players.size; i++)

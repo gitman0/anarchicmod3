@@ -1,5 +1,3 @@
-// Consider moving timer to this script
-
 init()
 {
 	switch(game["allies"])
@@ -22,8 +20,10 @@ init()
 
 	precacheShader(game["hudicon_allies"]);
 	precacheShader(game["hudicon_axis"]);
+	precacheString(&"MP_SLASH");
 	
 	level thread onPlayerConnect();
+	level thread onUpdateAllHUD();
 }
 
 onPlayerConnect()
@@ -32,10 +32,40 @@ onPlayerConnect()
 	{
 		level waittill("connecting", player);
 
-		player thread onPlayerSpawned();
+		player.hud_playericon = newClientHudElem(player);
+        player.hud_playericon.horzAlign = "left";
+	    player.hud_playericon.vertAlign = "top";
+	    player.hud_playericon.x = 6;
+	    player.hud_playericon.y = 28;
+	    player.hud_playericon.archived = false;
+	    player.hud_playericon.alpha = 0;
+
+	    player.hud_playerscore = newClientHudElem(player);
+	    player.hud_playerscore.horzAlign = "left";
+	    player.hud_playerscore.vertAlign = "top";
+	    player.hud_playerscore.x = 36;
+	    player.hud_playerscore.y = 26;
+	    player.hud_playerscore.font = "default";
+	    player.hud_playerscore.fontscale = 2;
+	    player.hud_playerscore.archived = false;
+	    player.hud_playerscore.alpha = 0;
+
+        player.hud_playerscorelimit = newClientHudElem(player);
+        player.hud_playerscorelimit.horzAlign = "left";
+	    player.hud_playerscorelimit.vertAlign = "top";
+		player.hud_playerscorelimit.x = 49;
+	    player.hud_playerscorelimit.y = 26;
+	    player.hud_playerscorelimit.font = "default";
+	    player.hud_playerscorelimit.fontscale = 2;
+	    player.hud_playerscorelimit.archived = false;
+	    player.hud_playerscorelimit.label = (&"MP_SLASH");
+	    player.hud_playerscorelimit.alpha = 0;
+
+		player.hidescore = true;
+
 		player thread onJoinedTeam();
 		player thread onJoinedSpectators();
-		player thread onUpdatePlayerScoreHUD();
+		player thread onUpdatePlayerHUD();
 	}
 }
 
@@ -46,7 +76,8 @@ onJoinedTeam()
 	for(;;)
 	{
 		self waittill("joined_team");
-		self thread removePlayerHUD();
+
+		self thread updatePlayerHUD();
 	}
 }
 
@@ -57,72 +88,88 @@ onJoinedSpectators()
 	for(;;)
 	{
 		self waittill("joined_spectators");
-		self thread removePlayerHUD();
+
+		self thread updatePlayerHUD();
 	}
 }
 
-onPlayerSpawned()
+onUpdatePlayerHUD()
 {
-	self endon("disconnect");
+	for(;;)
+	{
+		self waittill("update_playerhud_score");
+		
+		self thread updatePlayerHUD();
+	}
+}
+
+onUpdateAllHUD()
+{
+	for(;;)
+	{
+		self waittill("update_allhud_score");
+		
+		level thread updateAllHUD();
+	}
+}
+
+updatePlayerHUD()
+{
+	if(isdefined(self.pers["team"]))
+	{
+		hudicon["allies"] = game["hudicon_allies"];
+		hudicon["axis"] = game["hudicon_axis"];
+
+		if(self.pers["team"] == "allies" || self.pers["team"] == "axis")
+		{
+			self.hud_playericon setShader(hudicon[self.pers["team"]], 24, 24);
+		    self.hud_playericon.alpha = 1;
+			self.hud_playerscore setValue(self.score);
+		    self.hud_playerscore.alpha = 1;
+
+			if(level.scorelimit > 0)
+			{
+				self.hud_playerscorelimit setValue(level.scorelimit);
+				self.hud_playerscorelimit.x = getScoreLimitPosition(self.score);
+				self.hud_playerscorelimit.alpha = 1;
+			}
+			else
+				self.hud_playerscorelimit.alpha = 0;
+		}
+		else if(self.pers["team"] == "spectator")
+		{
+		    self.hud_playericon.alpha = 0;
+		    self.hud_playerscore.alpha = 0;
+		    self.hud_playerscorelimit.alpha = 0;
+		}
+	}
+}
+
+updateAllHUD()
+{
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+		players[i] thread updatePlayerHUD();
+}
+
+getScoreLimitPosition(score)
+{
+	offset = 0;
 	
-	for(;;)
+	if(score < 0)
 	{
-		self waittill("spawned_player");
-
-		if(!isdefined(self.hud_playericon))
-		{
-            self.hud_playericon = newClientHudElem(self);
-            self.hud_playericon.horzAlign = "left";
-		    self.hud_playericon.vertAlign = "top";
-		    self.hud_playericon.x = 6;
-		    self.hud_playericon.y = 28;
-		    self.hud_playericon.archived = false;
-		}
-
-		if(!isdefined(self.hud_playerscore))
-		{
-		    self.hud_playerscore = newClientHudElem(self);
-		    self.hud_playerscore.horzAlign = "left";
-		    self.hud_playerscore.vertAlign = "top";
-		    self.hud_playerscore.x = 36;
-		    self.hud_playerscore.y = 26;
-		    self.hud_playerscore.font = "default";
-		    self.hud_playerscore.fontscale = 2;
-		    self.hud_playerscore.archived = false;
-		}
-
-		assert(self.pers["team"] == "allies" || self.pers["team"] == "axis");
-		if(self.pers["team"] == "allies")
-			self.hud_playericon setShader(game["hudicon_allies"], 24, 24);
-		else
-			self.hud_playericon setShader(game["hudicon_axis"], 24, 24);
-		
-		self thread updatePlayerScoreHUD();
+		score = score * -1;
+		offset = 7;
 	}
-}
 
-onUpdatePlayerScoreHUD()
-{
-	for(;;)
-	{
-		self waittill("update_playerscore_hud");
+	if(score >= 10000)
+		offset += 48;
+	else if(score >= 1000)
+		offset += 36;
+	else if(score >= 100)
+		offset += 24;
+	else if(score >= 10)
+		offset += 12;
 		
-		self thread updatePlayerScoreHUD();
-	}
+	return 49 + offset;
 }
-
-updatePlayerScoreHUD()
-{
-	if(isDefined(self.hud_playerscore))
-		self.hud_playerscore setValue(self.score);
-}
-
-removePlayerHUD()
-{
-	if(isDefined(self.hud_playericon))
-		self.hud_playericon destroy();
-
-	if(isDefined(self.hud_playerscore))
-		self.hud_playerscore destroy();
-}
-

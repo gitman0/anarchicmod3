@@ -92,7 +92,7 @@ Callback_StartGameType()
 
 	game["radio_prespawn"][0] = "objectiveA";
 	game["radio_prespawn"][1] = "objectiveB";
-	game["radio_prespawn"][2] = "objective_hq";
+	game["radio_prespawn"][2] = "objective";
 	game["radio_prespawn_objpoint"][0] = "objpoint_A";
 	game["radio_prespawn_objpoint"][1] = "objpoint_B";
 	game["radio_prespawn_objpoint"][2] = "objpoint_star";
@@ -110,7 +110,7 @@ Callback_StartGameType()
 	assert(isdefined(game["radio_model"]));
 
 	precacheShader("white");
-	precacheShader("objective_hq");
+	precacheShader("objective");
 	precacheShader("objectiveA");
 	precacheShader("objectiveB");
 	precacheShader("objective");
@@ -222,7 +222,7 @@ Callback_StartGameType()
 	else
 		level.progressBarWidth = 192;
 
-	level.RadioSpawnDelay = 45;
+	level.RadioSpawnDelay = 15;
 	level.radioradius = 120;
 	level.respawngracetime = 5;
 	level.RadioMaxHoldSeconds = 120;
@@ -311,7 +311,12 @@ Callback_PlayerConnect()
 	{
 		self setClientCvar("ui_allow_weaponchange", "0");
 
-		if(!isdefined(self.pers["skipserverinfo"]))
+		if(!level.xenon)
+		{
+			if(!isdefined(self.pers["skipserverinfo"]))
+				self openMenu(game["menu_serverinfo"]);
+		}
+		else
 			self openMenu(game["menu_team"]);
 
 		self.pers["team"] = "spectator";
@@ -1063,6 +1068,7 @@ updateGametypeCvars()
 		{
 			level.scorelimit = scorelimit;
 			setCvar("ui_hq_scorelimit", level.scorelimit);
+			level notify("update_allhud_score");
 		}
 		checkScoreLimit();
 
@@ -1148,6 +1154,7 @@ hq_obj_think(radio)
 			continue;
 		NeutralRadios++;
 	}
+	
 	if(NeutralRadios <= 0)
 	{
 		if(level.nextradio > level.radio.size - 1)
@@ -1179,26 +1186,29 @@ hq_obj_think(radio)
 					fakeposition = level.radio[randomint(level.radio.size)];
 			}
 			randAorB = randomint(2);
-			objective_add(1, "current", fakeposition.origin, game["radio_prespawn"][randAorB]);
-			thread maps\mp\gametypes\_objpoints::addObjpoint(fakeposition.origin, "1", game["radio_prespawn_objpoint"][randAorB]);
+//			objective_add(1, "current", fakeposition.origin, game["radio_prespawn"][randAorB]);
+//			thread maps\mp\gametypes\_objpoints::addObjpoint(fakeposition.origin, "1", game["radio_prespawn_objpoint"][randAorB]);
 		}
+		
 		if(!isdefined(randAorB))
 			otherAorB = 2; //use original icon since there is only one objective that will show
 		else if(randAorB == 1)
 			otherAorB = 0;
 		else
 			otherAorB = 1;
-		objective_add(0, "current", level.radio[level.nextradio].origin, game["radio_prespawn"][otherAorB]);
-		thread maps\mp\gametypes\_objpoints::addObjpoint(level.radio[level.nextradio].origin, "0", game["radio_prespawn_objpoint"][otherAorB]);
+//		objective_add(0, "current", level.radio[level.nextradio].origin, game["radio_prespawn"][otherAorB]);
+//		thread maps\mp\gametypes\_objpoints::addObjpoint(level.radio[level.nextradio].origin, "0", game["radio_prespawn_objpoint"][otherAorB]);
 
 		level hq_check_teams_exist();
 		restartRound = false;
+		
 		while((!level.alliesexist) || (!level.axisexist))
 		{
 			restartRound = true;
 			wait 2;
 			level hq_check_teams_exist();
 		}
+		
 		if(restartRound)
 			restartRound();
 		level.roundStarted = true;
@@ -1210,8 +1220,9 @@ hq_obj_think(radio)
 		level.radio[level.nextradio].hidden = false;
 
 		level thread playSoundOnPlayers("explo_plant_no_tick");
-		objective_icon(0, game["radio_none"]);
-		objective_delete(1);
+		objective_add(0, "current", level.radio[level.nextradio].origin, game["radio_prespawn"][2]);
+//		objective_icon(0, game["radio_none"]);
+//		objective_delete(1);
 		thread maps\mp\gametypes\_objpoints::removeObjpoints();
 		thread maps\mp\gametypes\_objpoints::addObjpoint(level.radio[level.nextradio].origin, "0", "objpoint_radio");
 
@@ -1718,7 +1729,7 @@ hq_radio_capture(radio, team)
 				if(getTeamCount(NeutralizingTeam))
 				{
 					setTeamScore(NeutralizingTeam, getTeamScore(NeutralizingTeam) + level.NeutralizingPoints);
-					level notify("update_teamscore_hud");
+					level notify("update_allhud_score");
 
 					if(!level.splitscreen)
 					{
@@ -1742,7 +1753,7 @@ hq_radio_capture(radio, team)
 			}
 		}
 
-		level thread hq_removhudelem_allplayers(radio);
+		level thread hq_removehudelem_allplayers(radio);
 	}
 	else
 	{
@@ -1838,7 +1849,7 @@ hq_points()
 			if(getTeamCount(level.DefendingRadioTeam))
 			{
 				setTeamScore(level.DefendingRadioTeam, getTeamScore(level.DefendingRadioTeam) + 1);
-				level notify("update_teamscore_hud");
+				level notify("update_allhud_score");
 				checkScoreLimit();
 			}
 		}
@@ -1948,7 +1959,7 @@ hq_radio_resetall()
 
 	level.graceperiod = false;
 	level thread hq_obj_think(radio);
-	level thread hq_removhudelem_allplayers(radio);
+	level thread hq_removehudelem_allplayers(radio);
 
 	// All dead people should now respawn
 	players = getentarray("player", "classname");
@@ -1979,7 +1990,7 @@ hq_removeall_hudelems(player)
 	}
 }
 
-hq_removhudelem_allplayers(radio)
+hq_removehudelem_allplayers(radio)
 {
 	players = getentarray("player", "classname");
 	for(i = 0; i < players.size; i++)
@@ -2014,29 +2025,6 @@ hq_check_teams_exist()
 		if(level.alliesexist && level.axisexist)
 			return;
 	}
-}
-
-waittill_any(string1, string2)
-{
-	self endon("death");
-	ent = spawnstruct();
-
-	if(isdefined(string1))
-		self thread waittill_string(string1, ent);
-
-	if(isdefined(string2))
-		self thread waittill_string(string2, ent);
-
-	ent waittill("returned");
-	ent notify("die");
-}
-
-waittill_string(msg, ent)
-{
-	self endon("death");
-	ent endon("die");
-	self waittill(msg);
-	ent notify("returned");
 }
 
 updateTeamStatus()
@@ -2082,6 +2070,12 @@ restartRound()
 
 menuAutoAssign()
 {
+	if(!level.xenon && isdefined(self.pers["team"]) && (self.pers["team"] == "allies" || self.pers["team"] == "axis"))
+	{
+		self openMenu(game["menu_team"]);
+		return;
+	}
+	
 	numonteam["allies"] = 0;
 	numonteam["axis"] = 0;
 
@@ -2090,7 +2084,7 @@ menuAutoAssign()
 	{
 		player = players[i];
 
-		if(!isdefined(player.pers["team"]) || player.pers["team"] == "spectator" || player == self)
+		if(!isdefined(player.pers["team"]) || player.pers["team"] == "spectator")
 			continue;
 
 		numonteam[player.pers["team"]]++;
@@ -2103,7 +2097,7 @@ menuAutoAssign()
 		{
 			teams[0] = "allies";
 			teams[1] = "axis";
-			assignment = teams[randomInt(2)];
+			assignment = teams[randomInt(2)];	// should not switch teams if already on a team
 		}
 		else if(getTeamScore("allies") < getTeamScore("axis"))
 			assignment = "allies";
@@ -2161,6 +2155,12 @@ menuAllies()
 {
 	if(self.pers["team"] != "allies")
 	{
+		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("allies"))
+		{
+			self openMenu(game["menu_team"]);
+			return;
+		}
+
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
@@ -2188,6 +2188,12 @@ menuAxis()
 {
 	if(self.pers["team"] != "axis")
 	{
+		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("axis"))
+		{
+			self openMenu(game["menu_team"]);
+			return;
+		}
+
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;

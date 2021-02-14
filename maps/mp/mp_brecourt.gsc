@@ -3,7 +3,6 @@ main()
 	maps\mp\mp_brecourt_fx::main();
 	maps\mp\_load::main();
 
-//	setCullFog(0, 7000, 0.30, 0.31, 0.34, 0);
 	setExpFog(0.0001, 0.30, 0.31, 0.34, 0);
 	ambientPlay("ambient_france");
 
@@ -38,4 +37,26 @@ main()
 		level.radio[7] = spawn("script_model", (-1136.8, -740.3, 47.8));
 		level.radio[7].angles = (0, 305, 0);
 	}
+
+	level.killtriggers[0] = spawnstruct();
+	level.killtriggers[0].origin = (-3086, 884, 168);
+	level.killtriggers[0].radius = 8;
+	level.killtriggers[0].height = 12;
+
+	level.killtriggers[1] = spawnstruct();
+	level.killtriggers[1].origin = (-1736, -1688, 184);
+	level.killtriggers[1].radius = 20;
+	level.killtriggers[1].height = 12;
+
+	level.killtriggers[2] = spawnstruct();
+	level.killtriggers[2].origin = (-1062, -1284, 180);
+	level.killtriggers[2].radius = 20;
+	level.killtriggers[2].height = 12;
+
+	level.killtriggers[3] = spawnstruct();
+	level.killtriggers[3].origin = (1220, -2930, 148);
+	level.killtriggers[3].radius = 27;
+	level.killtriggers[3].height = 12;
+
+	thread maps\mp\_killtriggers::init();
 }

@@ -12,9 +12,11 @@ init()
 
 	if(!level.xenon)
 	{
+		game["menu_serverinfo"] = "serverinfo_" + getCvar("g_gametype");
 		game["menu_callvote"] = "callvote";
 		game["menu_muteplayer"] = "muteplayer";
 
+		precacheMenu(game["menu_serverinfo"]);
 		precacheMenu(game["menu_callvote"]);
 		precacheMenu(game["menu_muteplayer"]);
 	}
@@ -82,10 +84,24 @@ onMenuResponse()
 		if(response == "endgame")
 		{
 			if(level.splitscreen)
+			{
 				level thread [[level.endgameconfirmed]]();
+			}
+			else if (level.xenon)
+			{
+				endparty();
+				level thread [[level.endgameconfirmed]]();
+			}
 				
 			continue;
 		}
+
+		if(response == "endround")
+		{
+			level thread [[level.endgameconfirmed]]();
+			continue;
+		}
+
 
 		if(menu == game["menu_ingame"] || (level.splitscreen && (menu == game["menu_ingame_onteam"] || menu == game["menu_ingame_spectator"])))
 		{
@@ -168,6 +184,13 @@ onMenuResponse()
 				maps\mp\gametypes\_quickmessages::quickstatements(response);
 			else if(menu == game["menu_quickresponses"])
 				maps\mp\gametypes\_quickmessages::quickresponses(response);
+			else if(menu == game["menu_serverinfo"] && response == "close")
+			{
+				self closeMenu();
+				self closeInGameMenu();
+				self openMenu(game["menu_team"]);
+				self.pers["skipserverinfo"] = true;
+			}
 		}
 	}
 }

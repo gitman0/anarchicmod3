@@ -222,7 +222,12 @@ Callback_PlayerConnect()
 	{
 		self setClientCvar("ui_allow_weaponchange", "0");
 
-		if(!isDefined(self.pers["skipserverinfo"]))
+		if(!level.xenon)
+		{
+			if(!isdefined(self.pers["skipserverinfo"]))
+				self openMenu(game["menu_serverinfo"]);
+		}
+		else
 			self openMenu(game["menu_team"]);
 
 		self.pers["team"] = "spectator";
@@ -468,7 +473,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 		lpattackerteam = "world";
 	}
 
-	level notify("update_teamscore_hud");
+	level notify("update_allhud_score");
 
 	logPrint("K;" + lpselfguid + ";" + lpselfnum + ";" + lpselfteam + ";" + lpselfname + ";" + lpattackguid + ";" + lpattacknum + ";" + lpattackerteam + ";" + lpattackname + ";" + sWeapon + ";" + iDamage + ";" + sMeansOfDeath + ";" + sHitLoc + "\n");
 
@@ -899,6 +904,7 @@ updateGametypeCvars()
 		{
 			level.scorelimit = scorelimit;
 			setCvar("ui_tdm_scorelimit", level.scorelimit);
+			level notify("update_allhud_score");
 		}
 		checkScoreLimit();
 
@@ -919,6 +925,12 @@ printJoinedTeam(team)
 
 menuAutoAssign()
 {
+	if(!level.xenon && isdefined(self.pers["team"]) && (self.pers["team"] == "allies" || self.pers["team"] == "axis"))
+	{
+		self openMenu(game["menu_team"]);
+		return;
+	}
+
 	numonteam["allies"] = 0;
 	numonteam["axis"] = 0;
 
@@ -927,7 +939,7 @@ menuAutoAssign()
 	{
 		player = players[i];
 
-		if(!isDefined(player.pers["team"]) || player.pers["team"] == "spectator" || player == self)
+		if(!isDefined(player.pers["team"]) || player.pers["team"] == "spectator")
 			continue;
 
 		numonteam[player.pers["team"]]++;
@@ -940,7 +952,7 @@ menuAutoAssign()
 		{
 			teams[0] = "allies";
 			teams[1] = "axis";
-			assignment = teams[randomInt(2)];
+			assignment = teams[randomInt(2)];	// should not switch teams if already on a team
 		}
 		else if(getTeamScore("allies") < getTeamScore("axis"))
 			assignment = "allies";
@@ -998,6 +1010,12 @@ menuAllies()
 {
 	if(self.pers["team"] != "allies")
 	{
+		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("allies"))
+		{
+			self openMenu(game["menu_team"]);
+			return;
+		}
+
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
@@ -1025,6 +1043,12 @@ menuAxis()
 {
 	if(self.pers["team"] != "axis")
 	{
+		if(!level.xenon && !maps\mp\gametypes\_teams::getJoinTeamPermissions("axis"))
+		{
+			self openMenu(game["menu_team"]);
+			return;
+		}
+
 		if(self.sessionstate == "playing")
 		{
 			self.switching_teams = true;
