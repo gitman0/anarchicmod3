@@ -6,21 +6,23 @@
 
 init()
 {
-        level._effect["bombfire"] = loadfx("fx/props/barrelexp.efx");
+        level._effect["bombfire"] = loadfx( "fx/props/barrelexp.efx" );
 
 	level thread switchteam();
-	level thread killum();
-	level thread smiteplayer();
-	level thread forcename();
-	level thread freezeum();
-	level thread unfreezeum();
-	level thread kicktospec();
-	level thread wallops();
-	level thread kickspecs();
-	level thread muteplayer();
-	level thread unmuteplayer();
 
-	shitlist_setup();
+	level thread registerDvarEvent( "g_killum",	"int",	::killUm );
+	level thread registerDvarEvent( "g_smite",	"int",	::smitePlayer );
+	level thread registerDvarEvent( "g_forcename",	"string", ::forceName );
+	level thread registerDvarEvent( "g_freeze",	"int",	::freezeUm );
+	level thread registerDvarEvent( "g_unfreeze",	"int",	::unFreezeUm );
+	level thread registerDvarEvent( "g_kicktospec", "int",	::kickToSpec );
+	level thread registerDvarEvent( "wallops",	"string", ::adminAnnounce );
+	level thread registerDvarEvent( "g_kickspecs",	"int",	::kickSpecs );
+	level thread registerDvarEvent( "g_mute",	"int",	::mutePlayer );
+	level thread registerDvarEvent( "g_unmute",	"int",	::unMutePlayer );
+	level thread registerDvarEvent( "ax_givetags",	"int",	::giveClanTags );
+
+	setupShitlist();
 
 	level thread onPlayerConnect();
 }
@@ -29,28 +31,27 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connecting", player);
+		level waittill( "connected", player );
+		player thread shitlist();
 		player thread onPlayerSpawned();
 	}
 }
 
 onPlayerSpawned()
 {
-	self endon("disconnect");
+	self endon( "disconnect" );
 
 	for(;;)
 	{
-		self waittill("spawned_player");
-		self thread shitlist();
-/#
-		if (isadminNew(self))
+		self waittill( "spawned_player" );
+
+		/# if (isadminNew(self))
 			self iprintln("The new isadmin function returned true");
-		else self iprintln("The new isadmin function returned false");
-#/
+		else self iprintln("The new isadmin function returned false"); #/
 	}
 }
 
-shitlist_setup()
+setupShitlist()
 {
 	level.shitlist = [];
 
@@ -64,17 +65,17 @@ shitlist_setup()
 shitlist()
 {
 	guid = self getGUID();
-	if (!isdefined(level.shitlist[guid]))
+	if ( !isDefined(level.shitlist[guid]) )
 		return;
-	if (isdefined(level.shitlist[guid].name))
-		self thread shitlist_name(level.shitlist[guid].name);
-	if (isdefined(level.shitlist[guid].chat) && level.shitlist[guid].chat == "blocked")
-		self thread shitlist_chat();
+	if ( isDefined( level.shitlist[guid].name ) )
+		self thread shitlistName( level.shitlist[guid].name );
+	if ( isDefined( level.shitlist[guid].chat ) && level.shitlist[guid].chat == "blocked" )
+		self thread shitlistChat();
 }
 
-shitlist_name(name)
+shitlistName(name)
 {
-	self endon("disconnect");
+	self endon( "disconnect" );
 	for (;;)
 	{
 		self setclientcvar("name", name);
@@ -82,25 +83,34 @@ shitlist_name(name)
 	}
 }
 
-shitlist_chat()
+shitlistChat()
 {
-	self endon("disconnect");
+	self endon( "disconnect" );
 	for (;;)
 	{
-		self setclientcvar("cg_chattime", 0);
+		self setClientCvar( "cg_chattime", 0 );
 		wait 1;
 	}
 }
 
-isadminNew(player)
+isAdminNew(player)
 {
 	return isAdmin(player);
 }
 
-isadmin(player)
+isAdmin(player)
 {
-	adminRecord = getAdminRecord(player);
-	if ( isdefined(adminRecord) )
+	if ( !isDefined(player.ax_admin_flag) )
+	{
+		adminRecord = getAdminRecord(player);
+		if ( isDefined( adminRecord ) )
+		{
+			/# player iprintln( "Caching your admin record" ); #/
+			player.ax_admin_flag = true;
+			return true;
+		}
+	}
+	else if ( player.ax_admin_flag )
 		return true;
 	else return false;
 }
@@ -188,9 +198,10 @@ isadmin(player) {
 /// the following functions are either based on or courtesy of raviradmin.gsc
 //////////////////////////////////////////////////////////////////////////////
 
+// this one needs to be redone
 switchteam()
 {
-	self endon("boot");
+	self endon( "boot" );
 	setcvar("g_switchteam", "");
 	newTeam = "";
 	while(1)
@@ -263,284 +274,233 @@ switchteam()
 	}
 }
 
-killum()
+giveClanTags( clientNum )
 {
-	dvarName = "g_killum";
-	dvarType = "int";
-
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
+	if ( !isDefined( level.ax_server_clantag ) )
 	{
-		level waittill( "dvar_" + dvarName, val );
-		player = getPlayerByNumber( val );
+		adminPrint( "giveClanTags: no default clan tag defined" );
+		return;
+	}
 
-		if ( !isdefined(player) )
-			continue;
+	player = getPlayerByNumber( clientNum );
+	if ( !isDefined( player ) )
+	{
+		adminPrint( "giveClanTags: no players at clientNum " + clientNum );
+		return;
+	}
 
-		player suicide();
-		iprintln( player.name + "^7 was killed by the admin!" );
+	iprintln( &"AX_ADMIN_TOOLS_GIVETAGS", player.name );
+	player setClientCvar( "name", level.ax_server_clantag + player.name );
+}
+
+killUm( clientNum )
+{
+	player = getPlayerByNumber( clientNum );
+
+	if ( !isDefined( player ) )
+	{
+		adminPrint( "killUm: no players at clientNum " + clientNum );
+		return;
+	}
+	player suicide();
+	iprintln( &"AX_ADMIN_TOOLS_KILLUM", player.name );
+}
+
+smitePlayer( clientNum )
+{
+	player = getPlayerByNumber( clientNum );
+
+	if ( !isDefined( player ) )
+	{
+		adminPrint( "smitePlayer: no players at clientNum " + clientNum );
+		return;
+	}
+
+	if ( player.sessionstate == "playing" )
+	{
+		range = 180;
+		maxDamage = 150;
+		minDamage = 10;
+
+		playfx( level._effect["bombfire"], player.origin );
+		wait 0.05;
+		player playSound( "flak88_explode" );
+		radiusDamage( player.origin + (0, 0, 12), range, maxDamage, minDamage );
+		iprintln( &"AX_ADMIN_TOOLS_SMITE", player.name );
 	}
 }
 
-smiteplayer()
+forceName( val )
 {
-	dvarName = "g_smite";
-	dvarType = "int";
+	arr = explode( val, "," );
+	clientNum = int( arr[0] );
+	newName = arr[1];
 
-	level thread monitorDvar( dvarName, dvarType );
+	player = getPlayerByNumber( clientNum );
 
-	for (;;)
+	if ( !isDefined( player ) )
 	{
-		level waittill( "dvar_" + dvarName, val );
-		player = getPlayerByNumber( val );
+		adminPrint( "forceName: no players at clientNum " + clientNum );
+		return;
+	}
+	player setClientCvar( "name", newName );
+}
 
-		if ( !isdefined(player) )
-			continue;
+freezeUm( clientNum )
+{
+	player = getPlayerByNumber( clientNum );
 
-		if ( player.sessionstate == "playing" )
+	if ( !isDefined( player ) )
+	{
+		adminPrint( "freezeUm: no players at clientNum " + clientNum );
+		return;
+	}
+
+	if ( player.sessionstate == "playing" )
+	{
+		guid = player getGuid();
+		level.frozen_player[guid] = spawn( "script_model", (0,0,0) );
+		level.frozen_player[guid].origin = player.origin;
+		level.frozen_player[guid].angles = player.angles;
+		player linkTo( level.frozen_player[guid] );
+		player disableWeapon();
+		iprintln( &"AX_ADMIN_TOOLS_FREEZE", player.name );
+	}
+}
+
+unFreezeUm( clientNum )
+{
+	player = getPlayerByNumber( clientNum );
+
+	if ( !isDefined( player ) )
+	{
+		adminPrint( "unFreezeUm: no players at clientNum " + clientNum );
+		return;
+	}
+
+	if ( player.sessionstate == "playing" )
+	{
+		guid = player getGuid();
+		if ( isDefined( level.frozen_player[guid] ) )
 		{
-			range = 180;
-			maxdamage = 150;
-			mindamage = 10;
-
-			playfx(level._effect["bombfire"], player.origin);
-			wait 0.05;
-			player playsound("flak88_explode");
-			radiusDamage(player.origin + (0,0,12), range, maxdamage, mindamage);
-			iprintln("Lo, the admin smote " + player.name + " with fire!");
+			player unlink();
+			level.frozen_player[guid] delete();
+			player enableWeapon();
 		}
 	}
 }
 
-wallOps()
+kickToSpec( clientNum )
 {
-	dvarName = "wallop";
-	dvarType = "string";
+	player = getPlayerByNumber( clientNum );
 
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
+	if ( !isDefined( player ) )
 	{
-		level waittill( "dvar_" + dvarName, val );
-		adminAnnounce( val );
+		adminPrint( "kickToSpec: no players at clientNum " + clientNum );
+		return;
+	}
+
+	if ( player.sessionstate == "playing" )
+	{
+		if ( isAlive( player ) )
+			player suicide();
+
+	        player.pers["team"] = "spectator";
+	        player.sessionteam = "spectator";
+	        player [[level.spawnSpectator]]();
+		iprintln( &"AX_ADMIN_TOOLS_KICKTOSPEC", player.name );
 	}
 }
 
-forcename()
+kickSpecs( delay )
 {
-	dvarName = "g_forcename";
-	dvarType = "string";
-
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
+	if ( !isServerFull( "public" ) )
 	{
-		level waittill( "dvar_" + dvarName, val );
-
-		arr = explode( val, "," );
-		num = int( arr[0] );
-		name = arr[1];
-
-		player = getPlayerByNumber( num );
-
-		if ( !isdefined(player) )
-			continue;
-
-		player setClientCvar( "name", name );
+		adminPrint( "kickSpecs: aborted, server has open public slots" );
+		return;
 	}
-}
 
-freezeum()
-{
-	dvarName = "g_freeze";
-	dvarType = "int";
+	if ( delay < 10 ) delay = 10;
+	spectators = 0;
 
-	level thread monitorDvar( dvarName, dvarType );
+	privateClients = privateClients( 0 );
 
-	for (;;)
+	players = getentarray( "player", "classname" );
+	for ( i = 0; i < players.size; i++ )
 	{
-		level waittill( "dvar_" + dvarName, val );
-		player = getPlayerByNumber( val );
-
-		if ( !isdefined(player) )
-			continue;
-
-		if ( player.sessionstate == "playing" )
+		player = players[i];
+		clientNum = player getEntityNumber();
+		if ( player.pers["team"] == "spectator" )
 		{
-			guid = player getGuid();
-			level.frozen_player[guid] = spawn( "script_model", (0,0,0) );
-			level.frozen_player[guid].origin = player.origin;
-			level.frozen_player[guid].angles = player.angles;
-			player linkto( level.frozen_player[guid] );
-			player disableWeapon();
-			iprintln("Lo, the admin has frozen " + player.name + "^7! Free kill!");
-		}
-	}
-}
-
-unfreezeum()
-{
-	dvarName = "g_unfreeze";
-	dvarType = "int";
-
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
-	{
-		level waittill( "dvar_" + dvarName, val );
-		player = getPlayerByNumber( val );
-
-		if ( !isdefined(player) )
-			continue;
-
-		if ( player.sessionstate == "playing" )
-		{
-			guid = player getGuid();
-			if ( isdefined( level.frozen_player[guid] ) )
+			if ( ( privateClients > 0 && ( clientNum > (privateClients - 1) ) ) || privateClients == 0 )
 			{
-				player unlink();
-				level.frozen_player[guid] delete();
-				player enableWeapon();
+				spectators++;
+				level thread delayedKick( player, "kick_specs", "spectating in " + delay + " seconds!", true );
 			}
 		}
 	}
-}
-
-kicktospec()
-{
-	dvarName = "g_kicktospec";
-	dvarType = "int";
-
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
+	if ( spectators > 0 )
 	{
-		level waittill( "dvar_" + dvarName, val );
-		player = getPlayerByNumber( val );
-
-		if ( !isdefined(player) )
-			continue;
-
-		if ( player.sessionstate == "playing" )
-		{
-			if ( isAlive(player) )
-				player suicide();
-
-		        player.pers["team"] = "spectator";
-		        player.sessionteam = "spectator";
-		        player [[level.spawnspectator]]();
-		}
-	}
-}
-
-kickspecs()
-{
-	dvarName = "g_kickspecs";
-	dvarType = "int";
-
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
-	{
-		level waittill( "dvar_" + dvarName, delay );
-
-		if (delay < 10) delay = 10;
-
-		private_slots = getCvarInt("sv_privateClients");
-		if ( private_slots != 0 )
-		{
-			public_first = private_slots;
-			private_slots = private_slots - 1;
-		}
-		else public_first = 0;
-
-		/*public_last = getCvarInt("sv_maxclients") - 1;
-		for(i = public_first; i<public_last; i++) {
-			if (!isdefined ( getentbynum(i) ))
-				continue;
-		}*/
-		// need to check if server is full.. 
-
-		players = getentarray("player", "classname");
-		for (i = 0; i < players.size; i++)
-		{
-			player = players[i];
-			this = player getEntityNumber();
-			if (player.pers["team"] == "spectator")
-			{
-				if ( (private_slots > 0 && this > private_slots) || private_slots == 0 )
-					thread delayed_kick(player, "kick_specs", "spectating in " + delay + " seconds!", true);
-			}
-		}
+		iprintln( &"AX_ADMIN_TOOLS_KICKSPECS", spectators, delay );
 		wait delay;
-		level notify("kick_specs");
+		level notify( "kick_specs" );
 	}
+	else adminPrint( "kickSpecs: aborted, no spectators found" );
 }
 
-delayed_kick(player, event, reason, spec)
+delayedKick( player, event, reason, spec )
 {
-	self endon("disconnect");
-	clientAnnouncement(player, "^1Attention!^7 You will be kicked for " + reason);
-	level waittill(event);
-	if (spec) {
-		if (player.pers["team"] != "spectator")
-			return;
-	}
+	level endon( "intermission" );
+	player endon( "disconnect" );
+
+	clientAnnouncement( player, "^1Attention!^7 You will be kicked for " + reason );
+
+	level waittill( event );
+
+	if ( spec && player.pers["team"] != "spectator" )
+			return; // don't kick if they joined a team after the thread was called
 	kick(player getEntityNumber());
 }
 
-muteplayer()
+mutePlayer( clientNum )
 {
-	dvarName = "g_mute";
-	dvarType = "int";
+	player = getPlayerByNumber( clientNum );
 
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
+	if ( !isDefined( player ) )
 	{
-		level waittill( "dvar_" + dvarName, val );
-		player = getPlayerByNumber( val );
+		adminPrint( "mutePlayer: no players at clientNum " + clientNum );
+		return;
+	}
 
-		if ( !isdefined(player) )
-			continue;
-
-		if ( !player.muted )
-		{
-			player setClientCvar("cl_voice", 0);
-			player.muted = true;
-			player thread infimute();
-			iprintln("Lo, " + player.name + "^7 is now prohibited from using voice chat!");
-		}
+	if ( !player.muted )
+	{
+		player setClientCvar( "cl_voice", 0 );
+		player.muted = true;
+		player thread forcedMute();
+		iprintln( &"AX_ADMIN_TOOLS_MUTE", player.name );
 	}
 }
 
-unmuteplayer()
+unMutePlayer( clientNum )
 {
-	dvarName = "g_unmute";
-	dvarType = "int";
+	player = getPlayerByNumber( clientNum );
 
-	level thread monitorDvar( dvarName, dvarType );
-
-	for (;;)
+	if ( !isDefined( player ) )
 	{
-		level waittill( "dvar_" + dvarName, val );
-		player = getPlayerByNumber( val );
+		adminPrint( "unMutePlayer: no players at clientNum " + clientNum );
+		return;
+	}
 
-		if ( !isdefined(player) )
-			continue;
-
-		if ( !player.muted )
-		{
-			player setClientCvar("cl_voice", 1);
-			player.muted = false;
-			player notify( "stop_mute" );
-			iprintln("Lo, " + player.name + "^7 can now use voice chat. Welcome back!");
-		}
+	if ( !player.muted )
+	{
+		player setClientCvar( "cl_voice", 1 );
+		player.muted = false;
+		player notify( "stop_mute" );
+		iprintln( &"AX_ADMIN_TOOLS_UNMUTE", player.name );
 	}
 }
 
-infimute()
+forcedMute()
 {
 	self endon("stop_mute");
 	self endon("disconnect");
@@ -549,18 +509,6 @@ infimute()
 		wait 1;
 		self setClientCvar("cl_voice", 0);
 	}
-}
-
-getPlayerByNumber( num )
-{
-	players = getentarray("player", "classname");
-	for (i = 0; i < players.size; i++)
-	{
-		this = players[i] getEntityNumber();
-		if ( this == num )
-			return players[i];
-	}
-	return;
 }
 
 adminAnnounce( str )
@@ -573,32 +521,12 @@ adminAnnounce( str )
 	}
 }
 
-monitorDvar(name, type)
+adminPrint( str )
 {
-	level endon( "intermission" );
-
-	setCvar( name, "" );
-	for (;;)
+	players = getentarray("player", "classname");
+	for (i = 0; i < players.size; i++)
 	{
-		if ( type == "float" )
-		{
-			val = getCvarFloat( name );
-			if ( val > 0.0 )
-				level notify( "dvar_" + name, val );
-		}
-		else if ( type == "int" )
-		{
-			val = getCvarInt( name );
-			if ( val > 0 )
-				level notify( "dvar_" + name, val );
-		}
-		else
-		{
-			val = getCvar( name );
-			if ( val != "" )
-				level notify( "dvar_" + name, val );
-		}
-		setCvar( name, "" );
-		wait 0.05;
+		if ( isAdmin( players[i] ) )
+			players[i] iprintln( str );
 	}
 }

@@ -157,8 +157,9 @@ onMenuResponse()
 		}
 		else if(menu == game["menu_team"])
 		{
-			outofbalance = self maps\mp\gametypes\_anarchic::isBalanced(response);
-			if (outofbalance) {
+			balancedChoice = self ax\anarchic::isBalancedChoice( response );
+			if ( !balancedChoice )
+			{
 				self closeMenu();
 				self closeInGameMenu();
 				continue;

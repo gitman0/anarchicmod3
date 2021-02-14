@@ -63,36 +63,3 @@ showNextMap()
 		wait level.nextmap_delay;
 	}
 }
-
-localizedGametype(gt) {
-	switch (gt) {
-		case "tdm": return &"MPUI_TEAM_DEATHMATCH";
-		case "dm": return &"MPUI_DEATHMATCH";
-		case "ctf": return &"MPUI_CAPTURE_THE_FLAG";
-		case "hq": return &"MPUI_HEADQUARTERS";
-		case "sd": return &"MPUI_SEARCH_AND_DESTROY";
-		case "rtdm": return "Rifles-Only TDM";
-		case "lts": return "Last Team Standing";
-	}
-}
-localizedMap(map) {
-	switch (map) {
-		case "mp_brecourt": return &"MENU_BRECOURT_FRANCE_MP";
-		case "mp_burgundy": return &"MENU_BURGUNDY_FRANCE_MP";
-		case "mp_trainstation": return &"MENU_CAEN_FRANCE_MP";
-		case "mp_carentan": return &"MENU_CARENTAN_FRANCE_MP";
-		case "mp_decoy": return &"MENU_EL_ALAMEIN_EGYPT_MP";
-		case "mp_leningrad": return &"MENU_LENINGRAD_RUSSIA_MP";
-		case "mp_matmata": return &"MENU_MATMATA_TUNISIA_MP";
-		case "mp_downtown": return &"MENU_MOSCOW_RUSSIA_MP";
-		case "mp_dawnville": return &"MENU_ST_MERE_EGLISE_FRANCE_MP";
-		case "mp_railyard": return &"MENU_STALINGRAD_RUSSIA_MP";
-		case "mp_toujane": return &"MENU_TOUJANE_TUNISIA_MP";
-		case "mp_farmhouse": return &"MENU_BELTOT_FRANCE_MP";
-		case "mp_breakout": return &"MENU_VILLERSBOCAGE_FRANCE_MP";
-		case "mp_harbor": return &"AX_ROSTOV_RUSSIA_MP";
-		case "mp_rhine": return &"AX_WALLENDER_GERMANY_MP";
-		default: return map;
-	}
-}
-

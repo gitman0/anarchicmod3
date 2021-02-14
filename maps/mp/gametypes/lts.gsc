@@ -80,7 +80,6 @@ main()
 	level.endgameconfirmed = ::endMap;
 
 	level.spawnspectator = ::spawnspectator;
-	maps\mp\gametypes\_anarchic::main();
 }
 
 Callback_StartGameType()
@@ -124,6 +123,8 @@ Callback_StartGameType()
 		//thread maps\mp\gametypes\_teams::addTestClients();
 	}
 
+	thread ax\anarchic::init();
+
 	thread maps\mp\gametypes\_menus::init();
 	thread maps\mp\gametypes\_serversettings::init();
 	thread maps\mp\gametypes\_clientids::init();
@@ -148,8 +149,6 @@ Callback_StartGameType()
 		thread maps\mp\gametypes\_richpresence::init();
 	else // PC only
 		thread maps\mp\gametypes\_quickmessages::init();
-
-	maps\mp\gametypes\_anarchic::Callback_StartGametype();
 
 	game["gamestarted"] = true;
 
@@ -179,7 +178,7 @@ Callback_StartGameType()
 	for(i = 0; i < spawnpoints.size; i++)
 		spawnpoints[i] PlaceSpawnpoint();
 
-	allowed[0] = "tdm";
+	allowed = ax\utility::allowedGameObjects();
 	maps\mp\gametypes\_gameobjects::main(allowed);
 
 	// Time limit per map
@@ -287,8 +286,6 @@ Callback_PlayerConnect()
 	if(!isdefined(self.pers["team"]) && !level.splitscreen)
 		iprintln(&"MP_CONNECTED", self.name);
 
-	maps\mp\gametypes\_anarchic::Callback_PlayerConnect();
-
 	lpselfnum = self getEntityNumber();
 	lpselfguid = self getGuid();
 	logPrint("J;" + lpselfguid + ";" + lpselfnum + ";" + self.name + "\n");
@@ -385,12 +382,12 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 	{
 		if(isPlayer(eAttacker) && (self != eAttacker) && (self.pers["team"] == eAttacker.pers["team"]))
 		{
-			self maps\mp\gametypes\_anarchic::friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
+			self ax\anarchic::friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 		}
 		else
 		{
 			// Make sure at least one point of damage is done
-			iDamage = self maps\mp\gametypes\_anarchic::getdamage(iDamage, sMeansOfDeath);
+			iDamage = self ax\anarchic::getdamage(iDamage, sMeansOfDeath);
 			if(iDamage < 1)
 				iDamage = 1;
 
@@ -460,7 +457,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			return;
 	}
 
-	maps\mp\gametypes\_anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
+	ax\anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
 
 	// If the player was killed by a head shot, let players know it was a head shot kill
 	if(sHitLoc == "head" && sMeansOfDeath != "MOD_MELEE")
@@ -676,8 +673,6 @@ spawnPlayer()
 
 	waittillframeend;
 	self notify("spawned_player");
-
-	self thread maps\mp\gametypes\_anarchic::spawnplayer();
 }
 
 spawnSpectator(origin, angles)
@@ -1242,6 +1237,8 @@ updateTeamStatus()
 
 printJoinedTeam(team)
 {
+	return ax\utility::printJoinedTeam(team);
+
 	if(!level.splitscreen)
 	{
 		if(team == "allies")
@@ -1387,6 +1384,8 @@ menuAutoAssign()
 	}
 
 	self notify("joined_team");
+
+	self.chose_auto_assign = true; // ax
 }
 
 menuAllies()

@@ -11,7 +11,7 @@ main()
 		game["allies"] = "american";
 		game["american_soldiertype"] = "normandy";
 	}
-	else maps\mp\gametypes\_anarchic::setRandomAllied();
+	else ax\utility::setRandomAllied();
 
 	game["attackers"] = "allies";
 	game["axis"] = "german";

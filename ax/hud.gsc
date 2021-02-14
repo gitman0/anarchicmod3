@@ -17,6 +17,19 @@ init()
 			precacheShader(level.crosshair);
 		}
 		if (level.gametype != "dm") {
+			switch(game["allies"])
+			{
+				case "american":
+					game["headicon_allies"] = "headicon_american";
+					break;
+				case "british":
+					game["headicon_allies"] = "headicon_british";
+					break;
+				case "russian":
+					game["headicon_allies"] = "headicon_russian";
+					break;
+			}
+			game["headicon_axis"] = "headicon_german";
 			precacheShader(game["headicon_allies"]);
 			precacheShader(game["headicon_axis"]);
 		}
@@ -47,7 +60,7 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connecting", player);
+		level waittill("connected", player);
 
 		player thread miniscore_myscore();
 		player thread onPlayerSpawned();

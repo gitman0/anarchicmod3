@@ -64,11 +64,10 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
-	level.returnFlag = ::returnFlag;	// _anarchic::autoReturn()
-	level.printonteam = ::printOnTeam;	// _anarchic::autoReturn()
+	level.returnFlag = ::returnFlag;	// ax\ctfmods::autoReturn()
+	level.printonteam = ::printOnTeam;	// ax\ctfmods::autoReturn()
 
 	level.spawnspectator = ::spawnspectator;
-	maps\mp\gametypes\_anarchic::main();
 }
 
 Callback_StartGameType()
@@ -124,6 +123,8 @@ Callback_StartGameType()
 	level.hudflag_allies = "compass_flag_" + game["allies"];
 	level.hudflag_axis = "compass_flag_" + game["axis"];
 
+	thread ax\anarchic::init();
+
 	thread maps\mp\gametypes\_menus::init();
 	thread maps\mp\gametypes\_serversettings::init();
 	thread maps\mp\gametypes\_clientids::init();
@@ -147,6 +148,8 @@ Callback_StartGameType()
 		thread maps\mp\gametypes\_richpresence::init();
 	else // PC only
 		thread maps\mp\gametypes\_quickmessages::init();
+
+	game["gamestarted"] = true;
 
 	setClientNameMode("auto_change");
 
@@ -174,7 +177,7 @@ Callback_StartGameType()
 	for(i = 0; i < spawnpoints.size; i++)
 		spawnpoints[i] PlaceSpawnpoint();
 
-	allowed[0] = "ctf";
+	allowed = ax\utility::allowedGameObjects();
 	maps\mp\gametypes\_gameobjects::main(allowed);
 
 	// Time limit per map
@@ -186,6 +189,9 @@ Callback_StartGameType()
 	setCvar("ui_ctf_timelimit", level.timelimit);
 	makeCvarServerInfo("ui_ctf_timelimit", "30");
 
+	if(!isdefined(game["timepassed"]))
+		game["timepassed"] = 0;
+
 	// Score limit per map
 	if(getCvar("scr_ctf_scorelimit") == "")
 		setCvar("scr_ctf_scorelimit", "300");
@@ -193,14 +199,48 @@ Callback_StartGameType()
 	setCvar("ui_ctf_scorelimit", level.scorelimit);
 	makeCvarServerInfo("ui_ctf_scorelimit", "5");
 
+        // Round limit per map
+        if(getCvar("scr_ctf_roundlimit") == "")
+                setCvar("scr_ctf_roundlimit", "0");
+        level.roundlimit = getCvarInt("scr_ctf_roundlimit");
+        setCvar("ui_ctf_roundlimit", level.roundlimit);
+        makeCvarServerInfo("ui_ctf_roundlimit", level.roundlimit);
+
+        // Time length of each round
+	if(getCvar("scr_ctf_roundlength") == "")
+		setCvar("scr_ctf_roundlength", "30");
+	level.roundlength = getCvarFloat("scr_ctf_roundlength");
+	setCvar("ui_ctf_roundlength", level.roundlength);
+	makeCvarServerInfo("ui_ctf_roundlength", level.roundlength);
+
 	// Force respawning
 	if(getCvar("scr_forcerespawn") == "")
 		setCvar("scr_forcerespawn", "0");
 
 	if(!isDefined(game["state"]))
 		game["state"] = "playing";
+        if(!isdefined(game["roundsplayed"]))
+                game["roundsplayed"] = 0;
+        if(!isdefined(game["matchstarted"]))
+                game["matchstarted"] = false;
 
+	if(!isdefined(game["alliedscore"]))
+		game["alliedscore"] = 0;
+	setTeamScore("allies", game["alliedscore"]);
+
+	if(!isdefined(game["axisscore"]))
+		game["axisscore"] = 0;
+	setTeamScore("axis", game["axisscore"]);
+
+	level.roundstarted = false;
+	level.roundended = false;
 	level.mapended = false;
+
+        level.exist["allies"] = 0;
+        level.exist["axis"] = 0;
+        level.exist["teams"] = false;
+        level.didexist["allies"] = false;
+        level.didexist["axis"] = false;
 
 	level.team["allies"] = 0;
 	level.team["axis"] = 0;
@@ -220,14 +260,13 @@ Callback_StartGameType()
 
 	thread startGame();
 
-	if (isdefined(game["matchstarted"]) && game["matchstarted"]) {
+	if ( isDefined(game["matchstarted"]) && game["matchstarted"] )
+	{
 		thread initFlags();
 		thread sayMoveIn();
 	}
 	thread updateGametypeCvars();
 	thread maps\mp\gametypes\_teams::addTestClients();
-
-	maps\mp\gametypes\_anarchic::Callback_StartGametype();
 }
 
 dummy()
@@ -250,8 +289,6 @@ Callback_PlayerConnect()
 
 	if(!level.splitscreen)
 		iprintln(&"MP_CONNECTED", self.name + "^7");
-
-	maps\mp\gametypes\_anarchic::Callback_PlayerConnect();
 
 	lpselfnum = self getEntityNumber();
 	lpGuid = self getGuid();
@@ -351,12 +388,12 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 	{
 		if(isPlayer(eAttacker) && (self != eAttacker) && (self.pers["team"] == eAttacker.pers["team"]))
 		{
-			self maps\mp\gametypes\_anarchic::friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
+			self ax\anarchic::friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 		}
 		else
 		{
 			// Make sure at least one point of damage is done
-			iDamage = self maps\mp\gametypes\_anarchic::getdamage(iDamage, sMeansOfDeath, eAttacker, sWeapon);
+			iDamage = self ax\anarchic::getdamage(iDamage, sMeansOfDeath, eAttacker, sWeapon);
 			if(iDamage < 1)
 				iDamage = 1;
 
@@ -426,7 +463,7 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			return;
 	}
 
-	maps\mp\gametypes\_anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
+	ax\anarchic::Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
 
 	// If the player was killed by a head shot, let players know it was a head shot kill
 	if(sHitLoc == "head" && sMeansOfDeath != "MOD_MELEE")
@@ -601,8 +638,6 @@ spawnPlayer()
 
 	waittillframeend;
 	self notify("spawned_player");
-
-	self thread maps\mp\gametypes\_anarchic::spawnplayer();
 }
 
 spawnSpectator(origin, angles)
@@ -1071,7 +1106,7 @@ updateGametypeCvars()
 
 printJoinedTeam(team)
 {
-	return maps\mp\gametypes\_anarchic::printJoinedTeam(team);
+	return ax\utility::printJoinedTeam(team);
 
 	if(!level.splitscreen)
 	{
@@ -1515,7 +1550,7 @@ menuAutoAssign()
 	self notify("joined_team");
 	self notify("end_respawn");
 
-	maps\mp\gametypes\_anarchic::menuAutoAssign();
+	self.chose_auto_assign = true; // ax
 }
 
 menuAllies()

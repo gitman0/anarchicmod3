@@ -7,7 +7,7 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connecting", player);
+		level waittill("connected", player);
 
 		player thread onPlayerSpawned();
 		player thread onPlayerKilled();

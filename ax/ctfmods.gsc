@@ -24,7 +24,7 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connecting", player);
+		level waittill("connected", player);
 		player thread onPlayerSpawned();
                 player thread onPlayerKilled();
 	}
@@ -161,20 +161,30 @@ suddenDeathSupported()
 
 spawnpointName()
 {
+        timepassed = (getTime() - getStartTime()) / 1000;
+        timepassed = timepassed / 60.0;
+
 	spawnpointname = undefined;
-	switch(level.gametype)
+	switch ( level.gametype )
 	{
 		case "ctf":
-			if (level.reverse_spawns)
+			if ( level.reverse_spawns )
 			{
-				if(self.pers["team"] == "allies")
+				if ( self.pers["team"] == "allies" )
 					spawnpointname = "mp_ctf_spawn_axis";
 				else
 					spawnpointname = "mp_ctf_spawn_allied";
 			}
+			else if ( level.ax_ctf_pressurecook > 0.0 && timepassed < level.ax_ctf_pressurecook )
+			{
+				if ( self.pers["team"] == "allies" )
+					spawnpointname = "mp_sd_spawn_defender";
+				else
+					spawnpointname = "mp_sd_spawn_attacker";
+			}
 			else
 			{
-				if(self.pers["team"] == "allies")
+				if ( self.pers["team"] == "allies" )
 					spawnpointname = "mp_ctf_spawn_allied";
 				else
 					spawnpointname = "mp_ctf_spawn_axis";

@@ -1,3 +1,5 @@
+#include ax\utility;
+
 init()
 {
 	level thread onPlayerConnect();
@@ -7,7 +9,7 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connecting", player);
+		level waittill("connected", player);
 
 		guid = player getGuid();
 		if (isdefined(game["matchstarted"]) && game["matchstarted"]) {
@@ -74,11 +76,5 @@ rememberinfo(player)
 	level.lostplayer[guid].muted 			= player.muted;
 	level.lostplayer[guid].cannot_play 		= player.cannot_play;
 
-	level thread timedundefined(guid, level.ax_scoresave_expire);
-}
-
-timedundefined(idx, time)
-{
-	wait time;
-	level.lostplayer[idx] = undefined;
+	level thread expireOverTime( level.lostplayer, guid, level.ax_scoresave_expire );
 }

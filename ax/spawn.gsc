@@ -10,11 +10,11 @@ init()
 		allied_flag = getent("allied_flag", "targetname");
 		axis_flag = getent("axis_flag", "targetname");
 
-		level.spawnpoint_forward_axis = getClosest( allied_flag.origin, spawnpoints_axis );
-		level.spawnpoint_forward_allies = getClosest( axis_flag.origin, spawnpoints_allied );
+		level.spawnpoint_forward["axis"] = getClosest( allied_flag.origin, spawnpoints_axis );
+		level.spawnpoint_forward["allies"] = getClosest( axis_flag.origin, spawnpoints_allied );
 
-		level.spawnpoint_rear_axis = getClosest( axis_flag.origin, spawnpoints_axis );
-		level.spawnpoint_rear_allies = getClosest( allied_flag.origin, spawnpoints_allied );
+		level.spawnpoint_rear["axis"] = getClosest( axis_flag.origin, spawnpoints_axis );
+		level.spawnpoint_rear["allies"] = getClosest( allied_flag.origin, spawnpoints_allied );
 
 		if (level.spawn_assist > 1)
 			precacheString(&"AX_SPAWN_ASSIST");
@@ -28,7 +28,7 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connecting", player);
+		level waittill("connected", player);
 		player.spawn_assist = false;
 		player thread onPlayerSpawned();
 		player thread onPlayerKilled();
@@ -154,41 +154,53 @@ spawn_assist_hud_destroy()
 // this data may be used in the future to optimize the spawnlogic
 logSpawn()
 {
-	if (!level.ax_spawn_stats)
+	if ( !level.ax_spawn_stats )
 		return;
 
-	players = maps\mp\gametypes\_teams::CountPlayers();
+	enemy_team = otherTeam( self.pers["team"] );
 
-	enemy_team = getOtherTeam( self.pers["team"] );
+	teammates = [];
+	inclusiveTeammates = getPlayersByTeam( self.pers["team"] );
+	for ( i = 0; i < inclusiveTeammates.size; i++ )
+		if ( inclusiveTeammates[i] != self )
+			teammates[teammates.size] = inclusiveTeammates[i];
 
-	closest_teammate = getClosest(self.origin, players[self.pers["team"]]);
-	closest_enemy = getClosest(self.origin, players[enemy_team]);
+	enemies = getPlayersByTeam( enemy_team );
 
-	enemy_flag = getEnemyFlag(self.pers["team"]);
+	if ( teammates.size > 0 )
+	{
+		closest_teammate = getClosest( self.origin, teammates );
+		dist_closest_teammate = distance( self.origin, closest_teammate.origin );
+	}
+	else dist_closest_teammate = 0;
 
-	dist_closest_teammate = distance( self.origin, closest_teammate.origin );
-	dist_closest_enemy = distance( self.origin, closest_enemy.origin );
+	if ( enemies.size > 0 )
+	{
+		closest_enemy = getClosest( self.origin, enemies );
+		dist_closest_enemy = distance( self.origin, closest_enemy.origin );
+	}
+	else dist_closest_enemy = 0;
+
+	enemy_flag =  getEnemyFlag( self.pers["team"] );
 	dist_enemy_flag = distance( self.origin, enemy_flag.origin );
 
-	spawnpoint_forward = level.spawnpoint_forward_ + self.pers["team"];
-	spawnpoint_rear = level.spawnpoint_rear_ + self.pers["team"];
+	dist_spawnpoint_forward = distance( self.origin, level.spawnpoint_forward[self.pers["team"]].origin );
+	dist_spawnpoint_rear = distance( self.origin, level.spawnpoint_rear[self.pers["team"]].origin );
 
-	dist_spawnpoint_forward = distance( self.origin, spawnpoint_forward );
-	dist_spawnpoint_rear = distance( self.origin, spawnpoint_rear );
-
-	if ( flagAtHome(getOtherTeam(self.pers["team"])) )
+	if ( flagAtHome(otherTeam(self.pers["team"])) )
 		enemy_flag_at_home = 1;
 	else enemy_flag_at_home = 0;
 
 	logStr = "S";
 	logStr = appendLogStr( logStr, level.mapname );
-	logStr = appendLogStr( logStr, players.size );
+	logStr = appendLogStr( logStr, inclusiveTeammates.size + enemies.size );
 	logStr = appendLogStr( logStr, dist_closest_teammate );
 	logStr = appendLogStr( logStr, dist_closest_enemy );
 	logStr = appendLogStr( logStr, dist_enemy_flag );
 	logStr = appendLogStr( logStr, dist_spawnpoint_forward );
 	logStr = appendLogStr( logStr, dist_spawnpoint_rear );
 	logStr = appendLogStr( logStr, enemy_flag_at_home );
+	logStr = appendLogStr( logStr, "\n" );
 
 	logPrint( logStr );
 }
@@ -228,25 +240,12 @@ spawnpointModelByTeam(team)
 	}
 }
 
-appendLogStr( str, append )
-{
-	s = str + ";" + append;
-	return s;
-}
-
-getOtherTeam(team)
-{
-	if (team == "allies")
-		return "axis";
-	else return "allies";
-}
-
 getEnemyFlag(team)
 {
 	if (team == "allies")
-		flag = getent("allied_flag", "targetname");
-	else
 		flag = getent("axis_flag", "targetname");
+	else
+		flag = getent("allied_flag", "targetname");
 	return flag;
 }
 

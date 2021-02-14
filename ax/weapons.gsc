@@ -15,7 +15,7 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connecting", player);
+		level waittill("connected", player);
 		player thread onPlayerSpawned();
 		player thread onPlayerKilled();
 		player thread onJoinedTeam();
@@ -162,7 +162,8 @@ limitweapon(weapon, count, limit) {
 		if (getcvarint("scr_allow_" + weapon) != 0)
 			setcvar("scr_allow_" + weapon, 0);
 	}
-	maps\mp\gametypes\_weapons::updateallowed();
+	if ( isDefined(level.weaponnames) )
+		maps\mp\gametypes\_weapons::updateallowed();
 }
 
 limitShotgun(axis_limit, allied_limit, axis_count, allied_count) {
