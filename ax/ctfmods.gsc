@@ -1,4 +1,4 @@
-/* $Id: ctfmods.gsc 92 2010-10-04 00:26:08Z  $ */
+/* $Id: ctfmods.gsc 93 2010-10-04 01:01:48Z  $ */
 
 #include ax\utility;
 
@@ -11,6 +11,11 @@ init()
 		if (level.gametype == "ctf")
 			precacheShader(level.flag_carrier_icon);
 	}
+
+	if ( isdefined( game["axisscore"] ) )
+		setTeamScore( "axis", game["axisscore"] );
+	if ( isdefined( game["alliedscore"] ) )
+		setTeamScore( "allies", game["alliedscore"] );
 
 	if ( level.ax_ctf_pressurecook > 0 && level.gametype == "ctf" )
 	{
@@ -54,6 +59,9 @@ onPlayerConnect()
 		level waittill("connected", player);
 		player thread onPlayerSpawned();
                 player thread onPlayerKilled();
+
+		if ( isdefined( player.pers["score"] ) )
+			player.score = player.pers["score"];
 	}
 }
 
@@ -65,6 +73,13 @@ onPlayerSpawned()
 	{
 		self waittill("spawned_player");
 		self.obj_id = undefined;
+		if ( level.ax_ctf_pressurecook > 0 )
+		{
+			timepassed = (getTime() - getStartTime() + (level.ctf_warmup * 1000)) / 1000;
+			timepassed = timepassed / 60.0;
+			if ( timepassed < level.ax_ctf_pressurecook )
+				self iprintln("Pressure-cooker spawns are ON!");
+		}
 	}
 }
 
@@ -90,7 +105,17 @@ endRound()
 
 	round_start_delay = 5;
 
+	if ( !isdefined( game["alliedScoreByRound"] ) && !isdefined( game["axisScoreByRound"] ) )
+	{
+		game["alliedScoreByRound"] = [];
+		game["axisScoreByRound"] = [];
+	}
+
+	game["alliedScoreByRound"][ game["roundsplayed"] ] = getTeamScore( "allies" );
+	game["axisScoreByRound"][ game["roundsplayed"] ] = getTeamScore( "axis" );
+
 	game["roundsplayed"]++;
+
 	if ( game["roundsplayed"] < level.roundlimit )
 	{
 		announcement("Starting new round in " + round_start_delay + " seconds");
@@ -108,6 +133,20 @@ endMap()
 {
 	game["state"] = "intermission";
 	level notify("intermission");
+
+	if ( isdefined( game["alliedScoreByRound"] ) && isdefined( game["axisScoreByRound"] ) )
+	{
+		realAlliedScore = 0;
+		for ( i = 0; i < game["alliedScoreByRound"].size; i++ )
+			realAlliedScore += game["alliedScoreByRound"][i];
+
+		realAxisScore = 0;
+		for ( i = 0; i < game["axisScoreByRound"].size; i++ )
+			realAxisScore += game["axisScoreByRound"][i];
+
+		setTeamScore( "allies", realAlliedScore );
+		setTeamScore( "axis", realAxisScore );
+	}
 
 	alliedscore = getTeamScore("allies");
 	axisscore = getTeamScore("axis");

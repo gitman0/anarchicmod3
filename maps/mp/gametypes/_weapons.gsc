@@ -404,23 +404,10 @@ giveGrenades()
 
 	if(getcvarint("scr_allow_smokegrenades"))
 	{
-		switch (getcvar("g_gametype")) {
-			case "tdm":
-				if (isdefined(self.score) && self.score >= 60)
-					smokegrenadecount = 1;
-				else smokegrenadecount = 0;
-				break;
-			case "ctf":
-				if (isdefined(self.score) && self.score >= 30)
-					smokegrenadecount = 1;
-				else smokegrenadecount = 0;
-				break;
-			case "sd":
-			default:
-				smokegrenadecount = getWeaponBasedSmokeGrenadeCount(self.pers["weapon"]);
-				break;
-		}
-		
+		smokegrenadecount = ax\weapons::smokeGrenadesAllowed( self );
+
+		if ( !isdefined( smokegrenadecount ) )
+			smokegrenadecount = getWeaponBasedSmokeGrenadeCount(self.pers["weapon"]);
 		if(smokegrenadecount)
 		{
 			self giveWeapon(smokegrenadetype);

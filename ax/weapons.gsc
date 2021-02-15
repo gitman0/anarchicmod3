@@ -280,4 +280,14 @@ giveFrags()
 	}
 }
 
+smokeGrenadesAllowed( player )
+{
+	if ( isdefined( level.ax_scorereq_smokegrenades ) )
+		if ( isdefined( player.score ) && player.score < level.ax_scorereq_smokegrenades )
+			return 0; // no smoke for you
 
+	if ( isdefined( level.ax_limit_smokegrenades ) ) // could be different per gametype, but we let cvardef handle that
+		return level.ax_limit_smokegrenades;
+
+	return undefined; // defer to stock behavior
+}

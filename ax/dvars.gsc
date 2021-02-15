@@ -1,4 +1,4 @@
-/* $Id: dvars.gsc 86 2010-10-02 01:28:00Z  $ */
+/* $Id: dvars.gsc 94 2010-10-06 01:22:00Z  $ */
 
 #include ax\utility;
 
@@ -37,8 +37,9 @@ setupDvars()
 	level.static_nade_count		= cvardef("scr_static_nades", 0, 0, 99, "int");
 	level.dropnades			= cvardef("scr_dropnades", 1, 0, 1, "int");
 	level.allow_turrets		= cvardef("scr_allow_turrets", 1, 0, 1, "int");
-	level.ctf_warmup		= cvardef("scr_ctf_warmup", 50, 0, 300, "int");
-	level.ctf_autoreturn_delay	= cvardef("scr_ctf_autoreturn_delay", 120, 0, 1440, "int");
+	level.ax_limit_smokegrenades	= cvardef("ax_limit_smokegrenades", 0, 1, 128, "int");
+	level.ax_scorereq_smokegrenades = cvardef("ax_scorereq_smokegrenades", 0, 0, 512, "int");
+
 	level.idle_limit		= cvardef("scr_idle_limit", 0, 0, 3600, "int");
 	level.idle_warn_count		= cvardef("scr_idle_warn", 2, 0, 720, "int");
 	level.voting_minplayers		= cvardef("ax_voting_minplayers", 2, 0, 64, "int");
@@ -49,7 +50,12 @@ setupDvars()
 	level.sudden_death_minplayers	= cvardef("ax_sudden_death_minplayers", 1, 0, 32, "int");
 	level.ax_scoresave_expire	= cvardef("ax_scoresave_expire", 600, 0, 3600, "int");
 	level.ax_teambalance_menu	= cvardef("ax_teambalance_menu", 1, 0, 99, "int");
+
+	// ctf-specific modifications
 	level.ax_ctf_pressurecook	= cvardef("ax_ctf_pressurecook", 0, 0, 1440, "float");	
+	level.ctf_warmup		= cvardef("scr_ctf_warmup", 50, 0, 300, "int");
+	level.ctf_autoreturn_delay	= cvardef("scr_ctf_autoreturn_delay", 120, 0, 1440, "int");
+	level.ax_flag_offset		= cvardef("ax_flag_offset", 0, 0, 100, "int");
 
 	// teamkiller prevention
 	level.team_damage_limit		= cvardef("scr_team_damage_limit", 150, 0, 9999, "int");
@@ -76,7 +82,6 @@ setupDvars()
 	// anarchicmod utilities
 	level.ax_debug_spawns		= cvardef("ax_debug_spawns", 0, 0, 2, "int");
 	level.ax_spawn_stats		= cvardef("ax_spawn_stats", 0, 0, 1, "int");
-	level.ax_flag_offset		= cvardef("ax_flag_offset", 0, 0, 100, "int");
 	level.ax_admin_chat_prefix	= cvardef("ax_admin_chat_prefix", "^1admin^7CHAT: ");
 	level.ax_server_clantag		= cvardef("ax_server_clantag", "^1|^9ax^1|^7 ");
 }
