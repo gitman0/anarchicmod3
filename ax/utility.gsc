@@ -1,4 +1,121 @@
-/* $Id: utility.gsc 90 2010-10-03 06:16:08Z  $ */
+/* $Id: utility.gsc 117 2011-02-22 06:39:21Z  $ */
+
+// returns an array of players sorted by their score in descending order
+scoreSortedPlayers()
+{
+	sorted = [];
+	players = getentarray( "player", "classname" );
+	for ( i=0; i < players.size; i++ )
+	{
+		player = players[i];
+		score = player.score;
+
+		if ( sorted.size == 0 )
+			sorted[sorted.size] = player;
+
+		if ( score > sorted[0].score )
+		{
+			new_array = [];
+			new_array[new_array.size] = player;
+			sorted = arrayMerge( new_array, sorted );
+		}
+		else if ( score < sorted[sorted.size-1].score )
+		{
+			sorted[sorted.size] = player;
+		}
+		else
+		{
+			low_idx = undefined;
+			high_idx = undefined;
+			for ( x=0; x < sorted.size; x++ )
+			{
+				if ( sorted[i].score >= score )
+					low_idx = i;
+				else if ( sorted[i].score < score )
+					high_idx = i;
+			}
+			first_half = [];
+			second_half = [];
+			for ( x=0; x < sorted.size; x++ )
+			{
+				if ( x <= low_idx ) first_half[first_half.size] = sorted[x];
+				else if ( x >= high_idx ) second_half[second_half.size] = sorted[x];
+			}
+			first_half[first_half.size] = player;
+			sorted = arrayMerge( first_half, second_half );
+		}
+	}
+	return sorted;
+}
+
+// returns the player's score
+getScore()
+{
+	score = undefined;
+	if ( isPlayer( self ) ) score = self.score;
+	return score;
+}
+
+// global function which checks to see if respawning is allowed
+respawnAllowed()
+{
+	if ( isdefined( level.sudden_death_norespawn ) && level.sudden_death_norespawn )
+		return false;
+	else return true;
+}
+
+// returns the largest value
+max(val1, val2)
+{
+	if (val1 > val2) return val1;
+	else return val2;
+}
+
+// returns the smallest value
+min(val1, val2)
+{
+	if (val1 < val2) return val1;
+	else return val2;
+}
+
+// returns true if a player is waiting to spawn
+waitingToSpawn()
+{
+	if ( isdefined( self.WaitingToSpawn ) && self.WaitingToSpawn )
+		return true;
+	else return false;
+}
+
+// prints a string after a delay
+delayedPrintln(string, delay)
+{
+	wait delay;
+	iprintln(string);
+}
+
+// checks if we're in warmup mode
+inWarmup()
+{
+	if ( !isdefined( level.ctf_in_warmup ) || !level.ctf_in_warmup )
+		return false;
+	else return true;
+}
+
+// checks if game["matchstarted"] is set and true
+matchStarted()
+{
+	if ( isdefined( game["matchstarted"] ) && game["matchstarted"] )
+		return true;
+	else return false;
+}
+
+// checks if game["gamestarted"] is set and true
+gameStarted()
+{
+	if ( isdefined( game["gamestarted"] ) && game["gamestarted"] )
+		return true;
+	else return false;
+}
 
 // returns the next gametype in the rotation
 getNextGametype()
@@ -65,6 +182,44 @@ playSoundOnPlayers(sound, team)
 				players[i] playLocalSound(sound);
 		}
 	}
+}
+
+// basically a timed announcement()
+make_permanent_announcement(message, cleanup_notify, timer, y_position, color)
+{
+	if ( !isdefined(y_position) )
+	{
+		y_position = 130;
+	}
+	
+	text = newHudElem();
+	text setText(message);
+	text.alignX = "center";
+	text.alignY = "middle";
+	text.x = 320;
+	text.y = y_position;
+	text.sort = 0.0;
+	text.fontscale = 2.0;
+
+	time = newHudElem();
+	time setTimer(timer);
+	time.alignX = "center";
+	time.alignY = "middle";
+	time.x = 320;
+	time.y = y_position + 21;
+	time.sort = 0.0;
+	time.fontscale = 1.6;
+
+	if ( isdefined(color) )
+	{
+		text.color = color;
+		time.color = color;
+	}
+	
+	level waittill(cleanup_notify);
+	
+	text destroy();
+	time destroy();
 }
 
 // creates a clienthudelem with the given properties
@@ -164,6 +319,39 @@ allowedGameObjects()
 	}
 	return allowed;
 }	
+
+// plays the "move in!" sound to all players
+sayMoveIn()
+{
+	wait 2;
+
+	switch(game["allies"]) {
+		case "american":
+			alliedsoundalias = "US_mp_cmd_movein";
+			break;
+		case "russian":
+			alliedsoundalias = "RU_mp_cmd_movein";
+			break;
+		case "british":
+			alliedsoundalias = "UK_mp_cmd_movein";
+			break;
+		default:
+			alliedsoundalias = "US_mp_cmd_movein";
+			break;
+	}
+	axissoundalias = "GE_mp_cmd_movein";
+
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+	{
+		player = players[i];
+
+		if(player.pers["team"] == "allies")
+			player playLocalSound(alliedsoundalias);
+		else if(player.pers["team"] == "axis")
+			player playLocalSound(axissoundalias);
+	}
+}
 
 // boolean if the server is full on the slots specified: public, private, or all
 // can sweep multiple times and return based on average response
@@ -353,15 +541,26 @@ getEnemyFlag(team)
 // returns boolean true if flag is at the base for given team
 flagAtHome(team)
 {
+	if ( team == "allies" )	team = "allied";
 	ent = team + "_flag";
 	flag = getent(ent, "targetname");
 
-	/* assertEx( isdefined( flag ), "Did not find the flag represented by " + ent ); */
+/#	if ( !isdefined( flag ) ) iprintln("Did not find the flag represented by " + ent ); #/
 
-	if ( !isdefined( flag ) ) return false;
+	if ( !isdefined( flag ) )
+	{
+/#		iprintln("flag is not defined"); #/
+		return false;
+	}
 
 	if ( flag.origin != flag.home_origin )
+	{
+/#
+		if ( getCvarInt( "ax_debug_flags" ) )
+			iprintln("flag_missing [home_origin: " + flag.home_origin + "][origin: " + flag.origin + "]");
+#/
 		return false;
+	}
 	else return true;
 }
 
@@ -385,6 +584,16 @@ otherTeam(team)
 {
 	if (team == "allies") return "axis";
 	else return "allies";
+}
+
+// returns true if sudden death is supported for the current gametype
+suddenDeathSupported()
+{
+        switch (level.gametype)
+        {
+                case "ctf":     return true;
+                default:        return false;
+        }
 }
 
 // boolean if the given weapon is a turret

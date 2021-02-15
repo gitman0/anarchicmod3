@@ -1,4 +1,4 @@
-/* $Id: hud.gsc 82 2010-09-06 04:04:17Z  $ */
+/* $Id: hud.gsc 112 2011-02-21 03:22:57Z  $ */
 
 #include ax\utility;
 
@@ -76,7 +76,8 @@ onPlayerConnect()
 	{
 		level waittill("connected", player);
 
-		player thread miniscore_myscore();
+		if ( level.gametype != "dm" )
+			player thread miniscore_myscore();
 		player thread onPlayerSpawned();
 	}
 }
@@ -108,6 +109,7 @@ onPlayerSpawned()
 		self thread updatehealthbar();
 		self thread make_crosshair();
 		self thread onPlayerKilled();
+		self thread playersAlive();
 	}
 }
 
@@ -125,6 +127,15 @@ onPlayerKilled()
 			self.healthbar_back destroy();
 		if (isdefined(self.healthbar_cross))
 			self.healthbar_cross destroy();
+
+		if ( isdefined( self.players_alive_team_flag ) )
+			self.players_alive_team_flag destroy();
+		if ( isdefined( self.players_alive_enemy_flag ) )
+			self.players_alive_enemy_flag destroy();
+		if ( isdefined( self.players_alive_team_counter ) )
+			self.players_alive_team_counter destroy();
+		if ( isdefined( self.players_alive_enemy_counter ) )
+			self.players_alive_enemy_counter destroy();
 	}
 }
 
@@ -181,7 +192,7 @@ defineRuleSet()
 drawRuleHud() {
 	level endon("intermission");
 
-	if (level.show_rulehud != 1)
+	if ( !level.ax_show_rules )
 		return;
 
 	rule_duration = level.ax_show_rules_duration;
@@ -197,6 +208,11 @@ drawRuleHud() {
 		level.rule_hud.aligny = "top";
 		level.rule_hud.fontscale = 0.9;
 	}
+
+	// game["state"] is being set after this thread starts
+	while ( !isdefined(game["state"]) || game["state"] != "playing" )
+		wait 0.05;
+
 	while ( isdefined(game["state"]) && game["state"] == "playing" )
 	{
 		for (i=0; i<level.ruleset.size; i++)
@@ -250,7 +266,11 @@ miniscoreboard() {
 }
 
 // setup the seperators (forward slashes)
-miniscore_seps() {
+miniscore_seps()
+{
+	if ( level.ax_show_players_alive > 0 )
+		return;
+
 	sep_x = -24;
 	sep_y = -208;
 
@@ -259,7 +279,7 @@ miniscore_seps() {
 
 	for ( i = 0; i < 3; i++ )
 	{
-		if (!isdefined(self.kdhud_sep[i]))
+		if (!isdefined(level.kdhud_sep[i]))
 		{
 			level.kdhud_sep[i] = doHudElem( sep_x, sep_y, "left", "top", "right", "middle", 0.6 );
 			level.kdhud_sep[i] setText(&"MP_SLASH");
@@ -318,11 +338,14 @@ miniscore_myscore() {
         if ( !level.ax_show_mini || level.gametype == "cnq" )
 		return;
 
-	if (!isdefined(self.kdhud_kills))
-		self.kdhud_kills = self doClientHudElem( -27, -210, "right", "top", "right", "middle", 0.8 );
+	if ( level.gametype != "dm" )
+	{
+		if (!isdefined(self.kdhud_kills))
+			self.kdhud_kills = self doClientHudElem( -27, -210, "right", "top", "right", "middle", 0.8 );
 
-	if (!isdefined(self.kdhud_deaths))
-		self.kdhud_deaths = self doClientHudElem( -19, -210, "left", "top", "right", "middle", 0.8 );
+		if (!isdefined(self.kdhud_deaths))
+			self.kdhud_deaths = self doClientHudElem( -19, -210, "left", "top", "right", "middle", 0.8 );
+	}
 
 	if ( level.ax_show_mini_flags && level.gametype == "ctf" ) // third
 	{
@@ -369,8 +392,11 @@ miniscore_myscore() {
 		if (!isdefined(self.pers["kills"]) || !isdefined(self.deaths) || !isdefined(self.pers["flag_caps"]))
 			continue;
 
-		self.kdhud_kills setValue(self.pers["kills"]);
-		self.kdhud_deaths setValue(self.deaths);
+		if ( isdefined( self.kdhud_kills ) )
+			self.kdhud_kills setValue(self.pers["kills"]);
+		if ( isdefined( self.kdhud_deaths ) )
+			self.kdhud_deaths setValue(self.deaths);
+
 		if ( level.ax_show_mini_flags && level.gametype == "ctf" )
 		{
 			self.kdhud_caps_count setValue(self.pers["flag_caps"]);
@@ -389,13 +415,93 @@ miniscore_myscore() {
 			}
 			self.kdhud_caps setShader(icon, 14, 14);
 		}
-		if ( level.ax_show_mini_headshots && isdefined(self.hud_headshot_count) )
+		if ( level.ax_show_mini_headshots && isdefined( self.hud_headshot_count ) )
 			self.hud_headshot_count setValue( self.pers["headshots"] );
 
-		if ( level.ax_show_mini_melees && isdefined(self.hud_melee_count) )
+		if ( level.ax_show_mini_melees && isdefined( self.hud_melee_count ) )
 			self.hud_melee_count setValue( self.pers["melees"] );
 	}
 
+}
+
+playersAlive()
+{
+	self endon("disconnect");
+	self endon("killed_player");
+
+	// 0 - off
+	// 1 - your team only
+	// 2 - both teams
+	// 3 - your team only, sudden death only
+	// 4 - both teams, sudden death only
+
+	if ( !level.ax_show_players_alive )
+		return;
+
+	if ( level.ax_show_players_alive > 2 && !level.sudden_death_status )
+		return;
+
+	playersAliveHud();
+
+	for (;;)
+	{
+		playersAliveUpdate();
+		wait 0.5;
+	}
+}
+
+playersAliveHud()
+{
+	flag_pos_team = [];
+	flag_pos_enemy = [];
+
+	if ( ( level.ax_show_players_alive % 2 ) == 0 )
+	{
+		flag_pos_team[0] = -5;
+		flag_pos_team[1] = 228;
+		flag_pos_enemy = undefined;
+	}
+	else
+	{
+		flag_pos_team[0] = -10;
+		flag_pos_team[1] = 228;
+		flag_pos_enemy[0] = 10;
+		flag_pos_enemy[1] = 228;
+	}
+	
+	self.players_alive_team_flag = doClientHudElem( flag_pos_team[0], flag_pos_team[1], "center", "top", "center", "middle", 1, 1.5 );
+	self.players_alive_team_counter = doClientHudElem( (flag_pos_team[0] + 10), (flag_pos_team[1] + 2), "center", "top", "center", "middle", 0.7, 1.5 );
+
+	if ( isdefined( flag_pos_enemy ) )
+	{
+		self.players_alive_enemy_flag = doClientHudElem( flag_pos_enemy[0], flag_pos_enemy[1], "center", "top", "center", "middle", 1, 1.5 );
+		self.players_alive_enemy_counter = doClientHudElem( (flag_pos_enemy[0] + 10), (flag_pos_enemy[1] + 2), "center", "top", "center", "middle", 0.7, 1.5 );
+	}
+
+	self.players_alive_team_flag setShader( game["headicon_" + self.pers["team"]], 12, 12 );
+
+	if ( isdefined( self.players_alive_enemy_flag ) )
+		self.players_alive_enemy_flag setShader( game["headicon_" + otherTeam(self.pers["team"])], 12, 12 );
+}
+
+playersAliveUpdate()
+{
+	playersalive = [];
+	playersalive["allies"] = 0;
+	playersalive["axis"] = 0;
+
+	players = getentarray("player", "classname");
+	for ( i=0; i < players.size; i++ )
+	{
+		player = players[i];
+		if ( isAlive(player) && ( player.pers["team"] == "allies" || player.pers["team"] == "axis" ) )
+			playersalive[player.pers["team"]]++;
+	}
+
+	if ( isdefined( self.players_alive_team_counter ) )
+		self.players_alive_team_counter setValue(playersalive[self.pers["team"]]);
+	if ( isdefined( self.players_alive_enemy_counter ) )
+		self.players_alive_enemy_counter setValue(playersalive[otherTeam(self.pers["team"])]);
 }
 
 make_crosshair()

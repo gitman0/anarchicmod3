@@ -1,3 +1,5 @@
+/* $Id */
+
 init()
 {
 	level thread onPlayerConnect();
@@ -92,13 +94,13 @@ fixClientCvars(interval)
 
 idleWatchdog()
 {
-	if ( !level.idle_limit || !isdefined(game["matchstarted"]) || !game["matchstarted"] )
+	if ( !level.ax_idle_limit || !isdefined(game["matchstarted"]) || !game["matchstarted"] )
 		return;
 
 	self endon("disconnect");
 	self endon("killed_player");
 
-	warn_interval = ( level.idle_limit / (level.idle_warn_count + 1) );
+	warn_interval = ( level.ax_idle_limit / (level.ax_idle_warn_count + 1) );
 
 	origin_current = self.origin;
 	angles_current = self getplayerangles();
@@ -126,7 +128,7 @@ idleWatchdog()
 			continue;
 		}
 
-		if (idle_time > level.idle_limit)
+		if (idle_time > level.ax_idle_limit)
 		{
 			clientAnnouncement(self, "^1Attention!");
 			clientAnnouncement(self, "You are being forced to spectate because you are not playing!");

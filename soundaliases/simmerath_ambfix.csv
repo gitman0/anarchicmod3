@@ -1,0 +1,4 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+simmerath_ambfix,,ambient/amb_simmerath.mp3,0.1,0.25,,,,,,local,streamed,,looping,,mp_simmerath_beta2

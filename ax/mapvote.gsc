@@ -1,4 +1,4 @@
-/* $Id: mapvote.gsc 78 2010-09-04 17:27:58Z  $ */
+/* $Id: mapvote.gsc 105 2011-01-24 04:25:01Z  $ */
 
 //***********************************************************************************************************
 // MAP VOTE PACKAGE
@@ -22,7 +22,6 @@ init()
 		precacheString(level.mapvotetext["MapVote"]);
 		precacheString(level.mapvotetext["TimeLeft"]);
 		precacheString(level.mapvotetext["MapVoteHeader"]);
-		precacheShader("white");
 	}
 	level thread main();
 }

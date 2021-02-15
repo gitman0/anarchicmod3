@@ -1,3 +1,5 @@
+/* $Id */
+
 #include ax\utility;
 
 init()
@@ -268,8 +270,8 @@ giveFrags()
 {
 	if(getcvarint("scr_allow_fraggrenades"))
 	{
-		if (level.static_nade_count > 0)
-			fraggrenadecount = level.static_nade_count;
+		if ( level.ax_fraggrenade_count > 0 )
+			fraggrenadecount = level.ax_fraggrenade_count;
 		else fraggrenadecount = maps\mp\gametypes\_weapons::getWeaponBasedGrenadeCount(self.pers["weapon"]);
 		if(fraggrenadecount)
 		{
@@ -290,4 +292,16 @@ smokeGrenadesAllowed( player )
 		return level.ax_limit_smokegrenades;
 
 	return undefined; // defer to stock behavior
+}
+
+dropOffhand()
+{
+	current = self getcurrentoffhand();
+	if(current != "none")
+	{
+		ammosize = self getammocount(current);
+
+		if ( (ammosize) && ( isdefined(level.ax_drop_grenades) && level.ax_drop_grenades ) )
+			self dropItem(current);
+        }
 }

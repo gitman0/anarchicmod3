@@ -1,4 +1,4 @@
-/* $Id: rotation.gsc 86 2010-10-02 01:28:00Z  $ */
+/* $Id: rotation.gsc 108 2011-02-20 06:08:22Z  $ */
 
 #include ax\utility;
 
@@ -119,8 +119,13 @@ showNextMap()
 {
 	level endon("intermission");
 
-	if ( !level.nextmap_display || level.awe_mapvote )
+	if ( level.ax_announce_next_map == 0 || level.awe_mapvote )
 		return;
+
+	// minimum delay of 60
+	if ( level.ax_announce_next_map > 60 )
+		delay = level.ax_announce_next_map;
+	else delay = 60;
 
 	for (;;) {
 		maprotcur = strip(getcvar("sv_maprotationcurrent"));
@@ -139,6 +144,6 @@ showNextMap()
 			durr = nextmap + " (" + nextgt + ")";
 			iprintln(&"AX_NEXTMAP", localizedMap(nextmap), &"AX_NEXTMAP_SEP1", localizedGametype(nextgt), &"AX_NEXTMAP_SEP2");
 		}
-		wait level.nextmap_delay;
+		wait level.ax_announce_next_map;
 	}
 }

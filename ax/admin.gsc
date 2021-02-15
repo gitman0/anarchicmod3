@@ -1,4 +1,4 @@
-/* $Id: admin.gsc 88 2010-10-03 00:09:32Z  $ */
+/* $Id: admin.gsc 117 2011-02-22 06:39:21Z  $ */
 
 /**********************
     ADMIN FUNCTIONS
@@ -13,21 +13,23 @@ init()
 	level.ax_sticky_spectator = 0;
 	level.ax_sticky_spectator_max = 5;
 
+	loadAdminRecords();
+
 	level thread switchteam();
 
-	level thread registerDvarEvent( "g_killum",	"int",	::killUm );
-	level thread registerDvarEvent( "g_smite",	"int",	::smitePlayer );
-	level thread registerDvarEvent( "g_forcename",	"string", ::forceName );
-	level thread registerDvarEvent( "g_freeze",	"int",	::freezeUm );
-	level thread registerDvarEvent( "g_unfreeze",	"int",	::unFreezeUm );
-	level thread registerDvarEvent( "g_kicktospec", "int",	::kickToSpec );
-	level thread registerDvarEvent( "wallops",	"string", ::adminAnnounce );
-	level thread registerDvarEvent( "g_kickspecs",	"int",	::kickSpecs );
-	level thread registerDvarEvent( "g_mute",	"int",	::mutePlayer );
-	level thread registerDvarEvent( "g_unmute",	"int",	::unMutePlayer );
-	level thread registerDvarEvent( "ax_givetags",	"int",	::giveClanTags );
-	level thread registerDvarEvent( "ax_sticky_spec", "int", ::stickySpectate );
-
+	level thread registerDvarEvent( "g_killum",		"int",	::killUm );
+	level thread registerDvarEvent( "g_smite",		"int",	::smitePlayer );
+	level thread registerDvarEvent( "g_forcename",		"str",	::forceName );
+	level thread registerDvarEvent( "g_freeze",		"int",	::freezeUm );
+	level thread registerDvarEvent( "g_unfreeze",		"int",	::unFreezeUm );
+	level thread registerDvarEvent( "g_kicktospec",		"int",	::kickToSpec );
+	level thread registerDvarEvent( "wallops",		"str",	::adminAnnounce );
+	level thread registerDvarEvent( "g_kickspecs",		"int",	::kickSpecs );
+	level thread registerDvarEvent( "g_mute",		"int",	::mutePlayer );
+	level thread registerDvarEvent( "g_unmute",		"int",	::unMutePlayer );
+	level thread registerDvarEvent( "ax_givetags",		"int",	::giveClanTags );
+	level thread registerDvarEvent( "ax_sticky_spec",	"int",	::stickySpectate );
+	level thread registerDvarEvent( "ax_print_score_sort",	"int",	::printScoreSortedPlayers );
 	setupShitlist();
 
 	level thread onPlayerConnect();
@@ -91,11 +93,11 @@ isAdminNew(player)
 	return isAdmin(player);
 }
 
-isAdmin(player)
+isAdmin( player )
 {
-	if ( !isDefined(player.ax_admin_record) )
+	if ( !isDefined( player.ax_admin_record ) )
 	{
-		adminRecord = getAdminRecord(player);
+		adminRecord = getAdminRecord( player );
 		if ( isDefined( adminRecord ) )
 		{
 			player.ax_admin_record = adminRecord;
@@ -106,10 +108,10 @@ isAdmin(player)
 	else return true;
 }
 
-getAdminRecord(player)
+getAdminRecord( player )
 {
-	record = [];
 	result = undefined;
+
 	guid = player getGuid();
 
 	if ( guid == 0 )
@@ -118,33 +120,43 @@ getAdminRecord(player)
 		record[1] = "localAdmin";
 		return record;
 	}
-
-	guidFile = openFile("admin_players.dat", "read");
-
-	if ( guidFile < 0 )
-		return result;
-
-	numval = fReadLn(guidFile);
-	while ( numval > 0 )
+	for ( i=0; i<level.adminRecords.size; i++ )
 	{
-		if (numval == 2)
-		{
-			record[0] = fGetArg(guidFile, 0);
-			record[1] = fGetArg(guidFile, 1);
-		}
-		if ( int(record[0]) == guid )
+		record = level.adminRecords[i];
+		if ( int( record[0] ) == guid )
 		{
 			result = record;
 			break;
 		}
-		numval = fReadLn(guidFile);
-
-		waittillframeend;
 	}
-	closeFile(guidFile);
 	return result;
 }
 
+loadAdminRecords()
+{
+	level.adminRecords = [];
+	record = [];
+
+	result = undefined;
+
+	guidFile = openFile( "admin_players.dat", "read" );
+	if ( guidFile < 0 ) return false;
+
+	numval = fReadLn( guidFile );
+	while ( numval > 0 )
+	{
+		if ( numval == 2 )
+		{
+			record[0] = fGetArg( guidFile, 0 );
+			record[1] = fGetArg( guidFile, 1 );
+
+			level.adminRecords[level.adminRecords.size] = record;
+		}
+		numval = fReadLn( guidFile );
+	}
+	closeFile( guidFile );
+	return result;
+}
 
 /* the following functions are based on ravir's admin functions */
 
@@ -272,7 +284,7 @@ giveClanTags( clientNum )
 	}
 
 	iprintln( &"AX_ADMIN_TOOLS_GIVETAGS", player.name );
-	player setClientCvar( "name", level.ax_server_clantag + player.name );
+	player setClientCvar( "name", level.ax_server_clantag + "^7 " + player.name );
 }
 
 killUm( clientNum )
@@ -510,5 +522,15 @@ adminPrint( str )
 	{
 		if ( isAdmin( players[i] ) )
 			players[i] iprintln( str );
+	}
+}
+
+printScoreSortedPlayers( val )
+{
+	if ( val > 0 )
+	{
+		scoreSortedPlayers = scoreSortedPlayers();
+		for ( i=0; i<scoreSortedPlayers; i++ )
+			iprintln( "scoreSortedPlayers[" + i + "]: " + scoreSortedPlayers[i].name );
 	}
 }

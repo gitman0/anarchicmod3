@@ -2,7 +2,7 @@
      anarchicmod 3.0 for Call of Duty 2 by gitman @ anarchic-x.com
      not to be distributed or used anywhere but anarchic-x servers
  
-     $Id: anarchic.gsc 83 2010-09-06 04:35:55Z  $
+     $Id: anarchic.gsc 117 2011-02-22 06:39:21Z  $
 */
 
 #include ax\dvars;
@@ -25,6 +25,11 @@ init()
 		precacheString( &"AX_HUD_TEAMKILLS" );
 		precacheString( &"AX_WAIT_FOR_PLAYERS" );
 		precacheString( &"AX_MATCHSTARTING" );
+
+		precacheShader("white");
+
+		if ( level.gametype == "ctf" && !inWarmup() )
+			thread maps\mp\gametypes\_teams::addTestClients();
 	}
 
 	ax\admin::init();
@@ -129,6 +134,7 @@ onPlayerSpawned()
 			self.team_kill_display_counter = self doClientHudElem( (x + 42), y, "left", "top", "right", "middle", 0.9, 0 );
 		}
 		self.last_victim_team = undefined;
+		self.team_kill_spawn_penalty = 0;
 	}
 }
 
@@ -238,6 +244,13 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 				{
 					attacker.pers["kills"]--;
 					attacker.team_kills++;
+					if ( level.team_kill_spawn_penalty > 0 )
+					{
+						if ( !isdefined( self.team_kill_spawn_penalty ) )
+							attacker.team_kill_spawn_penalty = level.team_kill_spawn_penalty;
+						else
+							attacker.team_kill_spawn_penalty += level.team_kill_spawn_penalty;
+					}
 				}
 				else
 				{
@@ -477,6 +490,14 @@ isBalancedChoice(response)
 		self iprintlnbold( &"AX_CANTJOINTEAM_UNBALANCED", localizedTeam(game[response]), localizedTeam(game[otherTeam(response)]) );
 		return false;
 	}
+
+	// don't let MVP's unbalance the skill
+	if ( level.ax_mvp_system && ax\mvp::isMVP( self ) && !( ax\mvp::mvpClearedForJoin( self, response ) ) )
+	{
+		self iprintlnbold( &"AX_CANTJOINTEAM_UNBALANCED", localizedTeam(game[response]), localizedTeam(game[otherTeam(response)]) );
+		return false;
+	}
+	
 	// catch-all
 	return true;
 }

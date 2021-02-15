@@ -392,8 +392,8 @@ giveGrenades()
 
 	if(getcvarint("scr_allow_fraggrenades"))
 	{
-		if (level.static_nade_count > 0)
-			fraggrenadecount = level.static_nade_count;
+		if (level.ax_fraggrenade_count > 0)
+			fraggrenadecount = level.ax_fraggrenade_count;
 		else fraggrenadecount = getWeaponBasedGrenadeCount(self.pers["weapon"]);
 		if(fraggrenadecount)
 		{

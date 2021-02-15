@@ -1,9 +1,12 @@
-/* $Id: spawn.gsc 90 2010-10-03 06:16:08Z  $ */
+/* $Id: spawn.gsc 99 2011-01-23 07:24:56Z  $ */
 
 #include ax\utility;
 
 init()
 {
+	if ( level.spawn_assist > 0 && !gameStarted() )
+		precacheString(&"AX_SPAWN_ASSIST");
+
 	if (isdefined(level.gametype) && level.gametype == "ctf")
 	{
 		spawnpoints_allied = getentarray("mp_ctf_spawn_allied", "classname");
@@ -17,9 +20,6 @@ init()
 
 		level.spawnpoint_rear["axis"] = getClosest( axis_flag.origin, spawnpoints_axis );
 		level.spawnpoint_rear["allies"] = getClosest( allied_flag.origin, spawnpoints_allied );
-
-		if (level.spawn_assist > 1)
-			precacheString(&"AX_SPAWN_ASSIST");
 	}
 
 	level thread onPlayerConnect();
