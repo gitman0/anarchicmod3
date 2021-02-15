@@ -1,5 +1,5 @@
 /*
-	$Id: ctf.gsc 117 2011-02-22 06:39:21Z  $
+	$Id: ctf.gsc 119 2011-03-26 19:51:39Z root $
 
 	Capture the Flag
 	Objective: 	Score points for your team by capturing the enemy's flag and returning it to your base
@@ -407,7 +407,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 			self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 			// Shellshock/Rumble
-			if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+			if ( !isDefined(level.ax_allow_shellshock) || level.ax_allow_shellshock )
 				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 			self playrumble("damage_heavy");
 		}
@@ -1506,8 +1506,6 @@ menuAutoAssign()
 
 	self notify("joined_team");
 	self notify("end_respawn");
-
-	self.chose_auto_assign = true; // ax
 }
 
 menuAllies()

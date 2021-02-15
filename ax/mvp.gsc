@@ -1,4 +1,4 @@
-/* $Id: mvp.gsc 117 2011-02-22 06:39:21Z  $ */
+/* $Id: mvp.gsc 119 2011-03-26 19:51:39Z  $ */
 
 #include ax\utility;
 
@@ -22,6 +22,7 @@ save_mvpPlayers()
 	if ( level.mvpPlayers.size == 0 )
 		return false;
 
+	// increment score and death counts for existing MVP's
 	players = getentarray( "player", "classname" );
 	for ( i=0; i < players.size; i++ )
 	{
@@ -40,6 +41,28 @@ save_mvpPlayers()
 			}
 		}
 	}
+
+	// store new MVP's assuming they don't already have MVP status
+	scoreSortedPlayers = scoreSortedPlayers();
+	if ( scoreSortedPlayers.size >= level.ax_mvp_system_minplayers )
+	{
+		leaders = [];
+		if ( scoreSortedPlayers.size > level.ax_mvp_system_leader_count )
+			level.ax_mvp_system_leader_count = scoreSortedPlayers.size;
+		for ( i=0; i < level.ax_mvp_system_leader_count; i++ )
+			leaders[i] = scoreSortedPlayers[i];
+	}
+	for ( i=0; i < leaders.size; i++ )
+	{
+		if ( !isMVP( leader ) )
+		{
+			level.mvpPlayers[level.mvpPlayers.size] = spawnstruct();
+			level.mvpPlayers[level.mvpPlayers.size-1].guid = guid;
+			level.mvpPlayers[level.mvpPlayers.size-1].score = score;
+			level.mvpPlayers[level.mvpPlayers.size-1].deaths = deaths;
+		}
+	}
+
 	mvpFile = openFile( "mvp.dat", "write" );
 	if ( mvpFile < 0 ) return false;
 

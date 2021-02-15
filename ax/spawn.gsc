@@ -1,10 +1,10 @@
-/* $Id: spawn.gsc 99 2011-01-23 07:24:56Z  $ */
+/* $Id: spawn.gsc 119 2011-03-26 19:51:39Z  $ */
 
 #include ax\utility;
 
 init()
 {
-	if ( level.spawn_assist > 0 && !gameStarted() )
+	if ( level.ax_spawn_assist > 0 && !gameStarted() )
 		precacheString(&"AX_SPAWN_ASSIST");
 
 	if (isdefined(level.gametype) && level.gametype == "ctf")
@@ -66,7 +66,7 @@ spawn_assist()
 	self endon("disconnect");
 	self endon("killed_player");
 	self endon("player_fired");
-	if ( level.spawn_assist <= 0 )
+	if ( level.ax_spawn_assist <= 0 )
 		return;
 
 	self.spawn_assist = true;
@@ -74,7 +74,7 @@ spawn_assist()
 	//self ax\weapons::takeFrags();
 
 	self thread spawn_assist_discharge();
-	wait level.spawn_assist;
+	wait level.ax_spawn_assist;
 	self.spawn_assist_time = gettime();
 	self spawn_assist_cleanup();
 	//self ax\weapons::giveFrags();
@@ -87,7 +87,7 @@ spawn_assist_discharge()
 	i=0.0;
 	fired=0;
 
-	while (i < level.spawn_assist)
+	while (i < level.ax_spawn_assist)
 	{
 		self.spawn_assist_time = gettime();
 		if (!self attackbuttonpressed())
@@ -140,7 +140,7 @@ spawn_assist_hud()
 		self.spawn_assist_display_sec.fontscale = 0.8;
 		self.spawn_assist_display_sec.archived = false;
 		self.spawn_assist_display_sec.color = (1, 0, 0);
-		self.spawn_assist_display_sec setTimer(level.spawn_assist);
+		self.spawn_assist_display_sec setTimer(level.ax_spawn_assist);
 	}
 }
 

@@ -1,4 +1,4 @@
-/* $Id: admin.gsc 117 2011-02-22 06:39:21Z  $ */
+/* $Id: admin.gsc 119 2011-03-26 19:51:39Z  $ */
 
 /**********************
     ADMIN FUNCTIONS
@@ -530,7 +530,7 @@ printScoreSortedPlayers( val )
 	if ( val > 0 )
 	{
 		scoreSortedPlayers = scoreSortedPlayers();
-		for ( i=0; i<scoreSortedPlayers; i++ )
-			iprintln( "scoreSortedPlayers[" + i + "]: " + scoreSortedPlayers[i].name );
+		for ( i=0; i<scoreSortedPlayers.size; i++ )
+			iprintln( "scoreSortedPlayers[" + i + "]: " + scoreSortedPlayers[i].name + " - " + scoreSortedPlayers[i].score );
 	}
 }

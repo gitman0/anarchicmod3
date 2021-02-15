@@ -1,5 +1,5 @@
 /*
-	$Id: dm.gsc 78 2010-09-04 17:27:58Z  $
+	$Id: dm.gsc 119 2011-03-26 19:51:39Z root $
 
 	Deathmatch
 	Objective: 	Score points by eliminating other players
@@ -269,7 +269,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 	self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 	// Shellshock/Rumble
-	if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+	if ( !isDefined(level.ax_allow_shellshock) || level.ax_allow_shellshock )
 		self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 	self playrumble("damage_heavy");
 	if(isdefined(eAttacker) && eAttacker != self)
@@ -818,7 +818,7 @@ menuAutoAssign()
 		else
 			self openMenu(game["menu_weapon_axis"]);
 	}
-	self.chose_auto_assign = true; // ax
+	self.ax_autoassign_chosen = true; // ax
 }
 
 menuAllies()

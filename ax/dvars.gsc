@@ -1,4 +1,4 @@
-/* $Id: dvars.gsc 117 2011-02-22 06:39:21Z  $ */
+/* $Id: dvars.gsc 119 2011-03-26 19:51:39Z  $ */
 
 #include ax\utility;
 
@@ -27,28 +27,32 @@ setupDvars()
 	level.ax_show_players_alive			= cvardef("ax_show_players_alive", 0, 0, 4, "int");
 
 	// gameplay settings
-	level.allow_shellshock				= cvardef("ax_allow_shellshock", 1, 0, 1, "int");
-	level.spawn_assist				= cvardef("ax_spawn_assist", 0, 0, 3600, "int");
-
+	level.ax_allow_shellshock			= cvardef("ax_allow_shellshock", 1, 0, 1, "int");
+	level.ax_spawn_assist				= cvardef("ax_spawn_assist", 0, 0, 3600, "int");
 	level.ax_idle_limit				= cvardef("ax_idle_limit", 0, 0, 3600, "int");
 	level.ax_idle_warn_count			= cvardef("ax_idle_warn", 2, 0, 720, "int");
-	level.voting_minplayers				= cvardef("ax_voting_minplayers", 2, 0, 64, "int");
-	level.reverse_spawns				= cvardef("ax_reverse_spawns", 0, 0, 1, "int");
+	level.ax_voting_minplayers			= cvardef("ax_voting_minplayers", 2, 0, 64, "int");
+	level.ax_reverse_spawns				= cvardef("ax_reverse_spawns", 0, 0, 1, "int");
+	level.ax_scoresave_expire			= cvardef("ax_scoresave_expire", 600, 0, 3600, "int");
+	level.ax_teambalance_menu			= cvardef("ax_teambalance_menu", 1, 0, 99, "int");
+	level.ax_mvp_system				= cvardef("ax_mvp_system", 1, 0, 1, "int");
+	level.ax_mvp_system_minplayers			= cvardef("ax_mvp_system_minplayers", 0, 0, 64, "int");
+	level.ax_mvp_system_leader_count		= cvardef("ax_mvp_system_leader_count", 3, 0, 64, "int");
+
+	// sudden death
 	level.sudden_death_timelimit			= cvardef("ax_sudden_death_timelimit", 0, -1, 1440, "float");
 	level.sudden_death_disable_respawn_forced	= cvardef("ax_sudden_death_norespawn", 0, 0, 1, "int");
 	level.sudden_death_suppress_tie			= cvardef("ax_sudden_death_notie", 0, 0, 1, "int");
 	level.sudden_death_minplayers			= cvardef("ax_sudden_death_minplayers", 1, 0, 32, "int");
-	level.ax_scoresave_expire			= cvardef("ax_scoresave_expire", 600, 0, 3600, "int");
-	level.ax_teambalance_menu			= cvardef("ax_teambalance_menu", 1, 0, 99, "int");
-	level.ax_mvp_system				= cvardef("ax_mvp_system", 1, 0, 1, "int");
 
 	// ctf-specific modifications
 	level.ax_ctf_pressurecook			= cvardef("ax_ctf_pressurecook", 0, 0, 86400, "int");	
 	level.ax_ctf_warmup				= cvardef("ax_ctf_warmup", 50, 0, 300, "int");
-	level.ax_autoreturn_delay			= cvardef("ax_ctf_autoreturn_delay", 120, 0, 86400, "int");
-	level.ax_flag_offset				= cvardef("ax_flag_offset", 0, 0, 100, "int");
+	level.ax_ctf_autoreturn_delay			= cvardef("ax_ctf_autoreturn_delay", 120, 0, 86400, "int");
+	level.ax_ctf_flag_offset			= cvardef("ax_ctf_flag_offset", 0, 0, 100, "int");
 	level.ax_ctf_wait_for_players			= cvardef("ax_ctf_wait_for_players", 0, 0, 1440, "int");
 	level.ax_ctf_round_delay			= cvardef("ax_ctf_round_delay", 10, 0, 300, "int");
+	level.ax_ctf_shutout_limit			= cvardef("ax_ctf_shutout_limit", 0, 0, 32768, "int");
 	level.flag_hold_return				= cvardef("ax_ctf_flag_hold_return", 0, 0, 1, "int");
 	level.flag_hold_return_radius			= cvardef("ax_ctf_flag_hold_return_radius", 100, 0, 5000, "int");
 	level.flag_hold_return_time			= cvardef("ax_ctf_flag_hold_return_time", 100, 0, 1000000, "int");
@@ -93,7 +97,7 @@ setupDvars()
 	level.ax_admin_chat_prefix			= cvardef("ax_admin_chat_prefix", "^1admin^7CHAT: ");
 	level.ax_server_clantag				= cvardef("ax_server_clantag", "^1|^9ax^1|^7 ");
 
-	// experimental
+	// the rest are experimental
 	level.static_crosshair				= cvardef("scr_static_crosshair", 0, 0, 1, "int");
 	// level.ax_ctf_oneflag -  0: off, 1: allies defend, 2: axis defend, 3: random
 	level.ax_ctf_oneflag				= cvardef("ax_ctf_one_flag", 0, 0, 3, "int");

@@ -2,7 +2,7 @@
      anarchicmod 3.0 for Call of Duty 2 by gitman @ anarchic-x.com
      not to be distributed or used anywhere but anarchic-x servers
  
-     $Id: anarchic.gsc 117 2011-02-22 06:39:21Z  $
+     $Id: anarchic.gsc 119 2011-03-26 19:51:39Z  $
 */
 
 #include ax\dvars;
@@ -74,7 +74,7 @@ onPlayerConnect()
 		player.team_kill_suicides = 0;
 		player.team_kill_timeout = level.team_kill_timeout;
 		player.team_kill_counter = false;
-		player.chose_auto_assign = false;
+		player.ax_autoassign_chosen = false;
 
 		player thread onPlayerSpawned();
 		player thread onPlayerKilled();
@@ -135,6 +135,7 @@ onPlayerSpawned()
 		}
 		self.last_victim_team = undefined;
 		self.team_kill_spawn_penalty = 0;
+		self.ax_autoassign_chosen = false;
 	}
 }
 
@@ -290,7 +291,7 @@ friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vP
 		self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 		// Shellshock/Rumble
-		if ( level.allow_shellshock )
+		if ( level.ax_allow_shellshock )
 			self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 		self playrumble("damage_heavy");
 	}

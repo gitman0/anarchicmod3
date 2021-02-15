@@ -1,4 +1,29 @@
-/* $Id: utility.gsc 117 2011-02-22 06:39:21Z  $ */
+/* $Id: utility.gsc 119 2011-03-26 19:51:39Z  $ */
+
+// returns true if element is in array, false otherwise
+inArray( needle, haystack )
+{
+	for ( i=0; i < haystack.size; i++ )
+	{
+		if ( haystack[i] == needle )
+			return true;
+	}
+	return false;
+}
+
+// finds player entity from GUID
+getPlayerFromGUID( guid )
+{
+	players = getentarray( "player", "classname" );
+	for ( i=0; i < players.size; i++ )
+	{
+		player = players[i];
+		pGuid = player getGuid();
+		if ( guid == pGuid )
+			return player;
+	}
+	return false;
+}
 
 // returns an array of players sorted by their score in descending order
 scoreSortedPlayers()
@@ -23,7 +48,7 @@ scoreSortedPlayers()
 		{
 			sorted[sorted.size] = player;
 		}
-		else
+		else if ( i > 0 )
 		{
 			low_idx = undefined;
 			high_idx = undefined;
@@ -511,7 +536,7 @@ localizedMap( map )
 // prints the "joined team" messages, declares auto-assign (if chosen)
 printJoinedTeam(team)
 {
-	if (!self.chose_auto_assign)
+	if (!self.ax_autoassign_chosen)
 	{
 		if(team == "allies")
 			iprintln(&"MP_JOINED_ALLIES", self.name + "^7");

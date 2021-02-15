@@ -1,4 +1,4 @@
-/* $Id: ctfmods.gsc 118 2011-02-22 07:01:25Z  $ */
+/* $Id: ctfmods.gsc 119 2011-03-26 19:51:39Z  $ */
 
 #include ax\utility;
 
@@ -127,30 +127,23 @@ checkScoreLimit()
 	if(level.scorelimit <= 0)
 		return;
 
-	shutout = false;
-	shutout_limit = getcvarint("scr_ctf_shutout_limit");	
 	score_axis = getTeamScore("axis");
 	score_allies = getTeamScore("allies");
 
-	if (shutout_limit > 0)
+	if ( getTeamScore("allies") < level.scorelimit && getTeamScore("axis") < level.scorelimit )
 	{
-		if (score_allies == 0 && score_axis >= shutout_limit)
-			shutout = true;
-		if (score_axis == 0 && score_allies >= shutout_limit)
-			shutout = true;
+		if ( level.ax_ctf_shutout_limit > 0 && !isShutOut( level.ax_ctf_shutout_limit ) )
+			return;
+		else if ( !level.ax_ctf_shutout_limit )
+			return;
 	}
 
-	if(getTeamScore("allies") < level.scorelimit && getTeamScore("axis") < level.scorelimit && !shutout)
+	if (level.mapended || level.roundended)
 		return;
 
-//	if ( level.roundlimit > game["roundsplayed"] )
-//		return;
-
-	if(level.mapended || level.roundended)
-		return;
 	level.mapended = true;
 
-	if(!shutout)
+	if ( isShutOut( level.ax_ctf_shutout_limit ) )
 		iprintln(&"MP_SCORE_LIMIT_REACHED");
 	else iprintln("Game over - TOTAL SHUTOUT!");
 
@@ -643,8 +636,6 @@ flag()
 				{
 					if(isdefined(other.flag)) // Captured flag
 					{
-						println("CAPTURED THE FLAG!");
-
 						friendlyAlias = "ctf_touchcapture";
 						enemyAlias = "ctf_enemy_touchcapture";
 
@@ -690,8 +681,6 @@ flag()
 			}
 			else if(other.pers["team"] != self.team) // Touched by enemy
 			{
-				println("PICKED UP THE FLAG!");
-
 				friendlyAlias = "ctf_touchenemy";
 				enemyAlias = "ctf_enemy_touchenemy";
 
@@ -864,7 +853,6 @@ returnFlag(flag)
 
 	flag notify("end_autoreturn");
 
-	println("RETURNED THE FLAG!");
 	thread playSoundOnPlayers("ctf_touchown", flag.team);
 	thread [[level.printOnTeam]](&"MP_YOUR_FLAG_WAS_RETURNED", flag.team);
 
@@ -1106,7 +1094,7 @@ menuAutoAssign()
 	self notify("joined_team");
 	self notify("end_respawn");
 
-	self.chose_auto_assign = true; // ax
+	self.ax_autoassign_chosen = true; // ax
 }
 
 menuAllies()

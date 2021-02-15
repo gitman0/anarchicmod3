@@ -1,5 +1,5 @@
 /*
-	$Id: rtdm.gsc 78 2010-09-04 17:27:58Z  $
+	$Id: rtdm.gsc 119 2011-03-26 19:51:39Z root $
 
 	Rifles-Only Team Deathmatch
 	Objective: 	Score points for your team by eliminating players on the opposing team
@@ -300,7 +300,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 				self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 				// Shellshock/Rumble
-				if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+				if ( !isDefined(level.ax_allow_shellshock) || level.ax_allow_shellshock )
 					self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 				self playrumble("damage_heavy");
 			}
@@ -334,7 +334,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 				eAttacker.friendlydamage = undefined;
 
 				// Shellshock/Rumble
-				if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+				if ( !isDefined(level.ax_allow_shellshock) || level.ax_allow_shellshock )
 					self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 				self playrumble("damage_heavy");
 
@@ -350,7 +350,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 			self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 			// Shellshock/Rumble
-			if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+			if ( !isDefined(level.ax_allow_shellshock) || level.ax_allow_shellshock )
 				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 			self playrumble("damage_heavy");
 		}
@@ -1023,7 +1023,7 @@ menuAutoAssign()
 	self notify("joined_team");
 	self notify("end_respawn");
 
-	self.chose_auto_assign = true; // ax
+	self.ax_autoassign_chosen = true; // ax
 }
 
 menuAllies()

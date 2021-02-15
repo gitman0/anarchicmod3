@@ -206,13 +206,13 @@ isVotingAllowed()
 		if ( !isdefined(game["matchstarted"]) || !game["matchstarted"] )
 			return false;
 	}
-	if (level.voting_minplayers > 0)
+	if (level.ax_voting_minplayers > 0)
 	{
-		m = level.voting_minplayers % 2;
-		if (m > 0) level.voting_minplayers += m;
-		per_team = level.voting_minplayers / 2;
+		m = level.ax_voting_minplayers % 2;
+		if (m > 0) level.ax_voting_minplayers += m;
+		per_team = level.ax_voting_minplayers / 2;
 		players = maps\mp\gametypes\_teams::CountPlayers();
-		if ( ( players["allies"] < per_team && players["axis"] < per_team ) || players.size < level.voting_minplayers )
+		if ( ( players["allies"] < per_team && players["axis"] < per_team ) || players.size < level.ax_voting_minplayers )
 			return false;
 	}
 	return true;

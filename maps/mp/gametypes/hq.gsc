@@ -1,5 +1,5 @@
 /*
-	$Id: hq.gsc 81 2010-09-06 03:46:44Z  $
+	$Id: hq.gsc 119 2011-03-26 19:51:39Z root $
 
 	HQ
 	Objective: 	Establish a headquarters and gain points as long as your team controls it
@@ -385,7 +385,7 @@ Callback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sW
 			self finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 
 			// Shellshock/Rumble
-			if ( !isDefined(level.allow_shellshock) || level.allow_shellshock )
+			if ( !isDefined(level.ax_allow_shellshock) || level.ax_allow_shellshock )
 				self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 			self playrumble("damage_heavy");
 		}
@@ -2122,7 +2122,7 @@ menuAutoAssign()
 	self notify("joined_team");
 	self notify("end_respawn");
 
-	self.chose_auto_assign = true; // ax
+	self.ax_autoassign_chosen = true; // ax
 }
 
 menuAllies()
