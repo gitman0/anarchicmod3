@@ -1,0 +1,7 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_mp_sevastopol,,ambient/amb_Russia01b.mp3,0.5,,,,,,,local,streamed,,looping,,mp_sevastopol,,,,,,,,
+toiletflush,,misc/toiletflush.wav,0.85,,,,,,,local,,,,,mp_sevastopol,,,,,,,,
+elevator,,misc/elevator.wav,1,,,,,,,local,,,,,mp_sevastopol,,,,,,,,
+stukafly,,misc/stukafly.wav,1,,,,,,,local,,,,,mp_sevastopol,,,,,,,,
+radiostatic,,misc/radiostatic.wav,0.45,,,,,,,voice,streamed,,looping,,mp_sevastopol,,,,,,,,

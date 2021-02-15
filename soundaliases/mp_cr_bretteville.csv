@@ -1,0 +1,9 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_cr_bretteville,,misc/tt71sounds16.mp3,0.53,,,,,,,menu,streamed,,looping,,mp_cr_bretteville
+ambient_mp_cr_bretteville_2,,misc/KR-City.mp3,0.51,,,,,,,menu,streamed,,looping,,mp_cr_bretteville
+
+barrel_explosion,,explosions/exp_armoredcar.wav,0.8,1,,,,50,1000,local,streamed,,,,mp_cr_bretteville,,,,,,,,
+barrel_explosion_imminent,,misc/metal_stress01.wav,0.6,1,,,,50,500,local,streamed,,,,mp_cr_brettevilleEEEEE,,,,,,,,
+barrel_fire,,fire/Fire_Sm_loop01.wav,0.6,1,,2,,50,400,auto,streamed,,,,mp_cr_bretteville,,,,,,,,

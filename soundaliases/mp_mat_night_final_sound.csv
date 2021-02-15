@@ -1,0 +1,30 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_mat_night_final,,ambient/amb_mat_night.mp3,0.45,,,,,,,local,streamed,,looping,,mp_mat_night_final
+grille,,misc/grille.wav,0.8,,,,,,,voice,,,looping,,mp_mat_night_final
+zikade,,misc/zikade.wav,0.8,,,,,,,voice,,,looping,mp_mat_night_final
+flies,,misc/flies.wav,0.3,,,,,,,voice,,,looping,,mp_mat_night_final
+kubel_idle,,vehicles/kubel_idle.wav,0.5,,,,,,,voice,,,looping,,mp_mat_night_final
+camel,,misc/camel.wav,1,,,,,,,voice,,,looping,,mp_mat_night_final
+dog1,,misc/dog1.wav,0.8,,,,,,,voice,,,looping,,mp_mat_night_final
+dog2,,misc/dog2.wav,0.8,,,,,,,voice,,,looping,,mp_mat_night_final
+dog3,,misc/dog3.wav,1,,,,,,,voice,,,looping,,mp_mat_night_final
+lilli,,misc/lilli.mp3,0.3,,,,,,,voice,streamed,,looping,,mp_mat_night_final
+radio,,misc/radiostatic.wav,0.05,,,,,,,voice,,,looping,,mp_mat_night_final
+
+#Explosion
+barrel_explosion,,explosions/exp_armoredcar.wav,0.8,1,,,,50,1000,local,streamed,,,,mp_mat_night_final,,,,,,,,
+barrel_explosion_imminent,,misc/metal_stress01.wav,0.6,1,,,,50,500,local,streamed,,,,mp_mat_night_final,,,,,,,,
+barrel_fire,,fire/Fire_Sm_loop01.wav,0.01,1,,,,50,400,auto,streamed,,,,mp_mat_night_final,,,,,,,,
+
+#Door open
+dooropen,,misc/open.wav,,,,,,100,800,auto,streamed,,,,mp_mat_night_final
+
+#Door close
+doorclose,,misc/close.wav,,,,,,100,800,auto,streamed,,,,mp_mat_night_final
+
+#Door end
+doorend,,misc/end.wav,,,,,,100,800,auto,streamed,,,,mp_mat_night_final
+
+

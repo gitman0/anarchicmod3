@@ -1,0 +1,6 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+
+
+ambient_mp_ol_athens,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_ol_athens
+radio,,amb_emitters/emt_radio_loop_1c.wav,0.2,,,,,100,250,voice,streamed,,looping,,mp_ol_athens,,,,,,,,

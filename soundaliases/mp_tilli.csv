@@ -1,0 +1,14 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_mp_tilli,,ambient/amb_france04_ext.mp3,0.63,,,,,,,local,streamed,,looping,,mp_tilli
+horse_fly,,amb_emitters/emt_fly_loop3.wav,0.85,,,,,,,voice,,,looping,,mp_tilli
+traktor,,vehicles/truck_idle.wav,1,,,,,,,voice,,,looping,,mp_tilli
+fire_sound,,misc/Fire_Sm_loop01.wav,0.8,,,,,,,voice,,,looping,,mp_tilli
+kubel,,misc/kubel_idle.wav,1,,,,,,,voice,,,looping,,mp_tilli
+sherman,,misc/tank_03_idle.wav,1,,,,,,,voice,,,looping,,mp_tilli
+halftrack,,misc/tank_02_idle.wav,1,,,,,,,voice,,,looping,,mp_tilli
+willy,,misc/Fire_Sm_loop01.wav,1,,,,,,,voice,,,looping,,mp_tilli
+sherman2,,misc/tank_03_idle.wav,1,,,,,,,voice,,,looping,,mp_tilli
+radio,,misc/radio2.wav,1,,,,,,,voice,streamed,,looping,,mp_tilli
+radio2,,misc/emt_radio_loop_1c.wav,1,,,,,,,voice,streamed,,looping,,mp_tilli
+stuka_flyby,,misc/stuka_by02.wav,1,,,,,,,local,,,,,mp_tilli

@@ -1,0 +1,110 @@
+"# If the text in the first column of a row starts with a # character, the row is ignored",,"If the first column for a row is blank, then the row is ignored"
+,"If the first column for a row is blank, then the row is ignored",
+# The first non-comment line of a sound alias file specifies the key name for all values appearing in this column.,,
+"# This means it is safe to swap entire columns around, though you should never swap partial columns.",,
+"# You can invent new keys, but the game will ignore them if it doesn't know about them.",,
+"# You can leave out keys, but the ""name"" and ""file"" keys must always be present.",,
+
+,name,name of the alias that is used to play this sound (required)
+,sequence,"used to uniquely identify alias entries when more than one sound goes to an alias, used only to catch unwanted duplicates (default = 0)"
+,file,the name of the file that contains the sound data (required)
+,vol_min,"0 is silent, 1 is full volume (default = 1)"
+,vol_max,"0 is silent, 1 is full volume (default = same as vol_min)"
+,vol_mod,"blank causes no effect on vol_min and vol_max, otherwise the string must match a string in the volumemodgroups.def file and the value in that file corresponding to that string will be used to adjust vol_min and vol_max, clamped to the valid range"
+,pitch_min,"1 is normal playback, 2 is twice as fast, 0.5 is half as fast (default = 1)"
+,pitch_max,"1 is normal playback, 2 is twice as fast, 0.5 is half as fast (default = same as pitch_min)"
+,dist_min,"within this distance in inches, the sound is always full volume (default = 120)"
+,dist_max,"outside this distance in inches, the sound is not started.  If left blank or set to 0, the sound will play from any distance.  This does not affect sound volume falloff.",,,,,,,,,,,,,,,,,,,,,
+,channel,"auto, menu, weapon, voice, item, body, local, music, announcer (default = auto)",,,,,,,,,,,,,,,,,,,,,
+,type,primed (a streamed sound which gets primed on some platforms) / streamed / loaded (default = loaded),,,,,,,,,,,,,,,,,,,,,
+,probability,weight to use for the weighted probability of playing this sound instead of another sound (default = 1),,,,,,,,,,,,,,,,,,,,,
+,loop,"whether this sound is ""looping"" or ""nonlooping"" (default = ""nonlooping"")",,,,,,,,,,,,,,,,,,,,,
+,masterslave,"if ""master"", this is a master sound.  If a number, then this sound's volume will be multiplied by that number (a percentage between 0 and 1) any master sound is playing.  If blank, then neither master nor slave.",,,,,,,,,,,,,,,,,,,,,
+,loadspec,"space-separated list of which maps should use this alias; eg, ""burnville dawnville"".  If blank, the alias is used on all maps.",,,,,,,,,,,,,,,,,,,,,
+,compression,"a string corresponding to an entry in ""XMAUpdate.tbl"" which is used to determine compression by XMAUpdate.exe",,,,,,,,,,,,,,,,,,,,,
+,secondaryaliasname,"defined the name of an additional sound alias to play in addition to the current alias being played. Note that it is an error for the secondaryalias to also define a secondaryaliasname (eg, if B is a secondaryalias of A, B is not allowed to have its own secondaryalias).",,,,,,,,,,,,,,,,,,,,,
+,volumefalloffcurve,if blank uses the linear curve which can not be changed. A string 'XXXX' corresponds to the curve defined by the file 'soundaliases/XXXX.vfcurve',,,,,,,,,,,,,,,,,,,,,
+,startdelay,defaults to no delay. The value is the number of milliseconds to delay starting the sound by,,,,,,,,,,,,,,,,,,,,,
+,speakermap,if blank uses the default speakermappings which cannot be changed. A string 'XXXX' corresponds to the speakermap defined by the file 'soundaliases/XXXX.spkrmap'. ,,,,,,,,,,,,,,,,,,,,,
+,reverb,"blank means the alias is affected normally by wet and dry levels, ""fulldrylevel"" forces the alias to use a full drylevel (ignoring the global drylevel), ""nowetlevel"" forces the alias to use no wetlevel (ignoring the global wetlevel)",,,,,,,,,,,,,,,,,,,,,
+,lfe percentage,this determines what percentage of the highest calculated spatialized speaker volume should be passed to the LFE. blank means no LFE for the sound,,,,,,,,,,,,,,,,,,,,,
+
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+null,,null.wav,,,,,,,,,,,,,
+
+#ambiance,,,,,,,,,,,,,,,
+ambient_france,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_brest
+rain_light,,ambient/amb_newvillers_rainlite.mp3,0.45,,ambience,,,,,local,streamed,,looping,,mp_brest
+
+rain_hvy,,ambient/amb_newvillers_rainhvy.mp3,0.45,,ambience,,,,,local,streamed,,looping,,mp_brest
+rain_no,,ambient/amb_newvillers_norain.mp3,0.55,,ambience,,,,,local,streamed,,looping,,mp_brest
+ambient_mp_bits,,ambient/amb_newvillers_rainlite.mp3,0.63,,,,,,,local,streamed,,looping,,mp_brest
+thunder,,amb_elements/elm_thunder_y04.wav,0.85,0.99,,0.8,1.1,100000,,local,streamed,,,,mp_brest
+nvthunder,,amb_elements/elm_thunder_y04.wav,0.5,1,,,,100,800,local,streamed,,nonlooping,,mp_brest
+artillery_fire,1,explosions/explo_distant02.wav,0.45,0.6,explosion,0.9,0.9,500000,500000,auto,streamed,,,,mp_brest
+artillery_fire,2,explosions/explo_distant04.wav,0.45,0.6,explosion,0.9,0.9,500000,500000,auto,streamed,,,,mp_brest
+artillery_fire,3,explosions/explo_distant05.wav,0.45,0.6,explosion,0.9,0.9,500000,500000,auto,streamed,,,,mp_brest
+artillery_fire,4,explosions/explo_distant07.wav,0.45,0.6,explosion,0.9,0.9,500000,500000,auto,streamed,,,,mp_brest
+artillery_fire,5,explosions/explo_distant08.wav,0.45,0.6,explosion,0.9,0.9,500000,500000,auto,streamed,,,,mp_brest
+artillery_incoming,1,explosions/mrk_artillery_incoming1.wav,0.57,0.68,explosion,0.9,0.9,4000,8000,auto,streamed,,,0.85,mp_brest
+artillery_incoming,2,explosions/mrk_artillery_incoming2.wav,0.57,0.68,explosion,0.9,0.9,4000,8000,auto,streamed,,,0.85,mp_brest
+artillery_incoming,3,explosions/mrk_artillery_incoming3.wav,0.57,0.68,explosion,0.9,0.9,4000,8000,auto,streamed,,,0.85,mp_brest
+artillery_explosion,1,explosions/mortar_dirt01.wav,0.7,0.85,explosion,0.8,1.2,4000,12000,auto,streamed,,,0.85,mp_brest
+artillery_explosion,2,explosions/mortar_dirt02.wav,0.7,0.85,explosion,0.8,1.2,4000,12000,auto,streamed,,,0.85,mp_brest
+artillery_explosion,3,explosions/mortar_dirt03.wav,0.7,0.85,explosion,0.8,1.2,4000,12000,auto,streamed,,,0.85,mp_brest
+artillery_explosion,4,explosions/mortar_dirt04.wav,0.7,0.85,explosion,0.8,1.2,4000,12000,auto,streamed,,,0.85,mp_brest
+artillery_explosion,5,explosions/mortar_dirt05.wav,0.7,0.85,explosion,0.8,1.2,4000,12000,auto,streamed,,,0.85,mp_brest
+artillery_explosion,6,explosions/mortar_dirt06.wav,0.7,0.85,explosion,0.8,1.2,4000,12000,auto,streamed,,,0.85,mp_brest
+,,,,,,,,,,,,,,,mp_brest
+shell_incoming,1,explosions/mrk_incoming1.wav,0.95,1,explosion,0.9,0.9,500,500000,auto,streamed,,,0.85,mp_brest
+shell_incoming,2,explosions/mrk_incoming2.wav,0.95,1,explosion,0.9,0.9,500,500000,auto,streamed,,,0.85,mp_brest
+shell_incoming,3,explosions/mrk_incoming3.wav,0.95,1,explosion,0.9,0.9,500,500000,auto,streamed,,,0.85,mp_brest
+shell_incoming,4,explosions/mrk_incoming4.wav,0.95,1,explosion,0.9,0.9,500,500000,auto,streamed,,,0.85,mp_brest
+shell_incoming2,1,explosions/mrk_incoming1.wav,0.7,0.9,explosion,0.7,0.9,500,500000,auto,streamed,,,0.33,mp_brest
+shell_incoming2,2,explosions/mrk_incoming2.wav,0.7,0.9,explosion,0.7,0.9,500,500000,auto,streamed,,,0.33,mp_brest
+shell_incoming2,3,explosions/mrk_incoming3.wav,0.7,0.9,explosion,0.7,0.9,500,500000,auto,streamed,,,0.33,mp_brest
+shell_incoming2,4,explosions/mrk_incoming4.wav,0.7,0.9,explosion,0.7,0.9,500,500000,auto,streamed,,,0.33,mp_brest
+shell_explosion,1,explosions/mortar_dirt01.wav,0.75,0.9,explosion,0.7,0.9,50,7500,voice,streamed,,,0.5,mp_brest
+shell_explosion,2,explosions/mortar_dirt02.wav,0.75,0.9,explosion,0.7,0.9,50,7500,voice,streamed,,,0.5,mp_brest
+shell_explosion,3,explosions/mortar_dirt03.wav,0.75,0.9,explosion,0.7,0.9,50,7500,voice,streamed,,,0.5,mp_brest
+shell_explosion,4,explosions/mortar_dirt04.wav,0.75,0.9,explosion,0.7,0.9,50,7500,voice,streamed,,,0.5,mp_brest
+shell_explosion,5,explosions/mortar_dirt05.wav,0.75,0.9,explosion,0.7,0.9,50,7500,voice,streamed,,,0.5,mp_brest
+shell_explosion,6,explosions/mortar_dirt06.wav,0.75,0.9,explosion,0.7,0.9,50,7500,voice,streamed,,,0.5,mp_brest
+
+distant_artillery_barrage1,1,explosions/cannon_sequence_hvy1_filt.wav,1,1,,1,1.2,1,50000,auto,streamed,,,0.7,mp_brest
+distant_artillery_barrage2,2,explosions/cannon_sequence_hvy2_filt.wav,1,1,,1,1.2,1,50000,auto,streamed,,,0.7,mp_brest
+distant_artillery_barrage3,3,explosions/cannon_sequence_hvy3_filt.wav,1,1,,1,1.2,1,50000,auto,streamed,,,0.7,mp_brest
+distant_artillery_barrage_layer1,1,explosions/cannon_sequence_hvy1_filt.wav,0.38,0.38,,0.6,0.6,500000,,local,streamed,,,0.7,mp_brest
+distant_artillery_barrage_layer2,2,explosions/cannon_sequence_hvy2_filt.wav,0.38,0.38,,0.6,0.6,500000,,local,streamed,,,0.7,mp_brest
+distant_artillery_barrage_layer3,3,explosions/cannon_sequence_hvy3_filt.wav,0.38,0.38,,0.6,0.6,500000,,local,streamed,,,0.7,mp_brest
+fast_artillery_round,1,explosions/artillery_incoming01.wav,0.7,0.8,explosion,0.8,1.2,1,500000,auto,streamed,,,0.5,mp_brest
+fast_artillery_round,2,explosions/artillery_incoming02.wav,0.7,0.8,explosion,0.8,1.2,1,500000,auto,streamed,,,0.5,mp_brest
+fast_artillery_round,3,explosions/artillery_incoming03.wav,0.7,0.8,explosion,0.8,1.2,1,500000,auto,streamed,,,0.5,mp_brest
+fast_artillery_round,4,explosions/artillery_incoming04.wav,0.7,0.8,explosion,0.8,1.2,1,500000,auto,streamed,,,0.5,mp_brest
+fast_artillery_round,5,explosions/artillery_incoming05.wav,0.7,0.8,explosion,0.8,1.2,1,500000,auto,streamed,,,0.5,mp_brest
+artillery_impact,1,explosions/mortar_dirt01.wav,0.75,0.85,explosion,0.7,0.9,50,15000,auto,streamed,,,0.5,mp_brest
+artillery_impact,2,explosions/mortar_dirt02.wav,0.75,0.85,explosion,0.7,0.9,50,15000,auto,streamed,,,0.5,mp_brest
+artillery_impact,3,explosions/mortar_dirt03.wav,0.75,0.85,explosion,0.7,0.9,50,15000,auto,streamed,,,0.5,mp_brest
+artillery_impact,4,explosions/mortar_dirt04.wav,0.75,0.85,explosion,0.7,0.9,50,15000,auto,streamed,,,0.5,mp_brest
+artillery_impact,5,explosions/mortar_dirt05.wav,0.75,0.85,explosion,0.7,0.9,50,15000,auto,streamed,,,0.5,mp_brest
+artillery_impact,6,explosions/mortar_dirt06.wav,0.75,0.85,explosion,0.7,0.9,50,15000,auto,streamed,,,0.5,mp_brest
+door_open,1,misc/dooropen.mp3,0.8,,,,,100,900,auto,streamed,,,,mp_brest
+door_close,1,misc/doorclose.mp3,0.8,,,,,100,900,auto,streamed,,,,mp_brest
+door_locked,1,misc/doorlocked.mp3,0.8,,,,,100,900,auto,streamed,,,,mp_brest
+mortar_load,,misc/mortar_load.wav,1,1,element,0.9,0.9,7,400,auto,streamed,,,,mp_brest
+mortar_launch,,misc/mortar_launch.wav,1,1,element,0.9,0.9,7,400,auto,streamed,,,,mp_brest
+
+us_arty_reloading,1,Voiceovers/US/Artillery/artillery_ar1_sc01_10_t2_R.wav,0.93,0.93,,,,7,3000,voice,streamed,,,,mp_brest
+us_arty_reloading,2,Voiceovers/US/Artillery/artillery_ar1_sc01_11_t2_R.wav,0.93,0.93,,,,7,3000,voice,streamed,,,,mp_brest
+us_arty_reloading,3,Voiceovers/US/Artillery/artillery_ar1_sc01_12_t2_R.wav,0.93,0.93,,,,7,3000,voice,streamed,,,,mp_brest
+us_arty_shot,1,Voiceovers/US/Artillery/artillery_ar1_sc01_13_t3_R.wav,0.93,0.93,,,,7,3000,voice,streamed,,,,mp_brest
+us_arty_shot,2,Voiceovers/US/Artillery/artillery_ar1_sc01_14_t4_R.wav,0.93,0.93,,,,7,3000,voice,streamed,,,,mp_brest
+us_fire_for_effect,1,Voiceovers/MP/UK/UK_1_mp_responses_08.wav,0.93,0.93,,,,7,3000,voice,streamed,,,,mp_brest
+us_fire_for_effectR,,Voiceovers/US/Artillery/artillery_ar1_sc01_06_t5.wav,0.99,0.99,voiceover,,,360,6000,voice,streamed,,,master,mp_brest
+
+stukafly,,vehicles/stuka_planeby1.wav,1,,,,,,,local,streamed,,,,mp_brest
+
+us_arty_nofire,1,Voiceovers/US/Artillery/artillery_ar1_sc01_05_t2_R.wav,0.7,0.7,emitter,,,1,400,auto,streamed,,,,mp_brest
+us_arty_nofire,2,Voiceovers/US/Artillery/artillery_ar1_sc01_06_t4_R.wav,0.7,0.7,emitter,,,1,400,auto,streamed,,,,mp_brest
+us_arty_nofire,3,Voiceovers/US/Artillery/artillery_ar1_sc01_07_t1_R.wav,0.7,0.7,emitter,,,1,400,auto,streamed,,,,mp_brest

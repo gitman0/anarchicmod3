@@ -1,0 +1,4 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_france,,ambient/amb_duhocbattle_Bunker_1.mp3,0.1,,,,,,,local,streamed,,looping,,pfb_carentan_ctf,,,,,,,,
+sparky,,misc/spark1.mp3,0.85,,,,,,,voice,streamed,,looping,,pfb_carentan_ctf,,,,,,,,

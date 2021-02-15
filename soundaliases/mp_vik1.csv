@@ -1,0 +1,14 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_vik1,,ambient/amb_hill400_charge.mp3,0.2,0.2,ambience,,,,,local,streamed,,looping,0.85,mp_vik1,,,,,,ambience
+
+#sounds
+mp_vik1truck_idle,,mp_vik1/mp_vik1_truck_idle.wav,0.75,0.9,,,,100,1300,voice,,,looping,,mp_vik1,,,,,,,,
+mp_vik1elm_windgust10,,mp_vik1/mp_vik1_elm_windgust10.wav,0.75,0.9,,,,100,1300,voice,,,looping,,mp_vik1,,,,,,,,
+mp_vik1emt_oceanwaves_1,,mp_vik1/mp_vik1_emt_oceanwaves_1.wav,0.75,0.9,,,,100,1300,voice,,,looping,,mp_vik1,,,,,,,,
+mp_vik1mrk_wave_crashing_13,,mp_vik1/mp_vik1_mrk_wave_crashing_13.wav,0.75,0.9,,,,100,1300,voice,,,looping,,mp_vik1,,,,,,,,
+mp_vik1tank_02_idle,,mp_vik1/mp_vik1_tank_02_idle.wav,0.75,0.9,,,,100,1300,voice,,,looping,,mp_vik1,,,,,,,,
+barrel_explosion,,explosions/exp_armoredcar.wav,0.8,1,,,,50,1000,local,streamed,,,,mp_vik1,,,,,,,,
+barrel_explosion_imminent,,misc/metal_stress01.wav,0.6,1,,,,50,500,local,streamed,,,,mp_vik1,,,,,,,,
+barrel_fire,,fire/Fire_Sm_loop01.wav,0.01,1,,,,50,400,auto,streamed,,,,mp_vik1,,,,,,,,

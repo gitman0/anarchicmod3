@@ -1,0 +1,21 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#loop_sounds,,,,,,,,,,,,,,,,,,,,,,,
+fire,,fire.wav,0.92,0.92,,1,1,10,500,auto,streamed,,looping,,mp_countryside,,,,,,,,
+fire2,,fire2.wav,0.92,0.92,,1,1,10,500,auto,streamed,,looping,,mp_countryside,,,,,,,,
+river,,river.wav,0.92,0.92,,0.8,0.8,10,500,auto,streamed,,looping,,mp_countryside,,,,,,,,
+
+#Ambience,,,,,,,,,,,,,,,,,,,,,,,
+country_ambience,,country_ambience.wav,0.63,0.8,,,,,,local,streamed,,looping,,mp_countryside,,,,,,,,
+
+#firing,,,,,,,,,,,,,,,,,,,,,,,
+flak88_fire,,flak88_fire.wav,0.92,0.92,,1,1,100,2000,auto,streamed,,,,mp_countryside,,,,,,,,
+incoming,,incoming.wav,0.92,0.92,,1,1,10,1000,auto,streamed,,,,mp_countryside,,,,,,,,
+mortar_fire,,mortar_fire.wav,0.92,0.92,,1,1,10,1000,auto,streamed,,,,mp_countryside,,,,,,,,
+
+#impacts,,,,,,,,,,,,,,,,,,,,,,,
+wall_impact,,wall_impact.wav,0.92,0.92,,1,1,10,2000,auto,streamed,,,,mp_countryside
+dirt_impact,,dirt_impact.wav,0.92,0.92,,1,1,10,2000,auto,streamed,,,,mp_countryside
+water_impact,,water_impact.wav,0.92,0.92,,1,1,10,2000,auto,streamed,,,,mp_countryside
+tree_impact,,tree_impact.wav,0.92,0.92,,1,1,10,2000,auto,streamed,,,,mp_countryside
+metal_impact,,metal_impact.wav,0.92,0.92,,1,1,10,2000,auto,streamed,,,,mp_countryside

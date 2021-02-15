@@ -1,0 +1,25 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_le_crew_ctf,,misc/amb_lecrew2.mp3,0.69,,,,,,,local,streamed,,looping,,mp_le_crew_ctf
+
+
+
+
+
+
+river,,misc/rive2.wav,0.14,,,,,,,voice,,,looping,,mp_le_crew_ctf
+
+chimes,,misc/chi2.wav,0.70,,,,,,,voice,,,looping,,mp_le_crew_ctf
+
+drip,,misc/drip3.wav,0.55,,,,,,,voice,,,looping,,mp_le_crew_ctf
+
+tankfire,,fire/Fire_Med_loop01.wav,0.50,,,,,,,voice,,,looping,,mp_le_crew_ctf
+
+
+firesmall2,,fire/Fire_Sm_loop01.wav,0.1,,,,,,,voice,,,looping,,mp_le_crew_ctf
+
+frogs1,,misc/Frogs2.wav,0.4,,,,,,,voice,,,looping,,mp_le_crew_ctf
+
+
+

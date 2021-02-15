@@ -1,0 +1,16 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance,,,,,,,,,,,,,,,,,,,,,,,
+ambient_mp_montargis_v2,,ambient/amb_france01b.mp3,0.77,,,,,,,local,streamed,,looping,,mp_montargis_v2,,,,,,,,
+
+radio,,misc/radio.wav,0.175,,,,,,,voice,streamed,,looping,,mp_montargis_v2
+wind,,misc/wind.wav,0.1,,,,,,,voice,streamed,,looping,,mp_montargis_v2
+generator,,misc/generator.wav,0.8,,,,,,,voice,streamed,,looping,,mp_montargis_v2
+dam,,misc/dam.wav,1,,,,,,,voice,streamed,,looping,,mp_montargis_v2
+sewer,,misc/sewer.wav,0.5,,,,,,,voice,streamed,,looping,,mp_montargis_v2
+fire,,misc/fire.wav,0.2,,,,,,,voice,streamed,,looping,,mp_montargis_v2
+truck,,misc/truck.wav,0.5,,,,,,,voice,streamed,,looping,,mp_montargis_v2
+
+
+
+

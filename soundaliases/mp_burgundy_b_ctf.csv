@@ -1,0 +1,12 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_burgundy_bulls,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_burgundy_b_ctf
+tiger,,misc/tiger.wav,1,,,,,,,voice,streamed,,looping,,mp_burgundy_b_ctf
+grillen_frog,,misc/Grillen.wav,1,,,,,,,voice,streamed,,looping,,mp_burgundy_b_ctf
+frogs,,misc/frogs.wav,0.5,,,,,1,350,voice,streamed,,looping,,mp_burgundy_b_ctf
+grillen_frog_b,,misc/Grillen.wav,1,,,,,,,voice,streamed,,looping,,mp_burgundy_b_ctf
+frogs_b,,misc/frogs_b.wav,0.5,,,,,1,350,voice,streamed,,looping,,mp_burgundy_b_ctf
+tiger_fire,,fire/Fire_Med_loop01.wav,0.5,,,,,,,voice,streamed,,looping,,mp_burgundy_b_ctf
+flak,,misc/flakpanzer_loop.wav,0.5,,,,,1,1500,voice,streamed,,looping,,mp_burgundy_b_ctf
+phono,,misc/phonograph_bruckner.mp3,1,,,,,1,450,voice,streamed,,looping,,mp_burgundy_b_ctf

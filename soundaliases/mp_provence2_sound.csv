@@ -1,0 +1,45 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+null,,null.wav,,,,,,,,,,,,,,,,,,,
+
+#ambiance
+ambient_mp_provence2,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,
+
+# ouvrir
+ouvrirporte,,proporte/ouvrir.wav,0.85,,,,,50,500,voice,,,,
+ouvrirporteb,,proporte/ouvrirb.wav,0.85,,,,,50,500,voice,,,,
+
+# fermer
+fermerporte,,proporte/fermer.wav,0.85,,,,,50,500,voice,,,,
+fermerporteb,,proporte/fermerb.wav,0.85,,,,,50,500,voice,,,,
+
+#sons nature
+provchien,,misc/chienprov.wav,0.85,,,,,,,voice,,,looping,
+provchien2,,misc/chienprov2.wav,0.85,,,,,,,voice,,,looping,
+crimort,,misc/cri.wav,1,,,,,20,7000,voice,streamed,,,
+
+provcorbeau,,misc/corbeauprov.wav,0.85,,,,,,,voice,,,looping,
+provcigale,,misc/cigaleprov.wav,0.85,,,,,,,voice,,,looping,
+provoisoa,,misc/oisoaprov.wav,0.85,,,,,,,voice,,,looping,
+provoisob,,misc/oisobprov.wav,0.85,,,,,,,voice,,,looping,
+provvent,,misc/ventprov.wav,0.85,,,,,,,voice,,,looping,
+provfuite,,misc/fuiteprov.wav,0.85,,,,,,,voice,,,looping,
+
+#chanson
+#chanson (edith piaf / la vie en rose /1942)
+chans,,misc/edith1.wav,0.7,0.8,,,,20,800,voice,,,looping,
+crash,,misc/crac.wav,1,,,,,,,voice,,,,
+
+#bidons/camion/banque
+barrels,,Explosions/exp_armoredcar.wav,1,,,,,50,3000,voice,streamed,,,
+
+#fenetre
+vitre_explode,,misc/vitre.wav,1,,,,,50,1400,voice,streamed,,,
+
+#bouteille vin
+bout_explode,,misc/vitre.wav,1,,,,,20,400,voice,streamed,,,
+
+#son cloche
+ding,,misc/cloche.wav,1,,,,,50,7000,voice,streamed,,,
+dang,,misc/cloche.wav,1,,,,,50,7000,voice,streamed,,,,,PROVENCE 2 - ^4FR^7AN^1CE 
+louya,,misc/hallelu.wav,1,,,,,50,7000,voice,streamed,,,

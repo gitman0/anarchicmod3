@@ -1,0 +1,11 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambience,,,,,,,,,,,,,,,
+ambient_mp_bahrain_v2,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_bahrain_v2,,,,,,,,
+
+#Waterfall
+waterfall,,misc/mp_bahrain_v2_waterfall.wav,0.9,0.9,na,0.82,0.82,5,2000,auto,streamed,,looping,,,,,,,,,,
+
+
+
+

@@ -1,0 +1,4 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_two_bridges,,ambient/amb_hill400_charge.mp3,0.20,,,,,,,local,streamed,,looping,,mp_two_bridges

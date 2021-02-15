@@ -1,0 +1,15 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+
+#Ambiance
+ambient_mp_siegfriedline_final,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,
+horse_fly,,amb_emitters/emt_fly_loop3.wav,0.3,0.6,,,,,,voice,,,looping,
+
+#Wald
+froesche,,wald/froesche.mp3,0.9,1,element,1,1,10,900,auto,streamed,,looping,
+knarrendeaeste,,wald/knarrendeaeste.mp3,1,1,element,1,1,10,900,auto,streamed,,looping,
+heulenderwind,,wald/heulenderwind.mp3,0.9,1,element,1,1,10,900,auto,streamed,,looping,
+eule,,wald/eule.mp3,0.9,1,element,1,1,10,900,auto,streamed,,looping,
+rabe1,,wald/rabe1.mp3,0.9,1,element,1,1,10,900,auto,streamed,,looping,
+rabe2,,wald/rabe2.mp3,0.9,1,element,1,1,10,900,auto,streamed,,looping,
+

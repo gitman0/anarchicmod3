@@ -1,0 +1,11 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_germanfarm,,misc/wind.wav,0.63,,,,,,,local,streamed,,looping,,mp_germanfarm
+fire_normal,,fire/Fire_Sm_loop01.wav,1,,,,,1,200,voice,streamed,,looping,,mp_germanfarm
+fire_low,,fire/Fire_Sm_loop01.wav,0.5,0.6,,,,1,200,voice,streamed,,looping,,mp_germanfarm
+forrest,,misc/amb_birds.mp3,1,,,,,,,voice,streamed,,looping,,mp_germanfarm
+fly,,amb_emitters/emt_fly_loop3.wav,1,,,,,1,200,voice,streamed,,looping,,mp_germanfarm
+grillen,,misc/amb_farm.wav,1,,,,,,,voice,streamed,,looping,,mp_germanfarm
+specht_farm,,misc/specht_farm.wav,0.3,0.4,,,,,400,voice,,,looping,,mp_germanfarm
+

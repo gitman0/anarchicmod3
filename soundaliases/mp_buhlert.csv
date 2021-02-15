@@ -1,0 +1,20 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_mp_buhlert,,ambient/amb_duhocbattle_Bunker_1.mp3,0.1,,,,,,,local,streamed,,looping,,mp_buhlert
+marleen,,misc/marleen.mp3,0.85,,,,,,,voice,streamed,,looping,,mp_buhlert
+bunker1,,amb_emitters/emt_radio_loop_1c.wav,0.85,,,,,,,voice,,,looping,,mp_buhlert
+horse_fly,,amb_emitters/emt_fly_loop3.wav,0.85,,,,,,,voice,,,looping,,mp_buhlert
+tower_wind,,amb_emitters/emt_corner_wind_1.wav,0.65,,,,,,,voice,,,looping,,mp_buhlert
+traktor,,vehicles/truck_idle.wav,1,,,,,,,voice,,,looping,,mp_buhlert
+mill,,misc/mill_loop.wav,1,,,,,,,voice,,,looping,,mp_buhlert
+elevator,,misc/elevator.wav,1,,,,,,,local,,,,,mp_buhlert
+fire_sound,,fire/Fire_Sm_loop01.wav,0.8,,,,,,,voice,,,looping,,mp_buhlert
+stuka_flyby,,misc/stuka_by02.wav,1,,,,,,,local,,,,,mp_buhlert
+grillen,,misc/grillen.wav,0.8,,,,,,,voice,,,looping,,mp_buhlert
+
+
+
+
+
+
+

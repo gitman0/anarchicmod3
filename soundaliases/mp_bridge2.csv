@@ -1,0 +1,26 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_bridge2,,ambient/amb_night03.mp3,0.6,,,,,,,local,streamed,,looping,,mp_bridge2
+radio,,custom/radiomusic.mp3,0.6,1,,1,1,100,500,voice,streamed,,looping,,mp_bridge2,,,,,,,,
+watersound,,custom/waterlap.mp3,0.5,,,,,100,1200,auto,streamed,,looping,,mp_bridge2,,,,,,,,
+
+mp_bridge2_doorback,1,custom/DoorWoodClose_01.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_doorback,2,custom/DoorWoodClose_02.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_doorback,3,custom/DoorWoodClose_03.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_doorback,4,custom/DoorWoodClose_04.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_dooropen,1,custom/DoorWoodOpen_01.mp3,0.6,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_dooropen,2,custom/DoorWoodOpen_02.mp3,0.6,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_dooropen,3,custom/DoorWoodOpen_03.mp3,0.6,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_dooropen,4,custom/DoorWoodOpen_04.mp3,0.6,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+
+mp_bridge2_doorclose,1,custom/DoorWoodClose_stop1.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_doorclose,2,custom/DoorWoodClose_stop2.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_doorclose,3,custom/DoorWoodClose_stop3.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+mp_bridge2_doorclose,4,custom/DoorWoodClose_stop4.mp3,0.5,,,,,100,900,auto,streamed,,,,mp_bridge2,,,,,,,,
+
+window_break,1,glass/glass05.wav,0.8,1,na,0.9,1.05,120,800,,streamed,,,,all_mp
+window_break,2,glass/glass08.wav,0.8,1,na,0.9,1.05,120,800,,streamed,,,,all_mp
+
+radio_exp,,explosions/mrk_radioexplod_1.wav,0.5,,,,,100,600,auto,streamed,,,,mp_bridge2,,,,,,,,
+

@@ -1,0 +1,13 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_mp_matmatan_v2,,ambient/amb_africa_tankbattle.mp3,0.63,,,,,,,local,streamed,,looping,,mp_matmatan_v2,,,,,,,,
+
+mustang,,vehicles/stuka_planeby3b.wav,0.6,,,,,,,local,,,,,mp_matmatan_v2,,,,,,,,
+mustang_flyby1,,vehicles/stuka_planeby1.wav,0.6,,,,,,,local,,,,,mp_matmatan_v2,,,,,,,,
+mustang_flyby2,,vehicles/stuka_planeby2.wav,0.6,,,,,,,local,,,,,mp_matmatan_v2,,,,,,,,
+mustang_flyby3,,vehicles/stuka_planeby3b.wav,0.6,,,,,,,local,,,,,mp_matmatan_v2,,,,,,,,
+kubel_idle,,vehicles/kubel_idle.wav,0.5,,,,,,,voice,,,looping,,mp_matmatan_v2,,,,,,,,
+tank_idle,,vehicles/tank_01_idle.wav,0.5,,,,,,,voice,,,looping,,mp_matmatan_v2,,,,,,,,
+
+#patton,,,,,,,,,,,,,,,,,,,,,,,
+patton,,misc/patton.wav,0.95,1,,,,1,300,voice,,,looping,,mp_matmatan_v2,outlaw,,,,,,,

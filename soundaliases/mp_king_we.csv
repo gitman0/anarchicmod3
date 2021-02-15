@@ -1,0 +1,17 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_mp_king_we,,misc/background4.mp3,1,1,,,,,,local,streamed,,looping,,mp_king_we
+king,,misc/king.wav,0.50,,,,,1,90,voice,streamed,,looping,,mp_king_we
+upsvan,,vehicles/kubel_idle.wav,0.15,,,,,,,voice,,,looping,,mp_king_we
+grill,,fire/Fire_Sm_loop01.wav,0.30,,,,,1,100,voice,streamed,,looping,,mp_king_we
+police,,misc/police6.wav,0.30,,,,,1,100,voice,streamed,,looping,,mp_king_we
+rocky,,misc/rocky.wav,0.90,,,,,,,voice,,,nonlooping,,mp_king_we
+shower,,misc/shower.wav,0.50,,,,,1,100,voice,streamed,,looping,,mp_king_we
+tiger,,misc/tiger.mp3,1,,,,,119,120,voice,streamed,,looping,,mp_king_we
+doug,,misc/doug.wav,0.90,,,,,,,voice,streamed,,nonlooping,,mp_king_we
+lou,,misc/lou.wav,0.90,,,,,,,voice,streamed,,nonlooping,,mp_king_we
+white_christmas,,misc/pat_boone.mp3,0.70,,,,,,,voice,streamed,,looping,,mp_king_we
+frosty,,misc/frosty.mp3,0.70,,,,,,,voice,streamed,,looping,,mp_king_we
+panzer2,,vehicles/tank_01_idle.wav,0.20,,,,,,,voice,streamed,,looping,,mp_king_we
+
+

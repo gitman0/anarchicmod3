@@ -1,0 +1,57 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+
+#ambiance
+ambient_commando1_1,,ambient/amb_france01b.mp3,0.8,,,,,,,local,streamed,,looping,,mp_commando1_1
+
+# porte (ouvrir)
+comm_levidescend,,comporte/comfermerlevi.wav,1,,,,,75,1500,voice,,,,,mp_commando1_1
+comouvrir,,comporte/comouvrir.wav,0.85,,,,,50,500,voice,,,,,mp_commando1_1
+comouvrirb,,comporte/comouvrirb.wav,0.85,,,,,50,500,voice,,,,,mp_commando1_1
+
+# porte (fermer)
+comm_levimonte,,comporte/comouvrirlevi.wav,1,,,,,75,1500,voice,,,,,mp_commando1_1
+comfermer,,comporte/comfermer.wav,0.85,,,,,50,500,voice,,,,,mp_commando1_1
+comfermerb,,comporte/comfermerb.wav,0.85,,,,,50,500,voice,,,,,mp_commando1_1
+
+#portebombe
+fermportebomb,,doors/door_bunker_close.wav,1,,,,,75,500,voice,,,,,mp_commando1_1
+ouvportebomb,,doors/door_bunker_close.wav,1,,,,,75,500,voice,,,,,mp_commando1_1
+barremetal,,doors/gate_iron_open.wav,1,,,,,50,500,voice,,,,,mp_commando1_1
+
+#sons nature
+comm_cheval,,misc/chevalcom.wav,0.7,,,,,50,1500,voice,,,looping,,mp_commando1_1
+comm_fontaine,,misc/fontaine_pluie.wav,0.3,0.4,,,,50,600,voice,,,looping,,mp_commando1_1
+comm_corbeau,,misc/corbeaucom.wav,0.6,,,,,50,2000,voice,,,looping,,mp_commando1_1
+comm_oisoa,,misc/oisoacom.wav,0.85,,,,,,,voice,,,looping,,mp_commando1_1
+comm_oisob,,misc/oisobcom.wav,0.85,,,,,,,voice,,,looping,,mp_commando1_1
+comm_mouche,,amb_emitters/emt_fly_loop3.wav,0.5,0.6,,,,50,200,voice,,,looping,,mp_commando1_1
+
+#camion/voiture
+explovehicul,,Explosions/exp_armoredcar.wav,1,,,,,50,3000,voice,streamed,,,,mp_commando1_1
+
+#son feu
+medfire,,fire/Fire_med_loop02.wav,0.4,,,,,10,300,voice,,,looping,,mp_commando1_1
+
+#fenetre
+carro_explose,,misc/vitrecom.wav,0.6,,,,,50,1400,voice,,,,,mp_commando1_1
+
+#detonateur
+detone,,misc/mrk_wirerepair_1.wav,1,,,,,10,500,voice,,,,,mp_commando1_1
+
+#radio cabane garde
+comm_garde,,amb_emitters/emt_radiostatic_2.wav,0.3,,,,,50,500,voice,,,looping,,mp_commando1_1
+
+#radio station bureau
+comm_station,,amb_emitters/emt_radio_loop_1c.wav,0.5,,,,,50,300,voice,,,looping,,mp_commando1_1
+
+#son alarme SD
+com_alarme,,misc/alarmecom.wav,0.6,,,,,50,1000,voice,,,,,mp_commando1_1
+
+#jukebox
+changejuk,1,music/british_decoytrenches_dump2_GRFINAL.mp3,0.2,,,,,,,local,streamed,,looping,,mp_commando1_1
+changejuk,2,music/demolition_soviet_charge_GRFINAL.mp3,0.2,,,,,,,local,streamed,,looping,,mp_commando1_1
+changejuk,3,music/duhoc_assault_reagan2_GRFINAL.mp3,0.2,,,,,,,local,streamed,,looping,,mp_commando1_1
+changejuk,4,music/libya_charge_crusader_long_GRFINAL.mp3,0.2,,,,,,,local,streamed,,looping,,mp_commando1_1
+changejuk,5,music/toujane_vehicle_ride_GRFINAL.mp3,0.2,,,,,,,local,streamed,,looping,,mp_commando1_1
+changedisq,,misc/slide_advance.wav,1,,,,,,,voice,,,,,mp_commando1_1

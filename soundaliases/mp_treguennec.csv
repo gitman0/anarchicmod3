@@ -1,0 +1,33 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#ambiance
+ambient_mp_treguennec,,ambient/amb_newvillers_NoRain.mp3,0.3,,,,,,,local,streamed,,looping,,
+
+#radio allemande
+t_radio,,misc/radio1.wav,0.9,,,,,20,200,voice,,,looping,
+#passerelle haut
+t_pasrl,,misc/vent-haut.mp3,1,,,,,20,700,auto,streamed,,looping,,
+#interieur bunker bout
+t_bunk1,,misc/vent-bunk.mp3,0.9,,,,,20,400,auto,streamed,,looping,
+#interieur bunker milieu
+t_bunk2,,misc/vent-bunk.mp3,0.9,,,,,20,450,auto,streamed,,looping,
+#interieur bunker sortie
+t_bunk3,,misc/vent-bunk.mp3,0.9,,,,,20,400,auto,streamed,,looping,
+#interieur armurerie
+t_arm,,misc/vent-bunk.mp3,0.7,,,,,20,600,auto,streamed,,looping,
+#buissons milieu
+t_buis1,,misc/oiso-buis.mp3,0.9,,,,,20,2000,auto,streamed,,looping,
+#buissons bout
+t_buis2,,misc/oiso-buis.mp3,0.9,,,,,20,1500,auto,streamed,,looping,
+#mouette bout
+t_ois1,,misc/mouet1_s.mp3,0.9,,,,,20,3000,auto,streamed,,looping,
+#mouette bout train
+t_ois2,,misc/mouet2_s.mp3,0.9,,,,,20,3000,auto,streamed,,looping,
+#mouette bout ferme
+t_ois3,,misc/mouet3_s.mp3,0.7,,,,,20,3000,auto,streamed,,looping,
+#broyeur
+t_cas,,misc/broyeur.mp3,0.9,,,,,20,2000,auto,streamed,,looping,
+#mouches
+mouches,,misc/mouches.mp3,0.9,,,,,20,250,auto,streamed,,looping,
+#radio londre
+rlond,,misc/londre.mp3,0.9,,,,,50,1000,auto,streamed,,,

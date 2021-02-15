@@ -1,0 +1,10 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance,,,,,,,,,,,,,,,
+ambient_mp_hurtgen,,ambient/amb_Russia01b.mp3,0.46,,,,,,,local,streamed,,looping,,mp_Hurtgen 
+
+
+#radio station bureau
+radio_station,,amb_emitters/emt_radio_loop_1c.wav,0.5,,,,,50,300,voice,,,looping,
+
+

@@ -1,0 +1,13 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance 
+ambient_france,,ambient/amb_france01b.mp3,1,1,,,,,,local,streamed,,looping,,mp_montjean
+
+#Emitters,,,,,,,,,,,,,,,
+wind,2,amb_emitters/emt_corner_wind_2.wav,0.6,,emitter,,,1,400,auto,,,looping,,mp_montjean
+
+fire,,fire/Fire_med_loop02.wav,0.6,0.6,na,0.82,0.82,5,300,auto,streamed,,looping,,,,,,,,,,
+
+germansound,,amb_emitters/emt_radio_loop1c.wav,0.85,,emitter,,,1,400,auto,streamed,,looping,,mp_montjean
+
+watersound,,amb_emitters/emt_oceanwaves_1.wav,0.25,,emitter,,,1,2700,auto,streamed,,looping,,mp_montjean

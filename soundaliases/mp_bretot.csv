@@ -1,0 +1,6 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_bretot,,ambient/amb_france04_ext.mp3,0.63,,,,,,,local,streamed,,looping,,mp_bretot
+radio1,,amb_emitters/germanradio_grv_10.wav,0.5,0.9,,,,100,600,voice,,,looping,,mp_bretot,,,,,,,,
+fire,,amb_emitters/Fire_Med_loop01.wav,0.5,0.9,,,,100,600,voice,,,looping,,mp_bretot,,,,,,,,

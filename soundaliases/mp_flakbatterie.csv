@@ -1,0 +1,9 @@
+
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_flakbatterie,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_flakbatterie
+
+fire_sound,,fire/Fire_Sm_loop01.wav,0.10,,,,,,,voice,,,looping,,mp_flakbatterie
+
+horse_fly,,amb_emitters/emt_fly_loop3.wav,0.5,,,,,,,voice,,,looping,,mp_flakbatterie

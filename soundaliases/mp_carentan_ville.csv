@@ -1,0 +1,8 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance,,,,,,,,,,,,,,,,,,,,,,,
+ambient_mp_carentan_ville,,ambient/amb_france01b.mp3,0.77,,,,,,,local,streamed,,looping,,mp_carentan_ville,,,,,,,,
+
+radio1,,misc/radio.wav,0.33,,,,,,,voice,streamed,,looping,,mp_carentan_ville
+fly,,misc/fly.wav,0.15,,,,,,,voice,streamed,,looping,,mp_carentan_ville
+bird,,misc/bird.wav,0.44,,,,,,,voice,streamed,,looping,,mp_carentan_ville

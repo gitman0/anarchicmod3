@@ -1,0 +1,8 @@
+name,sequence,file,vol_min,vol_max,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle, , , , , , , 
+
+null,1,null.wav,,,,,,,,,,,,,,,,,,,,
+
+stuka_flyby,,misc/mustang.wav,0.1,0.4,1,1,100000,,,,,,,,,,,,,,,
+stuka_flyby1,,misc/stuka.wav,0.1,0.4,1,1,100000,,,,,,,,,,,,,,,
+stuka_flyby2,,misc/condor.wav,0.1,0.4,1,1,100000,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,, 

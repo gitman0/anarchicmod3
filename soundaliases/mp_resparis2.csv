@@ -1,0 +1,23 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_resparis2,,misc/amb_resistance.mp3,0.64,,,,,,,local,streamed,,looping,,mp_resparis2
+
+
+
+
+piaf,,misc/piaf.wav,0.22,,,,,,,voice,,,looping,,mp_resparis2
+
+horse_fly,,amb_emitters/emt_fly_loop3.wav,0.20,,,,,,,voice,,,looping,,mp_resparis2
+
+Fire_Med_loop02,,fire/Fire_Med_loop02.wav,0.40,,,,,,,voice,,,looping,,mp_resparis2
+
+drip,,misc/drip.wav,0.80,,,,,,,voice,,,looping,,mp_resparis2
+
+truck_idle,,vehicles/truck_idle.wav,0.3,,,,,,,voice,,,looping,,mp_resparis2
+
+
+
+
+
+

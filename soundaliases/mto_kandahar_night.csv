@@ -1,0 +1,14 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambience,,,,,,,,,,,,,,,
+ambient_mto_kandahar_night,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mto_kandahar_night,,,,,,,,
+
+waterfall1,,misc/waterfall.wav,0.75,0.9,,,,250,2000,voice,,,looping,,mto_kandahar_night,,,,,,,,
+
+pigeon,,misc/pigeon.wav,0.5,,,,,250,,voice,,,looping,,mto_kandahar_night,,,,,,,,
+
+crickets,,misc/crickets.wav,0.5,,,,,300,,voice,,,looping,,mto_kandahar_night,,,,,,,,
+
+riverworld_owl,,misc/mto_owl.wav,0.74,,,,,250,,voice,,,nonlooping,,mto_kandahar_night,,,,,,,,
+
+evreuxthunder,,amb_elements/elm_thunder2b.wav,1,,,,,1700,,voice,,,,,evreux,,,,,,,,

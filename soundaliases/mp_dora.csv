@@ -1,0 +1,15 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+mp_dora_ambient,,mp_dora/mp_dora_ambient.mp3,0.05,,,,,,,local,streamed,,looping,master,mp_dora
+flys,,amb_emitters/emt_fly_loop3.wav,0.50,,emitter,,,30,600,auto,streamed,,looping,,mp_dora
+crane_idle,,vehicles/kubel_idle.wav,0.5,,vehicle,0.5,,150,2000,auto,,,looping,,mp_dora
+dora_idle,,vehicles/kubel_idle.wav,1,,vehicle,0.3,,150,2000,auto,,,looping,,mp_dora
+crane_noise,,amb_elements/elm_metal6.wav,1,1,element,0.5,,150,2000,auto,,,,,mp_dora,,,,,,,,
+crane_click,,vehicles/mrk_turret_turn04_22k.wav,1,,vehicle,0.7,,150,2000,auto,,,,,mp_dora,,,,,7000,,,
+cart_brake1,,vehicles/mrk_turret_turn04_22k.wav,1,,vehicle,0.7,,150,2000,auto,,,,,mp_dora,,,,,,,,
+cart_brake2,,vehicles/truck_brakesqueal.wav,1,,vehicle,1,,150,2000,auto,,,,,mp_dora,,,,,,,,
+doraelevator_noise,,amb_elements/elm_metal3.wav,0.5,1,element,0.5,,150,2000,auto,,,,,mp_dora,,,,,,,,
+goliat_move,,vehicles/mrk_tank_03_move.wav,1,,vehicle,0.7,,150,2000,auto,,,,,mp_dora,,,,,,,,
+steam,,amb_elements/elm_metal7.wav,1,1,element,0.5,,150,2000,auto,streamed,,looping,,mp_dora
+dora_fire,,weapons/flak/flak88_fire.wav,0.6,,,,,,,local,,,,,mp_dora,,,,,,,,

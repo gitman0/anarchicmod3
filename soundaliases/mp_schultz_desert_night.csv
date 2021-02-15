@@ -1,0 +1,7 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#sons ambiants
+ambient_mp_schultz_desert_night,,misc/desert_n.mp3,0.5,,,,,,,local,streamed,,looping,mp_schultz_desert_night
+#son mortier explosion
+incoming_mortar,,Explosions/artillery_incoming05.wav,1,,,,,50,3500,voice,,,,
+explosion_ground,,Explosions/Mortar_dirt02.wav,1,,,,,50,3500,voice,,,,

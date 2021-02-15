@@ -1,0 +1,7 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_bassano,,ambient/amb1.mp3,0.63,,,,,,,local,streamed,,looping,,mp_bassano
+stuka_flyby,,misc/aerio.wav,1,,,,,,,local,,,,,mp_bassano
+my_radio,,customradio.mp3,1,,,,,2,700,auto,streamed,,looping,,mp_bassano
+my_radio2,,customradio2.mp3,1,,,,,2,800,auto,streamed,,looping,,mp_bassano

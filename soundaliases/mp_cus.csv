@@ -1,0 +1,12 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+mp_cus_ambient,,mp_cus/mp_cus_ambient.mp3,0.8,,,,,,,local,streamed,,looping,,mp_cus
+
+#Exploding Barrels
+barrel_explosion,,explosions/exp_armoredcar.wav,0.01,1,,,,300,2500,auto,streamed,,,,mp_cus,,,,,,,,
+barrel_explosion_imminent,,misc/metal_stress01.wav,0.75,1,,,,50,1200,voice,streamed,,,,mp_cus,,,,,,,,
+barrel_fire,,fire/Fire_Sm_loop01.wav,0.01,1,,,,50,400,auto,streamed,,,,mp_cus,,,,,,,,
+
+#Sound Effects
+cha_ching,,mp_cus/mp_cus_purchase.wav,1,1,,,,,,local,streamed,,,,mp_cus

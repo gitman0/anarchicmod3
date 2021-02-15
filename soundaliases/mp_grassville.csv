@@ -1,0 +1,11 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_grassville,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_grassville,,,,,,,,,
+elevator,,misc/elevator.wav,1,0.8,,,,50,700,voice,,,,,mp_grassville,,,,,,,
+tractor,,vehicles/truck_idle.wav,1,0.7,,,,,250,voice,,,looping,,mp_grassville
+radiobruck,,misc/radio_bruckner.wav,1,0.7,,,,50,300,voice,,,looping,,mp_grassville
+doorslide,,misc/door_vault_open.wav,0.9,0.7,,,,50,700,voice,,,,,mp_grassville,,,,,,,
+gerradio,,radio/germanradio_grv_10.wav,1,0.7,,,,50,300,voice,,,looping,,mp_grassville
+testklaxxon,,misc/klaxxon.wav,0.95,0.5,,,,60,500,voice,,,looping,,mp_grassville,,,,,,,
+tb,,misc/tb.wav,1,1,,,,70,130,voice,,,,,mp_grassville,,,,,,,

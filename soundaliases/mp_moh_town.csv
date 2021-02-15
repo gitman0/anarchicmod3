@@ -1,0 +1,35 @@
+,name,name of the alias that is used to play this sound (required)	
+,sequence,"used to uniquely identify alias entries when more than one sound goes to an alias, used only to catch unwanted duplicates (default = 0)"	
+,file,the name of the file that contains the sound data (required)	
+,vol_min,"0 is silent, 1 is full volume (default = 1)"	
+,vol_max,"0 is silent, 1 is full volume (default = same as vol_min)"	
+,pitch_min,"1 is normal playback, 2 is twice as fast, 0.5 is half as fast (default = 1)"	
+,pitch_max,"1 is normal playback, 2 is twice as fast, 0.5 is half as fast (default = same as pitch_min)"	
+,dist_min,"within this distance in inches, the sound is always full volume (default = 120)"	
+,dist_max,"outside this distance in inches, the sound is not started.  If left blank or set to 0, the sound will play from any distance.  This does not affect sound volume falloff."	
+,channel,"auto, menu, weapon, voice, item, body, local, music, announcer (default = auto)"	
+,type,streamed / loaded (default = loaded)	
+,probability,weight to use for the weighted probability of playing this sound instead of another sound (default = 1)	
+,loop,"whether this sound is ""looping"" or ""nonlooping"" (default = ""nonlooping"")"	
+,masterslave,"if ""master"", this is a master sound.  If a number, then this sound won't exceed this volume whenever any master sound is playing.  If blank, then neither master nor slave."	
+,loadspec,"space-separated list of which maps should use this alias	 eg, ""burnville dawnville"".  If blank, the alias is used on all maps."
+
+
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+
+
+#Ambiance
+ambient_mp_rrr,,misc/amb_arrigny.mp3,0.29,,,,,,,local,streamed,,looping,,mp_moh_town
+window_break,1,glass/glass05.wav,0.8,1,na,0.9,1.05,120,800,,streamed,,,,mp_moh_town
+window_break,2,glass/glass08.wav,0.8,1,na,0.9,1.05,120,800,,streamed,,,,mp_moh_town
+cart,,misc/cul_cart.wav,0.9,1,,,,,,voice,,,looping,
+fan,,misc/fan.wav,0.8,1,,,,100,420,voice,,,looping,,mp_moh_town
+steam,,misc/steam.wav,0.9,1,,,,80,420,voice,,,looping,master,mp_moh_town
+flak88_explode,,explosions/flak88_explod2.wav,1,1,explosion,0.8,0.9,800,8500,voice,streamed,,,0.85,,,,,,,,,0.5
+crow1,,misc/crow1.wav,0.9,1,,,,80,900,,,,,,mp_moh_town
+crow2,,misc/crow2.wav,0.9,1,,,,80,900,,,,,,mp_moh_town
+bird2,,misc/bird4.wav,0.9,1,,,,80,900,,,,looping,,mp_moh_town
+mo_sound,,misc/mo_sound.mp3,0.9,1,,,,8,200,,streamed,,looping,master,mp_moh_town
+clock,,misc/clock.wav,0.9,1,,,,80,280,voice,,,looping,slave,mp_moh_town
+clock1,,misc/clock1.wav,0.9,1,,,,80,280,voice,,,,master,mp_moh_town

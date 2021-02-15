@@ -1,0 +1,11 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_benedictine_beta,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_benedictine_beta
+
+#Spot effects
+flies,,amb_emitters/emt_fly_loop3.wav,0.5,1,,,,60,400,auto,streamed,,looping,,mp_benedictine_beta
+wind,,amb_emitters/emt_corner_wind_2.wav,0.6,,,,,1,400,auto,streamed,,looping,,mp_benedictine_beta
+
+
+UK_mp_cmd_incoming1,1,Voiceovers/MP/UK/uk_incoming1.wav,0.93,0.93,,,,7,3000,voice,streamed,,,,all_mp

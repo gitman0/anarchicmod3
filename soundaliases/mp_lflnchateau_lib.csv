@@ -1,0 +1,23 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+
+#Ambiance
+ambient_mp_lflnchateau_lib,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_lflnchateau_lib
+
+#Radio
+radio,,misc/radio.wav,0.6,,,,,20,300,voice,,,looping,
+
+#Fly
+fly,,misc/fly.wav,0.6,,,,,20,300,voice,,,looping,
+
+#Dog
+dog,,misc/dog.wav,0.6,,,,,20,300,voice,,,looping,
+
+#Edith
+edith1,,misc/edith1.wav,0.6,,,,,20,300,voice,,,looping,
+
+#Kubel
+kubel,,misc/kubel_idle.wav,0.6,,,,,20,300,voice,,,looping,
+
+#Truck
+truck,,misc/truck_idle.wav,0.6,,,,,20,300,voice,,,looping,

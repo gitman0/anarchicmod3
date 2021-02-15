@@ -1,0 +1,53 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#ambiance
+ambient_mp_casfly,,ambient/amb_africa01b.mp3,0.4,,,,,,,local,streamed,,looping,
+
+#sons avion
+son_stuka,,vehicles/stuka_planeby2.wav,1,,,,,,,local,,,,,mp_casfly
+
+
+#son alerte
+airraid,,misc/airraid.mp3,1,,,,,1000,6000,auto,streamed,,,
+
+#discours
+cfdiscours,,misc/cfdiscourshitler.mp3,1,,,,,1000,6000,auto,streamed,,,
+
+#radio
+cfradio,,misc/cfradio.mp3,1,,,,,10,250,auto,streamed,,looping,
+
+#dhiarre
+cfdhiarre,,misc/cfdhiarre.mp3,0.7,,,,,30,200,auto,streamed,,,
+
+#moteur camion
+cfmotcam,,misc/cfmotcam.mp3,1,,,,,100,900,auto,streamed,,,
+
+
+#batiment A et B
+cfgebaude1,,misc/cfgebaude1.mp3,1,,,,,400,900,auto,streamed,,looping,
+
+#batiment D
+cfgebaude2,,misc/cfgebaude2.mp3,1,,,,,400,900,auto,streamed,,looping,
+
+#tel1
+cftel1,,misc/cftel.mp3,0.8,,,,,40,200,auto,streamed,,,
+
+#tel2
+cftel2,,misc/cftel.mp3,0.8,,,,,40,200,auto,streamed,,,
+
+#resp
+cfresp1,,misc/cfresp1.mp3,0.5,,,,,40,200,auto,streamed,,looping,
+cfresp2,,misc/cfresp2.mp3,0.5,,,,,40,200,auto,streamed,,looping,
+cfresp3,,misc/cfresp3.mp3,0.5,,,,,40,200,auto,streamed,,looping,
+
+#bidons
+barrels,,Explosions/exp_armoredcar.wav,1,,,,,50,3000,voice,streamed,,,
+
+#dechirement
+cfdechir,,misc/cfdechirement.mp3,1,,,,,40,200,auto,streamed,,,
+
+#doberman grogne
+cfdob1,,misc/cfdoberman.mp3,1,,,,,40,300,auto,streamed,,,
+
+#doberman aboie
+cfdob2,,misc/cfdobermanouaf.mp3,1,,,,,300,1000,auto,streamed,,,

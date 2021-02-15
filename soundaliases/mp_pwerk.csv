@@ -1,0 +1,20 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_mp_pwerk,,ambient/amb_Russia03_pipe.mp3,0.5,,,,,,,local,streamed,,looping,,mp_pwerk
+fan,,misc/fan.wav,0.8,,,,,,,voice,,,looping,,mp_pwerk
+crash_disque_phono,,misc/deraille_juke_box.wav,1,,,,,,,voice,,,,
+marleen,,misc/marleen.mp3,0.7,,,,,,,voice,streamed,,looping,,mp_pwerk
+colonia,,misc/colonia.mp3,0.7,,,,,,,voice,streamed,,looping,,mp_pwerk
+wind,,amb_emitters/emt_corner_wind_1.wav,0.65,,,,,,,voice,,,looping,,mp_pwerk
+shutter_move,1,doors/mrk_shutter_move2.wav,0.1,0.4,,0.85,1.95,10,360,,streamed,,,,,,,,,mp_pwerk
+shutter_move,2,doors/mrk_shutter_move4.wav,0.1,0.4,,0.85,1.95,10,360,,streamed,,,,,,,,,mp_pwerk
+shutter_move,3,doors/mrk_shutter_move5.wav,0.1,0.4,,0.85,1.95,10,360,,streamed,,,,,,,,,mp_pwerk
+fire_sound,,fire/Fire_Sm_loop01.wav,0.5,,,,,50,300,voice,,,looping,,mp_pwerk
+dog,,misc/dog.wav,0.85,,,,,,,voice,,,looping,mp_pwerk
+motor,,vehicles/truck_idle.wav,0.8,,,,,,,voice,,,looping,,mp_pwerk
+dampf,,misc/dampf.wav,1,,,,,50,300,voice,,,looping,,mp_pwerk
+radio_static,,misc/radio_static.mp3,1,,,,,50,300,voice,streamed,,looping,,mp_pwerk
+rattensound,,misc/ratte.wav,1,,,,,,,voice,,,,mp_pwerk
+sparks,,misc/sparks.wav,0.8,,,,,50,300,voice,,,looping,,mp_pwerk
+funkspruch,,misc/funkspruch.wav,0.5,,,,,50,300,voice,,,looping,,mp_pwerk
+elevator,,misc/elevator.mp3,0.5,,,,,,3000,voice,streamed,,,,mp_pwerk

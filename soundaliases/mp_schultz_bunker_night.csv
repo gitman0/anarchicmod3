@@ -1,0 +1,20 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_schultz_bunker_night,,ambient/amb_Russia01b.mp3,0.8,,,,,,,local,streamed,,looping,,mp_schultz_bunker_night
+#radio1
+radio1,,misc/radio1.wav,0.9,,,,,20,250,voice,,,looping,
+#radio2
+radio2,,misc/radio2.wav,0.9,,,,,20,250,voice,,,looping,
+#ponthn
+ponthn,,misc/ponthn.mp3,0.7,,,,,20,600,voice,streamed,,looping,
+#hibou
+sbn_1,,misc/sbn_hibou.wav,0.9,,,,,10,3000,voice,,,,
+#chouette
+sbn_2,,misc/sbn_chouet.mp3,0.9,,,,,10,3000,auto,streamed,,,
+#loup
+sbn_3,,misc/sbn_loup.mp3,0.9,,,,,10,5000,auto,streamed,,,
+#grogne
+sbn_4,,misc/sbn_grogn.mp3,0.9,,,,,10,3000,auto,streamed,,,
+#tonne
+sbn_5,,misc/sbn_tone.mp3,0.9,,,,,10,5000,auto,streamed,,,

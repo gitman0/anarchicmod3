@@ -1,0 +1,8 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_sabes_du_mot_beta,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_sabes_du_mot_beta
+church_bells,,misc/mrk_church_bells_2.wav,0,1,,1,1,1,90000,auto,,,,,mp_sabes_du_mot_beta,,,,,,,,
+stuka_flyby,,vehicles/motsmustang.wav,0,1,,,,,10000,local,,,,,mp_sabes_du_mot_beta
+motsflys,,amb_emitters/emt_fly_loop3.wav,1,,emitter,,,30,600,auto,streamed,,looping,,mp_sabes_du_mot_beta
+motsdog,,vehicles/motsdog.mp3,0,1,,,,,600,auto,streamed,,,,mp_sabes_du_mot_beta

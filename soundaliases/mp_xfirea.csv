@@ -1,0 +1,9 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance,,,,,,,,,,,,,,,,,,,,,,,
+ambient_mp_xfirea,,ambient\amb_france01b.mp3,0.2,,,,,,,local,streamed,,looping,,mp_xfirea,,,,,,,,
+birds,,custom\amb_birds.mp3,1,,,,,100,2000,voice,streamed,,looping,,,,,,,,,,
+crow,,custom\crow.mp3,1,,,,,100,1500,voice,streamed,,looping,,,,,,,,,,
+nightingale,,custom\nightingale_single.mp3,1,,,,,100,750,voice,streamed,,looping,,,,,,,,,,
+birds1,,custom\amb_birds1.mp3,1,,,,,100,2000,voice,streamed,,looping,,,,,,,,,,
+thrush,,custom\thrush.mp3,0.9,,,,,100,750,voice,streamed,,looping,,,,,,,,,,

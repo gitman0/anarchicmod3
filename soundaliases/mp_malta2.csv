@@ -1,0 +1,20 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_malta2,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_malta2
+
+
+
+# open
+dopen,,misc/open2.wav,,,,,,100,800,auto,streamed,,,,mp_malta2
+
+# close
+dclose,,misc/close2.wav,,,,,,100,800,auto,streamed,,,,mp_malta2
+
+# toilet
+
+toilet2,,misc/toilet2.wav,,,,,,100,800,auto,streamed,,,,mp_malta2
+
+# gate
+
+gate2,,misc/gate2.wav,,,,,,100,800,auto,streamed,,,,mp_malta2

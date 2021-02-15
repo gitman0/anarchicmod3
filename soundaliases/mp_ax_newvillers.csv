@@ -1,0 +1,14 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+# Ambiance
+ambient_mp_ax_newvillers,,ambient/amb_rh_ax_newvillers.mp3,0.50,0.50,,,,,,local,streamed,,looping,,mp_ax_newvillers
+
+# Custom
+ax_newvillers_radio1,,misc/ax_rh_newvillers_radio.wav,0.9,,,,,120,,voice,,,looping,,mp_ax_newvillers
+ax_newvillers_graveyard,,misc/ax_rh_newvillers_crows_and_dogs.wav,0.3,,,,,200,,voice,,,looping,,mp_ax_newvillers
+ax_newvillers_sparks,,misc/ax_rh_newvillers_sparks_discharge.wav,0.8,,,,,200,,voice,,,looping,,mp_ax_newvillers
+
+# Mortars
+ax_newvillers_mortar_incoming,,Explosions/incoming05.wav,1,,explosion,,,3000,4000,auto,streamed,,,0.5,mp_ax_newvillers
+ax_newvillers_mortar_explosion,,Explosions/Mortar_dirt04.wav,1,,explosion,,,3000,4000,auto,streamed,,,0.5,mp_ax_newvillers
+

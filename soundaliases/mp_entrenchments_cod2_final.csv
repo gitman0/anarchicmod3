@@ -1,0 +1,8 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+ambient_mp_entrenchments_cod2_final,,ambient/amb_france03_ext.mp3,0.5,,,,,,,local,streamed,,looping,,,,,,,,,,
+mortar_load,,misc/mortar_load.wav,1,1,element,0.9,0.9,7,400,auto,streamed,,,,mp_entrenchments_cod2_final,,,,,,,,
+mortar_launch,,misc/mortar_launch.wav,1,1,element,0.9,0.9,7,400,auto,streamed,,,,mp_entrenchments_cod2_final,,,,,,,,
+incoming_mortar,,Explosions/artillery_incoming03.wav,1,1,,1,1,5,6000,auto,streamed,,,,,,,,,,,,
+explosion_ground,,Explosions/Mortar_dirt01.wav,1,1,,1,1,5,6000,auto,streamed,,,,,,,,,,,,
+radiostatic,,misc/radiostatic.wav,0.2,0.45,element,1,1,50,600,auto,streamed,,looping,,mp_entrenchments_cod2_final,,,,,,,,

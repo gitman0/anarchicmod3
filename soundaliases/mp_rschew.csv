@@ -1,0 +1,6 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+
+#Ambiance,,,,,,,,,,,,,,,,,,,,,,,
+ambient_mp_rschew,,ambient/amb_Russia05_ext.mp3,0.15,,,,,,,local,streamed,,looping,,mp_rschew,,,,,,,,
+electric_spark,,misc/espark.wav,0.15,,,,,50,500,auto,streamed,,looping,,mp_rschew,,,,,,,,

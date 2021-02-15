@@ -1,0 +1,26 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#ambiance
+ambient_mp_schultzwood,,ambient/amb_france01b.mp3,0.4,,,,,,,local,streamed,,looping,
+#chien
+sw_chien,,misc/sw_chien.wav,0.9,,,,,10,2000,voice,,,,
+#depart bob
+sw_1,,misc/sw_depart.mp3,0.6,,,,,10,50,auto,streamed,,,
+#bidons
+barrels,,Explosions/exp_armoredcar.wav,1,,,,,50,3000,voice,streamed,,,
+#vent clocher
+sw_2,,misc/sw_2.mp3,1,,,,,10,300,auto,streamed,,looping,
+#village
+sw_3,,misc/sw_3.mp3,1,,,,,10,1700,auto,streamed,,looping,
+#hellsbell
+sw_cloche,,misc/sw_cloche.mp3,1,,,,,20,4000,auto,streamed,,,
+#grand bois
+sw_5,,misc/sw_oiso-buis.mp3,0.9,,,,,10,2000,auto,streamed,,looping,
+#petit bois
+sw_6,,misc/sw_6.mp3,0.9,,,,,10,2000,auto,streamed,,looping,
+#mouches
+sw_7,,misc/sw_mouches.mp3,0.4,,,,,10,300,auto,streamed,,looping,
+#radio mood
+r_sw,,misc/sw_mood.mp3,0.9,,,,,20,700,auto,streamed,,,
+#corbak
+sw_corbo,,misc/sw_corbo.mp3,1,,,,,20,4000,auto,streamed,,,

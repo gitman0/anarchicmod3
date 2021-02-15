@@ -1,0 +1,19 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_glastonbury,,ambient/amb_france03_int.mp3,0.2,,,,,,,local,streamed,,looping,,mp_glastonbury
+
+#Sounds
+cow_fly,,amb_emitters/emt_fly_loop3.wav,0.6,,,,,,,voice,,,looping,,mp_glastonbury
+car_fire,,fire/Fire_Med_loop02.wav,0.9,,,,,40,500,auto,streamed,,looping,,mp_glastonbury
+clock1,,misc/clock1.wav,0.7,,,,,10,200,auto,streamed,,looping,,mp_glastonbury
+clock2,,misc/clock2.wav,0.7,,,,,10,200,auto,streamed,,looping,,mp_glastonbury
+turm,,amb_emitters/emt_corner_wind_2.wav,0.8,,,,,10,600,voice,,,looping,,mp_glastonbury
+carrier,,vehicles/tank_02_idle.wav,0.7,,,,,40,500,auto,streamed,,looping,,mp_glastonbury
+car_metal,,misc/metal_stress01.wav,0.7,,,,,40,400,auto,streamed,,,,mp_glastonbury
+spit1,,vehicles/mrk_plane_flyby_spitfire5.wav,1,,,,,,,local,,,,,mp_glastonbury
+spit2,,vehicles/stuka_planeby2.wav,1,,,,,,,local,,,,,mp_glastonbury
+spit3,,vehicles/c47_flyby02.wav,1,,,,,,,local,,,,,mp_glastonbury
+chicken,,misc/Chicken_Clucking.mp3,0.9,,,,,10,500,auto,streamed,,looping,,mp_glastonbury
+meadow,,misc/meadow_ambience.mp3,0.8,,,,,10,1000,auto,streamed,,looping,,mp_glastonbury
+village,,misc/village_sounds.mp3,1,,,,,10,1000,auto,streamed,,looping,,mp_glastonbury

@@ -1,0 +1,17 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_simmerath_beta2,,ambient/amb_simmerath.mp3,0.70,,,,,,,local,streamed,,looping,,mp_simmerath_beta2
+
+radio1,,misc/radio1.wav,1,,,,,80,,voice,,,looping,,mp_simmerath_beta2
+radio2,,misc/radio2.wav,0.70,,,,,90,,voice,,,looping,,mp_simmerath_beta2
+radio3,,amb_emitters/emt_radiostatic_2.wav,1,,,,,40,,voice,,,looping,,mp_simmerath_beta2
+flies,,amb_emitters/emt_fly_loop3.wav,1,,,,,50,,voice,,,looping,,mp_simmerath_beta2
+germanvoices,,amb_emitters/emt_demolition_gertrapped_1.wav,0.80,,,,,40,,voice,,,looping,,mp_simmerath_beta2
+clock,,misc/clock.wav,1,,,,,60,,voice,,,looping,,mp_simmerath_beta2,,,,,7000
+waterdrops,,misc/waterdrops.wav,1,,,,,50,,voice,,,looping,,mp_simmerath_beta2,,,,,1000
+birds,,misc/birds.wav,1,,,,,200,,voice,,,looping,,mp_simmerath_beta2
+mustang_flyby,,misc/mustang1passby.wav,1,,,,,,,local,,,,,mp_simmerath_beta2
+mustang_flyby2,,misc/mustang3passby.wav,1,,,,,,,local,,,,,mp_simmerath_beta2
+mortar_incoming,,Explosions/incoming11.wav,1,,,,,,,local,streamed,,,,mp_simmerath_beta2,,,,
+mortar_explosion,,Explosions/Mortar_dirt02.wav,1,,,,,,,local,streamed,,,,mp_simmerath_beta2,,,,

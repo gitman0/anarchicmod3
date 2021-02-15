@@ -1,0 +1,25 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_normandie_night_beta_2,,ambient/amb_france01b.mp3,0.8,,,,,,,local,streamed,,looping,,mp_normandie_night_beta_2
+
+#Mouche
+emt_fly_loop,,amb_emitters/emt_fly_loop3.wav,1,,emitter,,,60,150,auto,streamed,,looping,,mp_normandie_night_beta_2
+
+#Radio
+emt_radio_loop_1c,,amb_emitters/emt_radio_loop_1c.wav,1,,emitter,,,60,150,auto,streamed,,looping,,mp_normandie_night_beta_2
+emt_radiostatic_2,,amb_emitters/emt_radiostatic_2.wav,1,,emitter,,,60,150,auto,streamed,,looping,,mp_normandie_night_beta_2
+
+#fenetre / Bouteille
+carro_explose,,misc/son_vitre.wav,0.6,,,,,50,1400,voice,streamed,,,
+
+#Chanson phonographe (Edith Piaf / La vie en rose / 1942)
+chanson_phono,,misc/edith1.wav,0.6,,,,,20,300,voice,,,looping,
+crash_disque_phono,,misc/deraille_juke_box.wav,1,,,,,,,voice,,,,
+
+#Feu
+Fire_Sm_loop01,,fire/Fire_Sm_loop01.wav,1,,emitter,,,100,180,auto,streamed,,looping,,mp_normandie_night_beta_2
+
+#Stuka
+stuka,,vehicles/stuka_planeby1.wav,0.55,,,,,,,local,,,,,mp_normandie_night_beta_2
+stuka_flyby,,vehicles/stuka_planeby2.wav,0.55,,,,,,,local,,,,,mp_normandie_night_beta_2

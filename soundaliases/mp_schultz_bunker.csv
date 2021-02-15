@@ -1,0 +1,11 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance
+ambient_mp_schultz_bunker,,ambient/amb_Russia01b.mp3,0.8,,,,,,,local,streamed,,looping,,mp_schultz_bunker
+
+#radio1
+radio1,,misc/radio1.wav,0.9,,,,,20,250,voice,,,looping,
+#radio2
+radio2,,misc/radio2.wav,0.9,,,,,20,250,voice,,,looping,
+#ponthn
+ponthn,,misc/ponthn.mp3,0.9,,,,,20,600,voice,streamed,,looping,

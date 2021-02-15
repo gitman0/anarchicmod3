@@ -1,0 +1,9 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambience,,,,,,,,,,,,,,,
+ambient_chelm,,ambient/amb_france01b.mp3,0.63,,,,,,,local,streamed,,looping,,mp_chelm
+
+#Tanks,,,,,,,,,,,,,,,,,,
+flak_stop,,vehicles/mrk_turret_end01_22k.wav,0.7,0.9,vehicle,0.9,,7,3500,auto,,,,,,,,,,,,,
+flak_reloading,,weapons/flak/flak_reload.wav,0.7,0.8,na,0.95,1.05,120,1000,,,,,0.7,,,,,,,,,
+flak_fire,1,weapons/flak/flak88_fire.wav,1,1,na,1.1,1.2,800,6500,weapon,,,,0.7,,,,,,,,,0.3

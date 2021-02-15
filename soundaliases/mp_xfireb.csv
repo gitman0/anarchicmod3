@@ -1,0 +1,8 @@
+name,sequence,file,vol_min,vol_max,vol_mod,pitch_min,pitch_max,dist_min,dist_max,channel,type,probability,loop,masterslave,loadspec,subtitle,compression,secondaryaliasname,volumefalloffcurve,startdelay,speakermap,reverb,lfe percentage
+
+#Ambiance,,,,,,,,,,,,,,,,,,,,,,,
+ambient_mp_xfireb,,ambient/amb_africa01b.mp3,0.2,,,,,,,local,streamed,,looping,,mp_xfireb,,,,,,,,
+sea,,ambient/sea.mp3,1,,,,,100,2000,voice,streamed,,looping,,,,,,,,,,
+song,,custom/song.mp3,1,,,,,100,500,voice,streamed,,looping,,,,,,,,,,
+crickets,,ambient/amb_crickets.mp3,1,,,,,100,400,voice,streamed,,looping,,,,,,,,,,
+radio_exp,,explosions,0.6,,,,,100,600,voice,streamed,,,,,,,,,,,,
