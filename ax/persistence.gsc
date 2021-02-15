@@ -1,3 +1,5 @@
+/* $Id: persistence.gsc 83 2010-09-06 04:35:55Z  $ */
+
 #include ax\utility;
 
 init()
@@ -9,7 +11,7 @@ onPlayerConnect()
 {
 	for(;;)
 	{
-		level waittill("connected", player);
+		level waittill("connecting", player);
 
 		guid = player getGuid();
 		if (isdefined(game["matchstarted"]) && game["matchstarted"]) {
@@ -27,23 +29,20 @@ onPlayerConnect()
 				player.cannot_play		= level.lostplayer[guid].cannot_play;
 				if (isdefined(level.lostplayer[guid].weapon))
 					player.pers["weapon"] 	= level.lostplayer[guid].weapon;
+				if ( isDefined(level.lostplayer[guid].admin_record) )
+					player.ax_admin_record 	= level.lostplayer[guid].admin_record;
 				player.onjoin_welcome_back = true;
-                	}
-        	}
-		player thread onPlayerDisconnect();
+			}
+		}
 	}
-}
-
-onPlayerDisconnect()
-{
-	self waittill("disconnect");
-	rememberinfo(self);
 }
 
 rememberinfo(player)
 {
 	if (isdefined(game["matchstarted"]) && !game["matchstarted"])
 		return;
+
+	/# assert( isDefined(player) ); #/
 
 	if (!isdefined(player.pers["team"]) || !isdefined(player.deaths) || !isdefined(player.score) || !isdefined(player.pers["kills"]))
 		return;
@@ -75,6 +74,9 @@ rememberinfo(player)
 	level.lostplayer[guid].team_damage 		= player.team_damage;
 	level.lostplayer[guid].muted 			= player.muted;
 	level.lostplayer[guid].cannot_play 		= player.cannot_play;
+
+	if ( isDefined(player.ax_admin_record) )
+		level.lostplayer[guid].admin_record = player.ax_admin_record;
 
 	level thread expireOverTime( level.lostplayer, guid, level.ax_scoresave_expire );
 }

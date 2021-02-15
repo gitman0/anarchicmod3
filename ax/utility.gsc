@@ -1,3 +1,137 @@
+/* $Id: utility.gsc 90 2010-10-03 06:16:08Z  $ */
+
+// returns the next gametype in the rotation
+getNextGametype()
+{
+	rotationInfo = getNextGametypeMap();
+	if ( isdefined( rotationInfo ) )
+		return rotationInfo["nextGametype"];
+}
+
+// returns the next map in the rotation
+getNextMap()
+{
+	rotationInfo = getNextGametypeMap();
+	if ( isdefined( rotationInfo ) )
+		return rotationInfo["nextMap"];
+}	
+
+// worker function for the two functions above
+getNextGametypeMap()
+{
+	rotationInfo = [];
+	currentRotation = strip( nocolors( getCvar( "sv_maprotationcurrent" ) ) );
+	if ( currentRotation == "" )
+		currentRotation = strip( nocolors( getCvar( "sv_maprotation" ) ) );
+	if ( currentRotation == "" )
+		return undefined;
+	rotationTokens = explode( currentRotation, " " );
+	if ( rotationTokens[0] == "gametype" )
+	{
+		rotationInfo["nextGametype"] = rotationTokens[1];
+		rotationInfo["nextMap"] = rotationTokens[3];
+	}
+	else {
+		rotationInfo["nextGametype"] = getCvar( "g_gametype" );
+		rotationInfo["nextMap"] = rotationTokens[1];
+	}
+	return rotationInfo;
+}
+
+// copied from ctf.gsc to give it easier accessibility
+
+playSoundOnPlayers(sound, team)
+{
+	players = getentarray("player", "classname");
+
+	if(level.splitscreen)
+	{
+		if(isdefined(players[0]))
+			players[0] playLocalSound(sound);
+	}
+	else
+	{
+		if(isdefined(team))
+		{
+			for(i = 0; i < players.size; i++)
+			{
+				if((isdefined(players[i].pers["team"])) && (players[i].pers["team"] == team))
+					players[i] playLocalSound(sound);
+			}
+		}
+		else
+		{
+			for(i = 0; i < players.size; i++)
+				players[i] playLocalSound(sound);
+		}
+	}
+}
+
+// creates a clienthudelem with the given properties
+doClientHudElem( x, y, alignX, alignY, hAlign, vAlign, fontscale, alpha )
+{
+	hudelem = newClientHudElem( self );
+	hudelem hudSetProperties( x, y, alignX, alignY, hAlign, vAlign, fontscale, alpha );
+	return hudelem;
+}
+
+// creates a hudelem with the given properties
+doHudElem( x, y, alignX, alignY, hAlign, vAlign, fontscale, alpha )
+{
+	hudelem = newHudElem();
+	hudelem hudSetProperties( x, y, alignX, alignY, hAlign, vAlign, fontscale, alpha );
+	return hudelem;
+}
+
+// helper function for doClientHudElem and doHudElem
+hudSetProperties( x, y, alignX, alignY, hAlign, vAlign, fontscale, alpha )
+{
+	// setup some default values
+	switch( alignX )
+	{
+		case "left": case "right": case "center": break;
+		default: alignX = "center";
+	}
+	switch( alignY )
+	{
+		case "top": case "bottom": case "middle": break;
+		default: alignY = "middle";
+	}
+	switch( hAlign )
+	{
+		case "center_safearea": case "left": case "right": case "center": break;
+		default: hAlign = "center";
+	}
+	switch( vAlign )
+	{
+		case "center_safearea": case "top": case "bottom": case "middle": break;
+		default: vAlign = "middle";
+	}
+
+	if ( !isdefined(alpha) ) alpha = 1;
+	if ( !isdefined(fontscale) ) fontscale = 1;
+
+	self.x = x;
+	self.y = y;
+	self.alignX = alignX;
+	self.alignY = alignY;
+	self.horzAlign = hAlign;
+	self.vertAlign = vAlign;
+	self.color = (1, 1, 1);
+	self.font = "default";
+	self.fontscale = fontscale;
+	self.archived = false;
+	self.alpha = alpha;
+	self.sort = 1;
+}
+
+// sets the font properties of a hudelem
+hudSetFont( font, fontScale )
+{
+	self.font = font;
+	self.fontscale = fontScale;
+}
+
 // global function to define allowed gametype objects
 allowedGameObjects()
 {
@@ -206,14 +340,27 @@ printJoinedTeam(team)
 	return;
 }
 
+// returns the flag that does NOT belong to "team"
+getEnemyFlag(team)
+{
+        if (team == "allies")
+            	flag = getent("axis_flag", "targetname");
+        else
+                flag = getent("allied_flag", "targetname");
+        return flag;
+}
+
 // returns boolean true if flag is at the base for given team
 flagAtHome(team)
 {
 	ent = team + "_flag";
 	flag = getent(ent, "targetname");
-	if ( !isDefined( flag.home_origin) )
-		return true;
-	if (flag.origin != flag.home_origin)
+
+	/* assertEx( isdefined( flag ), "Did not find the flag represented by " + ent ); */
+
+	if ( !isdefined( flag ) ) return false;
+
+	if ( flag.origin != flag.home_origin )
 		return false;
 	else return true;
 }
@@ -283,6 +430,17 @@ isSniper( weapon )
 		default:
 			return false;
 	}
+}
+
+// merge an array
+arrayMerge( array1, array2 )
+{
+	if ( !isDefined(array1) || !isDefined(array2) )
+		return;
+	array = array1;
+	for ( i = 0; i < array2.size; i++ )
+		array[array.size] = array2[i];
+	return array;
 }
 
 // strips color codes from a string
@@ -381,6 +539,8 @@ monitorDvar(name, type)
 {
 	level endon( "intermission" );
 
+	checkDelay = 0.2;
+
 	setCvar( name, "" );
 	for (;;)
 	{
@@ -404,7 +564,7 @@ monitorDvar(name, type)
 		}
 		if ( getCvar( name ) != "" )
 			setCvar( name, "" );
-		wait 0.5;
+		wait checkDelay;
 	}
 }
 

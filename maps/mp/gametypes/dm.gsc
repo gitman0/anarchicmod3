@@ -1,4 +1,6 @@
 /*
+	$Id: dm.gsc 78 2010-09-04 17:27:58Z  $
+
 	Deathmatch
 	Objective: 	Score points by eliminating other players
 	Map ends:	When one player reaches the score limit, or time limit is reached

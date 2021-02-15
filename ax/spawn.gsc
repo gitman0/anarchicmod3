@@ -1,3 +1,5 @@
+/* $Id: spawn.gsc 90 2010-10-03 06:16:08Z  $ */
+
 #include ax\utility;
 
 init()
@@ -157,6 +159,14 @@ logSpawn()
 	if ( !level.ax_spawn_stats )
 		return;
 
+	if ( !isdefined( game["matchstarted"] ) || !game["matchstarted"] )
+		return;
+
+	if ( self.pers["team"] != "allies" && self.pers["team"] != "axis" )
+		return;
+
+	waittillframeend;
+
 	enemy_team = otherTeam( self.pers["team"] );
 
 	teammates = [];
@@ -200,7 +210,7 @@ logSpawn()
 	logStr = appendLogStr( logStr, dist_spawnpoint_forward );
 	logStr = appendLogStr( logStr, dist_spawnpoint_rear );
 	logStr = appendLogStr( logStr, enemy_flag_at_home );
-	logStr = appendLogStr( logStr, "\n" );
+	logStr = logStr + "\n";
 
 	logPrint( logStr );
 }
@@ -238,15 +248,6 @@ spawnpointModelByTeam(team)
 		model = "xmodel/prop_flag_" + team;
 		return model;
 	}
-}
-
-getEnemyFlag(team)
-{
-	if (team == "allies")
-		flag = getent("axis_flag", "targetname");
-	else
-		flag = getent("allied_flag", "targetname");
-	return flag;
 }
 
 getClosest( org, array, dist )

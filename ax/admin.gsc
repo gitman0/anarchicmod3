@@ -1,3 +1,5 @@
+/* $Id: admin.gsc 88 2010-10-03 00:09:32Z  $ */
+
 /**********************
     ADMIN FUNCTIONS
 **********************/
@@ -7,6 +9,9 @@
 init()
 {
         level._effect["bombfire"] = loadfx( "fx/props/barrelexp.efx" );
+
+	level.ax_sticky_spectator = 0;
+	level.ax_sticky_spectator_max = 5;
 
 	level thread switchteam();
 
@@ -21,6 +26,7 @@ init()
 	level thread registerDvarEvent( "g_mute",	"int",	::mutePlayer );
 	level thread registerDvarEvent( "g_unmute",	"int",	::unMutePlayer );
 	level thread registerDvarEvent( "ax_givetags",	"int",	::giveClanTags );
+	level thread registerDvarEvent( "ax_sticky_spec", "int", ::stickySpectate );
 
 	setupShitlist();
 
@@ -33,21 +39,8 @@ onPlayerConnect()
 	{
 		level waittill( "connected", player );
 		player thread shitlist();
-		player thread onPlayerSpawned();
-	}
-}
-
-onPlayerSpawned()
-{
-	self endon( "disconnect" );
-
-	for(;;)
-	{
-		self waittill( "spawned_player" );
-
-		/# if (isadminNew(self))
-			self iprintln("The new isadmin function returned true");
-		else self iprintln("The new isadmin function returned false"); #/
+		if ( !isDefined( player.ax_admin_record ) && isAdmin( player ) )
+			adminPrint( "Player " + player.name + " (" + player.ax_admin_record[1] + ") is a registered server admin." );
 	}
 }
 
@@ -100,19 +93,17 @@ isAdminNew(player)
 
 isAdmin(player)
 {
-	if ( !isDefined(player.ax_admin_flag) )
+	if ( !isDefined(player.ax_admin_record) )
 	{
 		adminRecord = getAdminRecord(player);
 		if ( isDefined( adminRecord ) )
 		{
-			/# player iprintln( "Caching your admin record" ); #/
-			player.ax_admin_flag = true;
+			player.ax_admin_record = adminRecord;
 			return true;
 		}
+		else return false;
 	}
-	else if ( player.ax_admin_flag )
-		return true;
-	else return false;
+	else return true;
 }
 
 getAdminRecord(player)
@@ -134,69 +125,28 @@ getAdminRecord(player)
 		return result;
 
 	numval = fReadLn(guidFile);
-	while ( numval )
+	while ( numval > 0 )
 	{
 		if (numval == 2)
 		{
 			record[0] = fGetArg(guidFile, 0);
 			record[1] = fGetArg(guidFile, 1);
 		}
-		if ( record[0] == guid )
+		if ( int(record[0]) == guid )
 		{
 			result = record;
 			break;
 		}
 		numval = fReadLn(guidFile);
+
+		waittillframeend;
 	}
 	closeFile(guidFile);
 	return result;
 }
-/*		
-isadmin(player) {
-	guid = player getGuid();
-	switch(guid) {
-		//case 0:
-		case 108775: // gitman
-		case 102468: // boog
-		case 107485: // logik
-		case 131185: // bella
-		case 133966: // sterling
-		case 186783: // maiden
-		case 146474: // the plague
-		case 100854: // ganoush
-		case 100562: // clint
-		case 105447: // powerforward
-		case 138948: // iceman
-		case 158132: // krovotnokov
-		case 289962: // fullwood
-		case 202622: // fishy
-		case 126027: // drugcop
-		case 105347: // cornrow
-		case 186127: // ransom
-		case 521239: // ted
-		case 104021: // c-knight
-		case 103369: // bnuts
-		case 722070: // hope
-		case 185896: // geo
-		case 191744: // odd sage
-		case 172024: // rollin
-		case 122658: // rup
-		case 241669: // till
-		case 104995: // mancini
-		case 1274652: // ct
-		case 784264: // grim
-		// chev
-		//
-			return true;
-		default:
-			return false;
-	}
-}
-*/
 
-//////////////////////////////////////////////////////////////////////////////
-/// the following functions are either based on or courtesy of raviradmin.gsc
-//////////////////////////////////////////////////////////////////////////////
+
+/* the following functions are based on ravir's admin functions */
 
 // this one needs to be redone
 switchteam()
@@ -272,6 +222,38 @@ switchteam()
 		}
 		wait 0.05;
 	}
+}
+
+stickySpectate( minutes )
+{
+	level endon( "intermission" );
+
+	switch ( level.gametype )
+	{
+		case "ctf": case "hq":
+			break;
+		default:
+			adminPrint( "stickySpectate: this gametype already has persistent spectating" );
+			return;
+	}
+
+	if ( level.ax_sticky_spectator > 0 ) // already enabled
+	{
+		adminPrint( "stickSpectate: attempted to enable, but already enabled" );
+		return;
+	}
+	
+	if ( minutes > level.ax_sticky_spectator_max )
+		minutes = level.ax_sticky_spectator_max;
+	level.ax_sticky_spectator = minutes;
+
+	adminPrint( "stickySpectate: persistent spectating enabled for " + level.ax_sticky_spectator + " minutes" );
+
+	wait ( level.ax_sticky_spectator * 60 );
+
+	level.ax_sticky_spectator = 0;
+
+	adminPrint( "stickySpectate: persistent spectating disabled" );
 }
 
 giveClanTags( clientNum )

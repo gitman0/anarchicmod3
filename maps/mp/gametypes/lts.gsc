@@ -1,4 +1,6 @@
 /*
+	$Id: lts.gsc 78 2010-09-04 17:27:58Z  $
+
 	Last Team Standing
 	Attackers objective:
 	Defenders objective:
@@ -78,7 +80,7 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
-
+	level.printJoinedTeam = ::printJoinedTeam;
 	level.spawnspectator = ::spawnspectator;
 }
 
@@ -1237,8 +1239,6 @@ updateTeamStatus()
 
 printJoinedTeam(team)
 {
-	return ax\utility::printJoinedTeam(team);
-
 	if(!level.splitscreen)
 	{
 		if(team == "allies")
@@ -1521,7 +1521,7 @@ menuWeapon(response)
 			self.pers["weapon"] = weapon;
 			self.spawned = undefined;
 			spawnPlayer();
-			self thread printJoinedTeam(self.pers["team"]);
+			self thread [[level.printJoinedTeam]](self.pers["team"]);
 			level checkMatchStart();
 		}
 	}
@@ -1545,13 +1545,13 @@ menuWeapon(response)
 			{
 				self.spawned = undefined;
 				spawnPlayer();
-				self thread printJoinedTeam(self.pers["team"]);
+				self thread [[level.printJoinedTeam]](self.pers["team"]);
 				level checkMatchStart();
 			}
 			else
 			{
 				spawnPlayer();
-				self thread printJoinedTeam(self.pers["team"]);
+				self thread [[level.printJoinedTeam]](self.pers["team"]);
 			}
 		}
 	}
@@ -1595,14 +1595,14 @@ menuWeapon(response)
 			{
 				self.spawned = undefined;
 				spawnPlayer();
-				self thread printJoinedTeam(self.pers["team"]);
+				self thread [[level.printJoinedTeam]](self.pers["team"]);
 			}
 		} // else if joining an empty team, spawn and check for match start
 		else if(!level.didexist[self.pers["team"]] && !level.roundended)
 		{
 			self.spawned = undefined;
 			spawnPlayer();
-			self thread printJoinedTeam(self.pers["team"]);
+			self thread [[level.printJoinedTeam]](self.pers["team"]);
 			level checkMatchStart();
 		} // else you will spawn with selected weapon next round
 		else

@@ -1,23 +1,30 @@
-// anarchicmod 3.0 for Call of Duty 2 by gitman @ anarchic-x.com
-// not to be distributed or used anywhere but anarchic-x servers
+/*  
+     anarchicmod 3.0 for Call of Duty 2 by gitman @ anarchic-x.com
+     not to be distributed or used anywhere but anarchic-x servers
+ 
+     $Id: anarchic.gsc 83 2010-09-06 04:35:55Z  $
+*/
 
+#include ax\dvars;
 #include ax\utility;
 
 init()
 {
-	ax\dvars::setupDvars();
+	setupDvars();
 
-	if(!isDefined(game["gamestarted"]))
+	level.printJoinedTeam = ::printJoinedTeam; // override the stock function
+
+	if( !isDefined(game["gamestarted"]) || !game["gamestarted"] )
 	{
 		game["deaths_axis"]	= 0;
 		game["deaths_allies"]	= 0;
 		game["kills_axis"]	= 0;
 		game["kills_allies"]	= 0;
 
-		precacheString(&"AX_PENALTY_TIME_LEFT");
-		precacheString(&"AX_HUD_TEAMKILLS");
-		precacheString(&"AX_WAIT_FOR_PLAYERS");
-		precacheString(&"AX_MATCHSTARTING");
+		precacheString( &"AX_PENALTY_TIME_LEFT" );
+		precacheString( &"AX_HUD_TEAMKILLS" );
+		precacheString( &"AX_WAIT_FOR_PLAYERS" );
+		precacheString( &"AX_MATCHSTARTING" );
 	}
 
 	ax\admin::init();
@@ -40,19 +47,21 @@ onPlayerConnect()
 	{
 		level waittill("connected", player);
 
-		if (!isdefined(player.kills))
+		if ( !isdefined(player.kills) )
 			player.kills = 0;
-		if (!isdefined(player.pers["kills"]))
+		if ( !isdefined(player.pers["kills"]) )
 			player.pers["kills"] = 0;
-		if (!isdefined(player.pers["flag_caps"]))
+		if ( !isdefined(player.pers["flag_caps"]) )
 			player.pers["flag_caps"] = 0;
-		if (!isdefined(player.pers["headshots"]))
+		if ( !isdefined(player.pers["headshots"]) )
 			player.pers["headshots"] = 0;
-		if (!isdefined(player.team_kills))
+		if ( !isdefined(player.pers["melees"]) )
+			player.pers["melees"] = 0;
+		if ( !isdefined(player.team_kills) )
 			player.team_kills = 0;
-		if (!isdefined(player.cannot_play))
+		if ( !isdefined(player.cannot_play) )
 			player.cannot_play = false;
-		if (!isdefined(player.muted))
+		if ( !isdefined(player.muted) )
 			player.muted = false;
 
 		player.team_kill_level = 0;
@@ -115,31 +124,11 @@ onPlayerSpawned()
 			x = -88;
 			y = 188;
 
-			self.team_kill_display = newClientHudElem(self);
-			self.team_kill_display.alignX = "left";
-			self.team_kill_display.alignY = "top";
-			self.team_kill_display.horzAlign = "right";
-			self.team_kill_display.vertAlign = "middle";
-			self.team_kill_display.x = x;
-			self.team_kill_display.y = y;
-			self.team_kill_display.fontscale = 0.85;
-			self.team_kill_display.archived = false;
-			self.team_kill_display.alpha = 0;
-			self.team_kill_display setText(&"AX_HUD_TEAMKILLS");
-
-			self.team_kill_display_counter = newClientHudElem(self);
-			self.team_kill_display_counter.alignX = "left";
-			self.team_kill_display_counter.alignY = "top";
-			self.team_kill_display_counter.horzAlign = "right";
-			self.team_kill_display_counter.vertAlign = "middle";
-			self.team_kill_display_counter.x = x + 42;
-			self.team_kill_display_counter.y = y;
-			self.team_kill_display_counter.fontscale = 0.9;
-			self.team_kill_display_counter.archived = false;
-			self.team_kill_display_counter.alpha = 0;
+			self.team_kill_display = self doClientHudElem( x, y, "left", "top", "right", "middle", 0.85, 0 );
+			self.team_kill_display setText( &"AX_HUD_TEAMKILLS" );
+			self.team_kill_display_counter = self doClientHudElem( (x + 42), y, "left", "top", "right", "middle", 0.9, 0 );
 		}
 		self.last_victim_team = undefined;
-		self thread check_ax();
 	}
 }
 
@@ -178,6 +167,54 @@ onPlayerDisconnect()
 	self waittill("disconnect");
 }
 
+getdamage(iDamage, sMeansOfDeath, eAttacker, sWeapon)
+{
+	if (getCvarInt("g_DebugDamage"))
+	{
+		if ( isDefined(self.origin) && isDefined(eAttacker.origin) )
+			attack_dist = distance(self.origin, eAttacker.origin);
+		else attack_dist = "unknown";
+		iprintln("iDamage: " + iDamage + ", distance: " + attack_dist + ", sMeansOfDeath: " + sMeansOfDeath + ", sWeapon: " + sWeapon);
+	}
+
+	mod_nade	= 0.15;		// spawn assist
+	//mod_nade_exp	= 0.01;		// prevent spawn assist abuse
+	mod_bullet	= 0.35;		// spawn assist
+	mod_hop		= 0.05;		// antihop
+
+	if ( isDefined(self.spawn_assist) && self.spawn_assist )
+	{
+		switch(sMeansOfDeath) {
+			case "MOD_EXPLOSIVE":
+			case "MOD_GRENADE_SPLASH":
+				iDamage = iDamage * mod_nade;
+				break;
+			case "MOD_RIFLE_BULLET":
+			case "MOD_PISTOL_BULLET":
+				iDamage = iDamage * mod_bullet;
+				break;
+		}
+	}
+	if (isdefined(eattacker) && isPlayer(eAttacker))
+	{
+		// antihop - not affected by being on turret, any other means of death other than pistol/rifle
+		if (eAttacker.hopping && !isturret(sWeapon) && (sMeansOfDeath == "MOD_RIFLE_BULLET" || sMeansOfDeath == "MOD_PISTOL_BULLET"))
+		{
+			old_damage = iDamage;
+			iDamage = iDamage * mod_hop;
+			eattacker.pers["hop_denial"] += old_damage - idamage;
+		}
+		/*
+		if ( isdefined(eAttacker.spawn_assist_time) && (gettime() - eAttacker.spawn_assist_time < 3000) && sMeansOfDeath == "MOD_GRENADE_SPLASH" )
+		{
+			iDamage = iDamage * mod_nade_exp;
+			eAttacker iprintln("^1* Your grenade only did " + iDamage + " damage points. Don't abuse spawn assist!");
+		}
+		*/
+	}
+	return int(iDamage);
+}
+
 Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc)
 {
 	if ((!isplayer(attacker)) || (!isdefined(attacker.pers["kills"])))
@@ -210,6 +247,8 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 					attacker.pers["kills"]++;
 					if(sHitLoc == "head" && sMeansOfDeath != "MOD_MELEE")
 						attacker.pers["headshots"]++;
+					else if ( sMeansOfDeath == "MOD_MELEE" )
+						attacker.pers["melees"]++;
 				}
 			}
 		}
@@ -221,15 +260,15 @@ Callback_PlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDi
 			game[s]++;
 		}
 	}
-	attacker team_kill_counter_destroy();
+	self team_kill_counter_destroy();
 }
 
 friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
 {
-	if (level.friendlyfire == "0")
+	if ( level.friendlyfire == "0" )
 		return;
 
-	else if(level.friendlyfire == "1") // standard
+	else if ( level.friendlyfire == "1" ) // standard
 	{
 		// Make sure at least one point of damage is done
 		if(iDamage < 1)
@@ -242,7 +281,7 @@ friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vP
 			self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 		self playrumble("damage_heavy");
 	}
-	else if(level.friendlyfire == "2") // reflect
+	else if ( level.friendlyfire == "2" ) // reflect
 	{
 		eAttacker.friendlydamage = true;
 		iDamage = int(iDamage * .5);
@@ -254,7 +293,7 @@ friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vP
 		eAttacker finishPlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 		eAttacker.friendlydamage = undefined;
 	}
-	else if(level.friendlyfire == "3") // shared
+	else if ( level.friendlyfire == "3" ) // shared
 	{
 		if (sMeansOfDeath == "MOD_MELEE" && game["matchstarted"])
 		{
@@ -298,14 +337,15 @@ friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vP
 		// Make sure at least one point of damage is done
 		if(attacker_damage < 1)
 			attacker_damage = 1;
-		if (isdefined(victim_damage))
+
+		if ( isdefined(victim_damage) )
 		{
-			if (isdefined(self.flag))
+			if ( isdefined(self.flag) ) // do less damage to flag carriers
 				victim_damage = victim_damage * 0.2; 
-			if (victim_damage < 1)
+			if ( victim_damage < 1 )
 				victim_damage = 1;
 		}
-	
+
 		if (isdefined(victim_damage))
 			self finishPlayerDamage(eInflictor, eAttacker, int(victim_damage), iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
 		eAttacker finishPlayerDamage(eInflictor, eAttacker, int(attacker_damage), iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime);
@@ -315,9 +355,9 @@ friendlyFire(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vP
 
 setTeamKillLevel()
 {
-	if (self.team_kills < level.team_kill_limit)
+	if ( self.team_kills < level.team_kill_limit )
 		self.team_kill_level = 0;
-	if (self.team_kills == level.team_kill_limit)
+	if ( self.team_kills == level.team_kill_limit )
 		self.team_kill_level = 1;
 	if ( (self.team_kills > level.team_kill_limit) || (self.team_damage > level.team_damage_limit) )
 		self.team_kill_level = 2;
@@ -325,34 +365,47 @@ setTeamKillLevel()
 		self.team_kill_level = 3;
 }
 
-team_kill_counter_update() {
+team_kill_counter_update()
+{
 	self endon("killed_player");
-	if (!isalive(self) || !isplayer(self))
+	self endon("disconnect");
+
+	if ( !isAlive(self) || !isPlayer(self) || self.team_kill_counter )
 		return;
-	if (self.team_kill_counter)
+
+	if ( !isdefined(self.team_kill_display) || !isdefined(self.team_kill_display_counter) )
 		return;
-	if (!isdefined(self.team_kill_display_counter) || !isdefined(self.team_kill_display))
-		return;
+
 	self.team_kill_counter = true;
 	self.team_kill_display_counter setValue(self.team_kills);
-	self.team_kill_display_counter.alpha = 1;
-	self.team_kill_display.alpha = 1;
+
+	self thread team_kill_counter_fade(1, 0.2);
 	wait 3;
 	self thread team_kill_counter_fade(0, 1);
 }		
 
-team_kill_counter_fade(in_out, time) {
+team_kill_counter_fade( in_out, time )
+{
 	self endon("killed_player");
-	if (!isdefined(self.team_kill_display) || !isdefined(self.team_kill_display_counter))
+	self endon("disconnect");
+
+	if ( !isdefined(self.team_kill_display) || !isdefined(self.team_kill_display_counter) )
 		return;
+
+	if ( in_out ) self.team_kill_counter = true;
+	else self.team_kill_counter = false;
+
 	self.team_kill_display fadeOverTime(time);
 	self.team_kill_display.alpha = in_out;
-	self.team_kill_display_counter fadeovertime(time);
+
+	self.team_kill_display_counter fadeOverTime(time);
 	self.team_kill_display_counter.alpha = in_out;
-	self.team_kill_counter = false;
+
+	wait time;
 }
 
-team_kill_counter_destroy() {
+team_kill_counter_destroy()
+{
 	self.team_kill_counter = false;
 	if (isdefined(self.team_kill_display))
 		self.team_kill_display destroy();
@@ -360,7 +413,7 @@ team_kill_counter_destroy() {
 		self.team_kill_display_counter destroy();
 }
 
-playerTimeout(time)
+playerTimeout( time )
 {
 	level endon("intermission");
 
@@ -372,17 +425,7 @@ playerTimeout(time)
 
 	if(!isdefined(self.penaltytimer))
 	{
-		self.penaltytimer = newClientHudElem(self);
-		self.penaltytimer.x = 0;
-		self.penaltytimer.y = -50;
-		self.penaltytimer.alignX = "center";
-		self.penaltytimer.alignY = "middle";
-		self.penaltytimer.horzAlign = "center_safearea";
-		self.penaltytimer.vertAlign = "center_safearea";
-		self.penaltytimer.alpha = 1;
-		self.penaltytimer.archived = false;
-		self.penaltytimer.font = "default";
-		self.penaltytimer.fontscale = 1;
+		self.penaltytimer = self doClientHudElem(0, -50, "center", "middle", "center_safearea", "center_safearea" );
 		self.penaltytimer.label = (&"AX_PENALTY_TIME_LEFT");
 		self.penaltytimer setTimer (time * 60);
 	}
@@ -390,62 +433,14 @@ playerTimeout(time)
 	self.cannot_play = true;
 	wait (time * 60);
 	clientAnnouncement(self, "&AX_HUD_TEAMKILL_PENALTY_REJOIN");
-	if (isdefined(self.penaltytimer))
+	if ( isdefined(self.penaltytimer) )
 		self.penaltytimer destroy();
 	self.cannot_play = false;
 }
 
-getdamage(iDamage, sMeansOfDeath, eAttacker, sWeapon)
-{
-	if (getCvarInt("g_DebugDamage"))
-	{
-		if ( isDefined(self.origin) && isDefined(eAttacker.origin) )
-			attack_dist = distance(self.origin, eAttacker.origin);
-		else attack_dist = "unknown";
-		iprintln("iDamage: " + iDamage + ", distance: " + attack_dist + ", sMeansOfDeath: " + sMeansOfDeath + ", sWeapon: " + sWeapon);
-	}
-
-	mod_nade	= 0.15;
-	mod_nade_exp	= 0.01;
-	mod_bullet	= 0.35;
-	mod_hop		= 0.05;
-
-	if ( isDefined(self.spawn_assist) && self.spawn_assist )
-	{
-		switch(sMeansOfDeath) {
-			case "MOD_EXPLOSIVE":
-			case "MOD_GRENADE_SPLASH":
-				iDamage = iDamage * mod_nade;
-				break;
-			case "MOD_RIFLE_BULLET":
-			case "MOD_PISTOL_BULLET":
-				iDamage = iDamage * mod_bullet;
-				break;
-		}
-	}
-	// antihop - not affected by being on turret, any other means of death other than pistol/rifle
-	if (isdefined(eattacker) && isPlayer(eAttacker))
-	{
-		if (eAttacker.hopping && !isturret(sWeapon) && (sMeansOfDeath == "MOD_RIFLE_BULLET" || sMeansOfDeath == "MOD_PISTOL_BULLET"))
-		{
-			old_damage = iDamage;
-			iDamage = iDamage * mod_hop;
-			eattacker.pers["hop_denial"] += old_damage - idamage;
-		}
-		/*
-		if ( isdefined(eAttacker.spawn_assist_time) && (gettime() - eAttacker.spawn_assist_time < 3000) && sMeansOfDeath == "MOD_GRENADE_SPLASH" )
-		{
-			iDamage = iDamage * mod_nade_exp;
-			eAttacker iprintln("^1* Your grenade only did " + iDamage + " damage points. Don't abuse spawn assist!");
-		}
-		*/
-	}
-	return int(iDamage);
-}
-
 isBalancedChoice(response)
 {
-	// go ahead of menu auto-balance is disabled
+	// go ahead if menu auto-balance is disabled
 	if ( !level.ax_teambalance_menu )
 		return true;
 
@@ -457,14 +452,15 @@ isBalancedChoice(response)
 
 	// go ahead if no other players
 	if ( players["allies"] == 0 && players["axis"] == 0 )
+	{
+		/# self iprintln( "Auto-balance skipped - no other players" ); #/
 		return true;
+	}
 
 	// go ahead if admin
-	adminRecord = ax\admin::getAdminRecord( self );
-	if ( isDefined( adminRecord ) )
+	if ( ax\admin::isAdmin(self) )
 	{
-		name = adminRecord[1];
-		self iprintln( "Auto-balance skipped - admin GUID registered to: " + name + "^7" );
+		self iprintln( "Auto-balance skipped - admin GUID registered to: " + self.ax_admin_record[1] + "^7" );
 		return true;
 	}
 
@@ -483,13 +479,4 @@ isBalancedChoice(response)
 	}
 	// catch-all
 	return true;
-}
-
-check_ax()
-{
-	//self iprintln(nocolors(name));
-	tags = "^7|^4ax^7|";
-	nc = nocolors(self.name);
-	if (nc.size > tags.size)
-		return;
 }

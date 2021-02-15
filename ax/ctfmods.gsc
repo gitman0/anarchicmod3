@@ -1,15 +1,42 @@
+/* $Id: ctfmods.gsc 92 2010-10-04 00:26:08Z  $ */
+
 #include ax\utility;
 
 init()
 {
-	if(!isDefined(game["gamestarted"]))
+	level.flag_carrier_icon = "objective";
+
+	if( !isDefined(game["gamestarted"]) || !game["gamestarted"] )
 	{
 		if (level.gametype == "ctf")
-		{
-			level.flag_carrier_icon = "objective";
 			precacheShader(level.flag_carrier_icon);
-		}
 	}
+
+	if ( level.ax_ctf_pressurecook > 0 && level.gametype == "ctf" )
+	{
+		spawnpointname = "mp_sd_spawn_attacker";
+		spawnpoints = getentarray(spawnpointname, "classname");
+
+		if(!spawnpoints.size)
+			level.ax_ctf_pressurecook = 0;
+
+		for(i = 0; i < spawnpoints.size; i++)
+			spawnpoints[i] PlaceSpawnpoint();
+	}
+	if ( level.ax_ctf_pressurecook > 0 && level.gametype == "ctf" )
+	{
+		spawnpointname = "mp_sd_spawn_defender";
+		spawnpoints = getentarray(spawnpointname, "classname");
+
+		if(!spawnpoints.size)
+			level.ax_ctf_pressurecook = 0;
+
+		for(i = 0; i < spawnpoints.size; i++)
+			spawnpoints[i] PlaceSpawnpoint();
+	}
+
+	if ( level.ax_ctf_pressurecook > 0 && level.gametype == "ctf" )
+		level thread announcePressureCooker();
 
 	game["objid_axis"] = 14;
 	game["objid_allies"] = 15;
@@ -55,6 +82,95 @@ onPlayerKilled()
 	}
 }
 
+endRound()
+{
+/#
+	assertEx( isdefined( game["roundsplayed"] ), "Error: game[\"roundsplayed\"] is not defined" );
+	assertEx( isdefined( level.roundlimit ), "Error: level.roundlimit is not defined" );
+
+	round_start_delay = 5;
+
+	game["roundsplayed"]++;
+	if ( game["roundsplayed"] < level.roundlimit )
+	{
+		announcement("Starting new round in " + round_start_delay + " seconds");
+		wait round_start_delay;
+		level notify( "restarting" );
+		waittillframeend;
+		map_restart( true );
+		return;
+	}
+	else iprintln(&"MP_ROUND_LIMIT_REACHED");
+#/
+	level thread endMap();
+}
+endMap()
+{
+	game["state"] = "intermission";
+	level notify("intermission");
+
+	alliedscore = getTeamScore("allies");
+	axisscore = getTeamScore("axis");
+
+	if(alliedscore == axisscore)
+	{
+		winningteam = "tie";
+		losingteam = "tie";
+		text = "MP_THE_GAME_IS_A_TIE";
+	}
+	else if(alliedscore > axisscore)
+	{
+		winningteam = "allies";
+		losingteam = "axis";
+		text = &"MP_ALLIES_WIN";
+	}
+	else
+	{
+		winningteam = "axis";
+		losingteam = "allies";
+		text = &"MP_AXIS_WIN";
+	}
+
+	winners = "";
+	losers = "";
+
+	if(winningteam == "allies")
+		level thread playSoundOnPlayers("MP_announcer_allies_win");
+	else if(winningteam == "axis")
+		level thread playSoundOnPlayers("MP_announcer_axis_win");
+	else
+		level thread playSoundOnPlayers("MP_announcer_round_draw");
+
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+	{
+		player = players[i];
+
+		if((winningteam == "allies") || (winningteam == "axis"))
+		{
+			lpGuid = player getGuid();
+			if((isDefined(player.pers["team"])) && (player.pers["team"] == winningteam))
+				winners = (winners + ";" + lpGuid + ";" + player.name);
+			else if((isDefined(player.pers["team"])) && (player.pers["team"] == losingteam))
+				losers = (losers + ";" + lpGuid + ";" + player.name);
+		}
+
+		player closeMenu();
+		player closeInGameMenu();
+		player setClientCvar("cg_objectiveText", text);
+
+		player [[level.spawnIntermission]]();
+	}
+
+	if((winningteam == "allies") || (winningteam == "axis"))
+	{
+		logPrint("W;" + winningteam + winners + "\n");
+		logPrint("L;" + losingteam + losers + "\n");
+	}
+	wait 10;
+	exitLevel(false);
+}
+
 checkTimeLimit()
 {
 	if(level.timelimit <= 0)
@@ -72,6 +188,8 @@ checkTimeLimit()
 	if (!isdefined(level.sudden_death_status))
 		level.sudden_death_status = false;
 
+	players = maps\mp\gametypes\_teams::CountPlayers();
+
 	if ( level.sudden_death_status && level.sudden_death_timelimit > 0 )
 	{
 		sudden_death_timepassed = (getTime() - level.sudden_death_starttime) / 1000;
@@ -79,16 +197,24 @@ checkTimeLimit()
 
 		if ( sudden_death_timepassed >= level.sudden_death_timelimit )
 		{
-			timeLimitReached();
+			iprintln(&"MP_TIME_LIMIT_REACHED");
+			level.mapended = true;
+			level thread endRound();
 			return;
 		}
+	}
+
+	if ( level.sudden_death_timelimit == 0 && ( players["allies"] <= level.sudden_death_minplayers || players["axis"] <= level.sudden_death_minplayers ) )
+	{
+		level.mapended = true;
+		level thread endRound();
+		return;
 	}
 
 	if ( suddenDeathSupported() && level.sudden_death_timelimit > -1 ) 
 	{
 		debug = getCvarInt("ax_debug_sudden_death");
-		players = maps\mp\gametypes\_teams::CountPlayers();
-		if ( ( players["allies"] > 1 && players["axis"] > 1 ) || debug > 0 )
+		if ( ( players["allies"] >= level.sudden_death_minplayers && players["axis"] >= level.sudden_death_minplayers ) || debug > 0 )
 		{
 			score_axis = getTeamScore("axis");
 			score_allies = getTeamScore("allies");
@@ -140,14 +266,10 @@ checkTimeLimit()
 			}
 		}
 	}
-	timeLimitReached();
-}
-
-timeLimitReached()
-{
-	level.mapended = true;
 	iprintln(&"MP_TIME_LIMIT_REACHED");
-	level thread [[level.endGameConfirmed]]();
+	level.mapended = true;
+	level thread endRound();
+
 }
 
 suddenDeathSupported()
@@ -159,9 +281,18 @@ suddenDeathSupported()
 	}
 }
 
+announcePressureCooker()
+{
+	if ( level.ax_ctf_pressurecook <= 0 || !isdefined( game["matchstarted"] ) || !game["matchstarted"] || ( isdefined( level.ctf_in_warmup ) && level.ctf_in_warmup ) )
+		return;
+	iprintln("Pressure-cooker spawns are ON!");
+	wait level.ax_ctf_pressurecook;
+	iprintln("Classic CTF spawns are ON!");
+}
+
 spawnpointName()
 {
-        timepassed = (getTime() - getStartTime()) / 1000;
+        timepassed = (getTime() - getStartTime() + (level.ctf_warmup * 1000)) / 1000;
         timepassed = timepassed / 60.0;
 
 	spawnpointname = undefined;
@@ -236,6 +367,8 @@ printOnTeamWithArg(text, arg, team)
 
 fixFlagPositions()
 {
+	waittillframeend;
+
         if (level.gametype != "ctf")
 		return;
 	switch(level.mapname)

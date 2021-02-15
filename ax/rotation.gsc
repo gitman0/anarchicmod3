@@ -1,9 +1,88 @@
+/* $Id: rotation.gsc 86 2010-10-02 01:28:00Z  $ */
+
 #include ax\utility;
 
 init()
 {
 	level thread showNextMap();
 	level thread rotationHistory();
+
+	level thread onPlayerConnect();
+}
+
+onPlayerConnect()
+{
+	for (;;)
+	{
+		level waittill( "connected", player );
+		player thread onPlayerSpawned();
+	}
+}
+
+onPlayerSpawned()
+{
+	self endon( "disconnect" );
+	for (;;)
+	{
+		self waittill( "spawned_player" );
+
+/#
+		wait 5;
+		self printRotationArray( "all" );
+#/
+	}
+}
+
+printRotationArray( type, gt )
+{
+	rotationArray = rotationArray( type, gt );
+
+	if ( !rotationarray.size )
+	{
+		self iprintln( "rotationArray returned null" );
+		return;
+	}
+	for ( i = 0; i < rotationArray.size; i++ )
+		self iprintln( "rotationArray[" + i + "] == " + rotationArray[i] );
+}
+
+rotationByPlayerCount()
+{
+}
+
+rotationArray( type, gt )
+{
+	if ( type == "current" )
+		maprotationStr = strip( getCvar( "sv_maprotationcurrent" ) );
+	else maprotationStr = strip( getCvar( "sv_maprotation" ) );
+
+	maprotationStr_e = explode( maprotationStr, " " );
+
+	maprotationArray = [];
+
+	rotationGt = undefined;
+	if ( isDefined( gt ) && gt != "" )
+		rotationGt = gt;
+
+	for ( i = 0; i < maprotationStr_e.size; i++ )
+	{
+		if ( isDefined( gt ) && gt != "" )
+		{
+			if ( strip(maprotationStr_e[i] == "gametype") || strip(maprotationStr_e[i] == "g_gametype") )
+			{
+				rotationGt = strip( maprotationStr_e[i+1] );
+				i++;
+			}
+			if ( rotationGt != gt )
+				continue;
+		}
+		if ( strip( maprotationStr_e[i] ) == "map" )
+		{
+			maprotationArray[maprotationArray.size] = strip( maprotationStr_e[i+1] );
+			i++;
+		}
+	}
+	return maprotationArray;
 }
 
 rotationHistory()

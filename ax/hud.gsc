@@ -1,53 +1,67 @@
+/* $Id: hud.gsc 82 2010-09-06 04:04:17Z  $ */
+
+#include ax\utility;
+
 init()
 {
 	level.modlabel_str = &"AX_MOD_STRING";
 
 	defineRuleSet();
 
-	if(!isDefined(game["gamestarted"]))
+	if( !isDefined(game["gamestarted"]) || !game["gamestarted"] )
 	{
-		precacheString(level.modlabel_str);
+		if ( level.ax_show_modlabel )
+			precacheString(level.modlabel_str);
 
-		precacheString(&"MP_SLASH");
-
-		precacheShader("gfx/hud/death_suicide.tga");
-
-		if (level.static_crosshair) {
+		if ( level.static_crosshair )
+		{
 			level.crosshair = "gfx/reticle/center_cross.tga";
 			precacheShader(level.crosshair);
 		}
-		if (level.gametype != "dm") {
-			switch(game["allies"])
-			{
-				case "american":
-					game["headicon_allies"] = "headicon_american";
-					break;
-				case "british":
-					game["headicon_allies"] = "headicon_british";
-					break;
-				case "russian":
-					game["headicon_allies"] = "headicon_russian";
-					break;
-			}
-			game["headicon_axis"] = "headicon_german";
-			precacheShader(game["headicon_allies"]);
-			precacheShader(game["headicon_axis"]);
-		}
-		precacheShader("killiconheadshot");
-		precacheShader("killiconmelee");
 
-		if(level.show_healthbar)
+		if ( level.ax_show_mini )
+		{
+			precacheString(&"MP_SLASH");
+
+			if ( level.ax_show_mini_flags && level.gametype == "ctf" )
+				precacheShader("gfx/hud/death_suicide.tga");
+
+			if (level.gametype != "dm")
+			{
+				switch(game["allies"])
+				{
+					case "american":
+						game["headicon_allies"] = "headicon_american";
+						break;
+					case "british":
+						game["headicon_allies"] = "headicon_british";
+						break;
+					case "russian":
+						game["headicon_allies"] = "headicon_russian";
+						break;
+				}
+				game["headicon_axis"] = "headicon_german";
+				precacheShader(game["headicon_allies"]);
+				precacheShader(game["headicon_axis"]);
+			}
+			if ( level.ax_show_mini_headshots )
+				precacheShader("killiconheadshot");
+			if ( level.ax_show_mini_melees )
+				precacheShader("killiconmelee");
+		}
+
+		if ( level.show_healthbar )
 		{
 			precacheShader("gfx/hud/hud@health_back.tga");
 			precacheShader("gfx/hud/hud@health_bar.tga");
 			precacheShader("gfx/hud/hud@health_cross.tga");
 		}
 
-		for (i=0;i<level.ruleset.size;i++)
-			precacheString(level.ruleset[i]);
+		for ( i=0;i<level.ruleset.size;i++ )
+			precacheString( level.ruleset[i] );
 	}
 
-	if ((level.show_kdhud) && (level.gametype != "dm"))
+	if ( level.ax_show_mini && level.gametype != "dm" )
 		thread miniscoreboard();
 
 	drawModLabel();
@@ -75,39 +89,21 @@ onPlayerSpawned()
 	{
 		self waittill("spawned_player");
 
-		if(level.show_healthbar && !isdefined(self.healthbar))
+		if ( level.show_healthbar && !isdefined(self.healthbar) )
 	        {
 	                x = -138;
 	                y = 231;
 	                maxwidth = 128;
 
-			self.healthbar_back = newClientHudElem( self );
+			self.healthbar_back = self doClientHudElem( x, y, "left", "top", "right", "middle" );
 			self.healthbar_back setShader("gfx/hud/hud@health_back.tga", maxwidth + 2, 7);
-			self.healthbar_back.alignX = "left";
-			self.healthbar_back.alignY = "top";
-			self.healthbar_back.horzAlign = "right";
-			self.healthbar_back.vertAlign = "middle";
-			self.healthbar_back.x = x;
-			self.healthbar_back.y = y;
-	
-			self.healthbar_cross = newClientHudElem( self );
+
+			self.healthbar_cross = self doClientHudElem( (x - 1), y, "right", "top", "right", "middle" );
 			self.healthbar_cross setShader("gfx/hud/hud@health_cross.tga", 7, 7);
-			self.healthbar_cross.alignX = "right";
-			self.healthbar_cross.alignY = "top";
-			self.healthbar_cross.horzAlign = "right";
-			self.healthbar_cross.vertAlign = "middle";
-			self.healthbar_cross.x = x - 1;
-			self.healthbar_cross.y = y;
-        
-			self.healthbar = newClientHudElem( self );
-			self.healthbar setShader("gfx/hud/hud@health_bar.tga", maxwidth, 5);
+
+			self.healthbar = self doClientHudElem( (x + 1), (y + 1), "left", "top", "right", "middle" );
 			self.healthbar.color = ( 0, 1, 0);
-			self.healthbar.alignX = "left";
-			self.healthbar.alignY = "top";
-			self.healthbar.horzAlign = "right";
-			self.healthbar.vertAlign = "middle";
-			self.healthbar.x = x + 1;
-			self.healthbar.y = y + 1;
+			self.healthbar setShader("gfx/hud/hud@health_bar.tga", maxwidth, 5);
 		}
 		self thread updatehealthbar();
 		self thread make_crosshair();
@@ -177,6 +173,8 @@ defineRuleSet()
 	level.ruleset[level.ruleset.size] = &"AX_SPAM10";
 	level.ruleset[level.ruleset.size] = &"AX_SPAM11";
 	level.ruleset[level.ruleset.size] = &"AX_SPAM12";
+	level.ruleset[level.ruleset.size] = &"AX_SPAM13";
+	level.ruleset[level.ruleset.size] = &"AX_SPAM14";
 }
 
 // shows the server rules
@@ -186,8 +184,8 @@ drawRuleHud() {
 	if (level.show_rulehud != 1)
 		return;
 
-	rule_duration = 4;
-	rule_delay = 3;
+	rule_duration = level.ax_show_rules_duration;
+	rule_delay = level.ax_show_rules_delay;
 
 	if (!isdefined(level.rule_hud))
 	{
@@ -206,33 +204,23 @@ drawRuleHud() {
 			level.rule_hud setText(level.ruleset[i]);
 			level.rule_hud fadeOvertime(1);
 			level.rule_hud.alpha = 1;
-			wait rule_duration;
+			wait ( rule_duration + 1 );
 			level.rule_hud fadeOvertime(1);
 			level.rule_hud.alpha = 0;
-			wait rule_delay;
+			wait ( rule_delay + 1 );
 		}
 	}
 }
 
 drawModLabel() {	
-	if (level.show_modlabel != 1)
+	if ( !level.ax_show_modlabel )
 		return;
 
-	if(!isdefined(level.mod_title))
+	if( !isdefined(level.mod_title) )
 	{
-		level.modlabel_hud = newHudElem();
-		level.modlabel_hud.archived = false;
-		level.modlabel_hud.x = 10;
-		level.modlabel_hud.y = 230;
-		level.modlabel_hud.horzAlign = "left";
-		level.modlabel_hud.vertAlign = "middle";
-		level.modlabel_hud.alignX = "left";
-		level.modlabel_hud.alignY = "top";
-		level.modlabel_hud.fontScale = 0.8;
-		level.modlabel_hud.sort = 1;
-		level.modlabel_hud.color = (1, 1, 1);
+		level.modlabel_hud = doHudElem( 10, 230, "left", "top", "left", "middle", 0.8 );
+		level.modlabel_hud setText( level.modlabel_str );
 	}
-	level.modlabel_hud setText(level.modlabel_str);
 }
 
 miniscoreboard() {
@@ -244,22 +232,24 @@ miniscoreboard() {
 
 	wait 0.5;
 
-	while (1) {
+	while (1)
+	{
 		wait 0.5;
 
-		if (!isdefined(game["kills_allies"]) || !isdefined(game["kills_axis"]))
+		if ( !isdefined(game["kills_allies"]) || !isdefined(game["kills_axis"]) )
 			continue;
-		if (!isdefined(game["deaths_allies"]) || !isdefined(game["deaths_axis"]))
+		if ( !isdefined(game["deaths_allies"]) || !isdefined(game["deaths_axis"]) )
 			continue;
 
-		level.kdhud_kills[0] setValue(game["kills_allies"]);
-		level.kdhud_kills[1] setValue(game["kills_axis"]);
-		level.kdhud_deaths[0] setValue(game["deaths_allies"]);
-		level.kdhud_deaths[1] setValue(game["deaths_axis"]);
+		level.kdhud_kills[0] setValue( game["kills_allies"] );
+		level.kdhud_kills[1] setValue( game["kills_axis"] );
+
+		level.kdhud_deaths[0] setValue( game["deaths_allies"] );
+		level.kdhud_deaths[1] setValue( game["deaths_axis"] );
 	}
 }
 
-// setup the seperators
+// setup the seperators (forward slashes)
 miniscore_seps() {
 	sep_x = -24;
 	sep_y = -208;
@@ -267,79 +257,43 @@ miniscore_seps() {
 	level.kdhud_sep = [];
 	level.kdhud_ratio = [];
 
-	for (i = 0; i < 3; i++) {
-		if (!isdefined(self.kdhud_sep[i])) {
-			level.kdhud_sep[i] = newHudElem();
-			level.kdhud_sep[i].archived = false;
-			level.kdhud_sep[i].x = sep_x;
-			level.kdhud_sep[i].y = sep_y;
-			level.kdhud_sep[i].horzAlign = "right";
-			level.kdhud_sep[i].vertAlign = "middle";
-			level.kdhud_sep[i].alignX = "left";
-			level.kdhud_sep[i].alignY = "top";
-			level.kdhud_sep[i].fontScale = 0.6;
-			level.kdhud_sep[i].sort = 1;
-			level.kdhud_sep[i].color = (1, 1, 1);		
+	for ( i = 0; i < 3; i++ )
+	{
+		if (!isdefined(self.kdhud_sep[i]))
+		{
+			level.kdhud_sep[i] = doHudElem( sep_x, sep_y, "left", "top", "right", "middle", 0.6 );
+			level.kdhud_sep[i] setText(&"MP_SLASH");
 		}
 		sep_y = sep_y + 10;
-		level.kdhud_sep[i] setText(&"MP_SLASH");
 	}
 }
 
 // draw the team flags
-miniscore_flags() {
-	if(!isdefined(level.kdhud_flag0))
-	{
-		level.kdhud_flag0 = newHudElem();
-		level.kdhud_flag0.archived = false;
-		level.kdhud_flag0.x = -54;
-		level.kdhud_flag0.y = -201;
-		level.kdhud_flag0.horzAlign = "right";
-		level.kdhud_flag0.vertAlign = "middle";
-		level.kdhud_flag0.alignX = "left";
-		level.kdhud_flag0.alignY = "top";
-		level.kdhud_flag0.sort = 1;
-		level.kdhud_flag0.alpha = 1.5;
-	}
-	if(!isdefined(level.kdhud_flag1))
-	{
-		level.kdhud_flag1 = newHudElem();
-		level.kdhud_flag1.archived = false;
-		level.kdhud_flag1.x = -54;
-		level.kdhud_flag1.y = -191;
-		level.kdhud_flag1.horzAlign = "right";
-		level.kdhud_flag1.vertAlign = "middle";
-		level.kdhud_flag1.alignX = "left";
-		level.kdhud_flag1.alignY = "top";
-		level.kdhud_flag1.sort = 1;
-		level.kdhud_flag1.alpha = 1.5;
-	}
-	level.kdhud_flag0 setShader(game["headicon_allies"], 12, 12);
-	level.kdhud_flag1 setShader(game["headicon_axis"], 12, 12);
+miniscore_flags()
+{
+	if ( !isdefined(level.kdhud_flag0) )
+		level.kdhud_flag0 = doHudElem( -54, -201, "left", "top", "right", "middle", 1, 1.5 );
+
+	if ( !isdefined(level.kdhud_flag1) )
+		level.kdhud_flag1 = doHudElem( -54, -191, "left", "top", "right", "middle", 1, 1.5 );
+
+	level.kdhud_flag0 setShader( game["headicon_allies"], 12, 12 );
+	level.kdhud_flag1 setShader( game["headicon_axis"], 12, 12 );
 
 }
 
 // mini team scoreboard
-miniscore_teamscore() {
+miniscore_teamscore()
+{
 	// kills column
 	sep_x = -27;
 	sep_y = -200;
 	level.kdhud_kills = [];
 
-	for (i = 0; i < 2; i++) {
-		if (!isdefined(level.kdhud_kills[i])) {
-			level.kdhud_kills[i] = newHudElem();
-			level.kdhud_kills[i].archived = false;
-			level.kdhud_kills[i].x = sep_x;
-			level.kdhud_kills[i].y = sep_y;
-			level.kdhud_kills[i].horzAlign = "right";
-			level.kdhud_kills[i].vertAlign = "middle";
-			level.kdhud_kills[i].alignX = "right";
-			level.kdhud_kills[i].alignY = "top";
-			level.kdhud_kills[i].fontScale = 0.8;
-			level.kdhud_kills[i].sort = 0.8;
-			level.kdhud_kills[i].color = (1, 1, 1);		
-		}
+	for ( i = 0; i < 2; i++ )
+	{
+		if ( !isdefined(level.kdhud_kills[i]) )
+			level.kdhud_kills[i] = doHudElem( sep_x, sep_y, "right", "top", "right", "middle", 0.8 );
 		sep_y = sep_y + 10;
 	}
 
@@ -348,20 +302,10 @@ miniscore_teamscore() {
 	sep_y = -200;
 	level.kdhud_deaths = [];
 
-	for (i = 0; i < 3; i++) {
-		if (!isdefined(level.kdhud_deaths[i])) {
-			level.kdhud_deaths[i] = newHudElem();
-			level.kdhud_deaths[i].archived = false;
-			level.kdhud_deaths[i].x = sep_x;
-			level.kdhud_deaths[i].y = sep_y;
-			level.kdhud_deaths[i].horzAlign = "right";
-			level.kdhud_deaths[i].vertAlign = "middle";
-			level.kdhud_deaths[i].alignX = "left";
-			level.kdhud_deaths[i].alignY = "top";
-			level.kdhud_deaths[i].fontScale = 0.8;
-			level.kdhud_deaths[i].sort = 0.8;
-			level.kdhud_deaths[i].color = (1, 1, 1);		
-		}
+	for ( i = 0; i < 3; i++ )
+	{
+		if ( !isdefined(level.kdhud_deaths[i]) )
+			level.kdhud_deaths[i] = doHudElem( sep_x, sep_y, "left", "top", "right", "middle", 0.8 );
 		sep_y = sep_y + 10;
 	}
 }
@@ -371,98 +315,52 @@ miniscore_myscore() {
 	self endon("disconnect");
 	level endon("intermission");
 
-        if ( !level.show_kdhud || level.gametype == "cnq" )
+        if ( !level.ax_show_mini || level.gametype == "cnq" )
 		return;
 
-	if (!isdefined(self.kdhud_kills)) {
-		self.kdhud_kills = newClientHudElem(self);
-		self.kdhud_kills.archived = false;
-		self.kdhud_kills.x = -27;
-		self.kdhud_kills.y = -210;
-		self.kdhud_kills.horzAlign = "right";
-		self.kdhud_kills.vertAlign = "middle";
-		self.kdhud_kills.alignX = "right";
-		self.kdhud_kills.alignY = "top";
-		self.kdhud_kills.fontScale = 0.8;
-		self.kdhud_kills.sort = 0.8;
-		self.kdhud_kills.color = (1, 1, 1);		
+	if (!isdefined(self.kdhud_kills))
+		self.kdhud_kills = self doClientHudElem( -27, -210, "right", "top", "right", "middle", 0.8 );
+
+	if (!isdefined(self.kdhud_deaths))
+		self.kdhud_deaths = self doClientHudElem( -19, -210, "left", "top", "right", "middle", 0.8 );
+
+	if ( level.ax_show_mini_flags && level.gametype == "ctf" ) // third
+	{
+		if ( !isdefined(self.kdhud_caps) )
+			self.kdhud_caps = self doClientHudElem( -45, -130, "center", "middle", "right", "middle", 0.7, 0.8 );
+
+		if ( !isdefined(self.kdhud_caps_count) )
+			self.kdhud_caps_count = self doClientHudElem( -24, -130, "left", "middle", "right", "middle", 0.8 );
 	}
-	if (!isdefined(self.kdhud_deaths)) {
-		self.kdhud_deaths = newClientHudElem(self);
-		self.kdhud_deaths.archived = false;
-		self.kdhud_deaths.x = -19;
-		self.kdhud_deaths.y = -210;
-		self.kdhud_deaths.horzAlign = "right";
-		self.kdhud_deaths.vertAlign = "middle";
-		self.kdhud_deaths.alignX = "left";
-		self.kdhud_deaths.alignY = "top";
-		self.kdhud_deaths.fontScale = 0.8;
-		self.kdhud_deaths.sort = 0.8;
-		self.kdhud_deaths.color = (1, 1, 1);		
+
+	if ( level.ax_show_mini_headshots ) // second 
+	{
+		if ( !isdefined(self.hud_headshot) )
+		{
+			self.hud_headshot = self doClientHudElem( -45, -160, "center", "middle", "right", "middle", 0.7, 0.6 );
+			self.hud_headshot setShader( "killiconheadshot", 11, 11 );
+		}
+
+		if ( !isdefined(self.hud_headshot_count) )
+			self.hud_headshot_count = self doClientHudElem( -24, -160, "left", "middle", "right", "middle", 0.8 );
 	}
-	if (level.gametype == "ctf") {
-		if (!isdefined(self.kdhud_caps)) {
-			self.kdhud_caps = newClientHudElem(self);
-			self.kdhud_caps.archived = false;
-			self.kdhud_caps.x = -45;
-			self.kdhud_caps.y = -145;
-			self.kdhud_caps.horzAlign = "right";
-			self.kdhud_caps.vertAlign = "middle";
-			self.kdhud_caps.alignX = "center";
-			self.kdhud_caps.alignY = "middle";
-			self.kdhud_caps.fontScale = 0.7;
-			self.kdhud_caps.sort = 0.8;
-			self.kdhud_caps.color = (1, 1, 1);
-			self.kdhud_caps.alpha = 0.8;
+
+	if ( level.ax_show_mini_melees ) // first 
+	{
+		if ( !isdefined(self.hud_melee) )
+		{
+			self.hud_melee = self doClientHudElem( -45, -145, "center", "middle", "right", "middle", 0.7, 0.6 );
+			self.hud_melee setShader( "killiconmelee", 11, 11 );
 		}
-		if (!isdefined(self.kdhud_caps_count)) {
-			self.kdhud_caps_count = newClientHudElem(self);
-			self.kdhud_caps_count.archived = false;
-			self.kdhud_caps_count.x = -24;
-			self.kdhud_caps_count.y = -145;
-			self.kdhud_caps_count.horzAlign = "right";
-			self.kdhud_caps_count.vertAlign = "middle";
-			self.kdhud_caps_count.alignX = "left";
-			self.kdhud_caps_count.alignY = "middle";
-			self.kdhud_caps_count.fontScale = 0.8;
-			self.kdhud_caps_count.sort = 0.8;
-			self.kdhud_caps_count.color = (1, 1, 1);
-		}
-	}
-	if (level.show_headshots) {
-		if (!isdefined(self.hud_headshot)) {
-			self.hud_headshot = newClientHudElem(self);
-			self.hud_headshot.archived = false;
-			self.hud_headshot.x = -45;
-			self.hud_headshot.y = -160;
-			self.hud_headshot.horzAlign = "right";
-			self.hud_headshot.vertAlign = "middle";
-			self.hud_headshot.alignX = "center";
-			self.hud_headshot.alignY = "middle";
-			self.hud_headshot.fontScale = 0.7;
-			self.hud_headshot.sort = 0.8;
-			self.hud_headshot.color = (1, 1, 1);
-			self.hud_headshot.alpha = 0.6;
-			self.hud_headshot setShader("killiconheadshot", 11, 11);
-		}
-		if (!isdefined(self.hud_headshot_count)) {
-			self.hud_headshot_count = newClientHudElem(self);
-			self.hud_headshot_count.archived = false;
-			self.hud_headshot_count.x = -24;
-			self.hud_headshot_count.y = -160;
-			self.hud_headshot_count.horzAlign = "right";
-			self.hud_headshot_count.vertAlign = "middle";
-			self.hud_headshot_count.alignX = "left";
-			self.hud_headshot_count.alignY = "middle";
-			self.hud_headshot_count.fontScale = 0.8;
-			self.hud_headshot_count.sort = 0.8;
-			self.hud_headshot_count.color = (1, 1, 1);
-		}
+
+		if ( !isdefined(self.hud_melee_count) )
+			self.hud_melee_count = self doClientHudElem( -24, -145, "left", "middle", "right", "middle", 0.8 );
 	}
 
 	wait 0.5;
 
-	while (1) {
+	while (1)
+	{
 		wait 0.5;
 
 		if (!isdefined(self))
@@ -473,7 +371,7 @@ miniscore_myscore() {
 
 		self.kdhud_kills setValue(self.pers["kills"]);
 		self.kdhud_deaths setValue(self.deaths);
-		if (level.gametype == "ctf")
+		if ( level.ax_show_mini_flags && level.gametype == "ctf" )
 		{
 			self.kdhud_caps_count setValue(self.pers["flag_caps"]);
 			if (!isdefined(self.pers["team"]))
@@ -491,8 +389,11 @@ miniscore_myscore() {
 			}
 			self.kdhud_caps setShader(icon, 14, 14);
 		}
-		if (level.show_headshots)
-			self.hud_headshot_count setValue(self.pers["headshots"]);
+		if ( level.ax_show_mini_headshots && isdefined(self.hud_headshot_count) )
+			self.hud_headshot_count setValue( self.pers["headshots"] );
+
+		if ( level.ax_show_mini_melees && isdefined(self.hud_melee_count) )
+			self.hud_melee_count setValue( self.pers["melees"] );
 	}
 
 }

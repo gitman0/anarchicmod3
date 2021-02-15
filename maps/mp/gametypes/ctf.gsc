@@ -1,4 +1,6 @@
 /*
+	$Id: ctf.gsc 90 2010-10-03 06:16:08Z  $
+
 	Capture the Flag
 	Objective: 	Score points for your team by capturing the enemy's flag and returning it to your base
 	Map ends:	When one team reaches the score limit, or time limit is reached
@@ -66,8 +68,9 @@ main()
 	level.endgameconfirmed = ::endMap;
 	level.returnFlag = ::returnFlag;	// ax\ctfmods::autoReturn()
 	level.printonteam = ::printOnTeam;	// ax\ctfmods::autoReturn()
-
+	level.printJoinedTeam = ::printJoinedTeam;
 	level.spawnspectator = ::spawnspectator;
+	level.spawnintermission = ::spawnIntermission;	// ax\ctfmods::endMap()
 }
 
 Callback_StartGameType()
@@ -114,6 +117,7 @@ Callback_StartGameType()
 		precacheString(&"MP_YOUR_FLAG_WAS_RETURNED");
 		precacheString(&"PLATFORM_PRESS_TO_SPAWN");
 
+		thread maps\mp\gametypes\_teams::addTestClients();
 	}
 
 	level.compassflag_allies = "compass_flag_" + game["allies"];
@@ -266,7 +270,6 @@ Callback_StartGameType()
 		thread sayMoveIn();
 	}
 	thread updateGametypeCvars();
-	thread maps\mp\gametypes\_teams::addTestClients();
 }
 
 dummy()
@@ -718,20 +721,22 @@ respawn()
 		return;
 
 	self.sessionteam = self.pers["team"];
-	self.sessionstate = "spectator";
-
-	if(isdefined(self.dead_origin) && isdefined(self.dead_angles))
+	if ( !isDefined( level.ax_sticky_spectator ) || level.ax_sticky_spectator == 0 )
 	{
-		origin = self.dead_origin + (0, 0, 16);
-		angles = self.dead_angles;
-	}
-	else
-	{
-		origin = self.origin + (0, 0, 16);
-		angles = self.angles;
-	}
+		self.sessionstate = "spectator";
 
-	self spawn(origin, angles);
+		if(isdefined(self.dead_origin) && isdefined(self.dead_angles))
+		{
+			origin = self.dead_origin + (0, 0, 16);
+			angles = self.dead_angles;
+		}
+		else
+		{
+			origin = self.origin + (0, 0, 16);
+			angles = self.angles;
+		}
+		self spawn(origin, angles);
+	}
 
 	while(isdefined(self.WaitingToSpawn))
 		wait .05;
@@ -833,7 +838,7 @@ make_permanent_announcement(message, cleanup_notify, timer, y_position, color)
 }
 startGame()
 {
-	if (!isdefined(game["matchstarted"]))
+	if (!isdefined(game["matchstarted"]) || !game["matchstarted"] )
 	{
 		game["matchstarted"] = false;
 /*		wait_for_players = 30;
@@ -851,11 +856,14 @@ startGame()
 		}
 		level notify( "end_wait_for_players" );
 */
+		level.ctf_in_warmup = false;
 		if (isdefined(level.ctf_warmup))
 			warmup = level.ctf_warmup;
 		else warmup = 50;
 		thread make_permanent_announcement(&"AX_MATCHSTARTING", "cleanup match starting", warmup);
+		level.ctf_in_warmup = true;
 		wait warmup;
+		level.ctf_in_warmup = false;
 		game["matchstarted"] = true;
 		level notify("cleanup match starting");
 		wait 0.05;
@@ -1106,8 +1114,6 @@ updateGametypeCvars()
 
 printJoinedTeam(team)
 {
-	return ax\utility::printJoinedTeam(team);
-
 	if(!level.splitscreen)
 	{
 	    if(team == "allies")
@@ -1681,7 +1687,7 @@ menuWeapon(response)
 		else
 			spawnPlayer();
 
-		self thread printJoinedTeam(self.pers["team"]);
+		self thread [[level.printJoinedTeam]](self.pers["team"]);
 	}
 	else
 	{

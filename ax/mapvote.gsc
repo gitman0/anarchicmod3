@@ -1,3 +1,5 @@
+/* $Id: mapvote.gsc 78 2010-09-04 17:27:58Z  $ */
+
 //***********************************************************************************************************
 // MAP VOTE PACKAGE
 // ORIGINALLY MADE BY NC-17 (codam, powerserver), REWORKED BY wizard220, MODIFIED BY FrAnCkY55, Modified again by bell
@@ -15,7 +17,7 @@ init()
 	level.mapvotetext["TimeLeft"]      = &"Time Left: ";
 	level.mapvotetext["MapVoteHeader"] = &"Next Map Vote";
 
-	if(!isdefined(game["gamestarted"]))
+	if( !isdefined(game["gamestarted"]) || !game["gamestarted"] )
 	{
 		precacheString(level.mapvotetext["MapVote"]);
 		precacheString(level.mapvotetext["TimeLeft"]);

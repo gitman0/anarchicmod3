@@ -1,4 +1,6 @@
 /*
+	$Id: hq.gsc 81 2010-09-06 03:46:44Z  $
+
 	HQ
 	Objective: 	Establish a headquarters and gain points as long as your team controls it
 	Map ends:	When one teams score reaches the score limit, or time limit is reached
@@ -72,6 +74,8 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
+	level.printJoinedTeam = ::printJoinedTeam;
+	level.spawnspectator = ::spawnSpectator;
 }
 
 Callback_StartGameType()
@@ -733,20 +737,22 @@ respawn()
 		return;
 
 	self.sessionteam = self.pers["team"];
-	self.sessionstate = "spectator";
-
-	if(isdefined(self.dead_origin) && isdefined(self.dead_angles))
+	if ( !isDefined( level.ax_sticky_spectator ) || level.ax_sticky_spectator == 0 )
 	{
-		origin = self.dead_origin + (0, 0, 16);
-		angles = self.dead_angles;
-	}
-	else
-	{
-		origin = self.origin + (0, 0, 16);
-		angles = self.angles;
-	}
+		self.sessionstate = "spectator";
 
-	self spawn(origin, angles);
+		if(isdefined(self.dead_origin) && isdefined(self.dead_angles))
+		{
+			origin = self.dead_origin + (0, 0, 16);
+			angles = self.dead_angles;
+		}
+		else
+		{
+			origin = self.origin + (0, 0, 16);
+			angles = self.angles;
+		}
+		self spawn(origin, angles);
+	}
 
 	while(isdefined(self.WaitingOnTimer) || ((self.pers["team"] == level.DefendingRadioTeam) && isdefined(self.WaitingOnNeutralize)))
 		wait .05;
@@ -2243,7 +2249,7 @@ menuWeapon(response)
 		else
 			spawnPlayer();
 
-		self thread printJoinedTeam(self.pers["team"]);
+		self thread [[level.printJoinedTeam]](self.pers["team"]);
 	}
 	else
 	{

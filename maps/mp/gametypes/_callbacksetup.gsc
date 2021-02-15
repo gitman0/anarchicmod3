@@ -46,6 +46,7 @@ self is the player that is disconnecting.
 CodeCallback_PlayerDisconnect()
 {
 	self notify("disconnect");
+	if ( isDefined(level.ax_scoresave_expire) ) ax\persistence::rememberinfo(self);
 	[[level.callbackPlayerDisconnect]]();
 }
 
@@ -123,3 +124,4 @@ AbortLevel()
 callbackVoid()
 {
 }
+

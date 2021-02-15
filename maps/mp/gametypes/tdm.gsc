@@ -1,4 +1,6 @@
 /*
+	$Id: tdm.gsc 78 2010-09-04 17:27:58Z  $
+
 	Team Deathmatch
 	Objective: 	Score points for your team by eliminating players on the opposing team
 	Map ends:	When one team reaches the score limit, or time limit is reached
@@ -58,8 +60,8 @@ main()
 	level.spectator = ::menuSpectator;
 	level.weapon = ::menuWeapon;
 	level.endgameconfirmed = ::endMap;
-
-	//level.spawnspectator = ::spawnspectator;
+	level.printJoinedTeam =	::printJoinedTeam;
+	level.spawnspectator = ::spawnspectator;
 }
 
 Callback_StartGameType()
@@ -937,8 +939,6 @@ updateGametypeCvars()
 
 printJoinedTeam(team)
 {
-	return ax\utility::printJoinedTeam(team);
-
 	if(!level.splitscreen)
 	{
 		if(team == "allies")
@@ -1139,7 +1139,7 @@ menuWeapon(response)
 	{
 		self.pers["weapon"] = weapon;
 		spawnPlayer();
-		self thread printJoinedTeam(self.pers["team"]);
+		self thread [[level.printJoinedTeam]](self.pers["team"]);
 	}
 	else
 	{

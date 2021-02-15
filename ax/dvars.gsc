@@ -1,3 +1,5 @@
+/* $Id: dvars.gsc 86 2010-10-02 01:28:00Z  $ */
+
 #include ax\utility;
 
 setupDvars()
@@ -7,11 +9,8 @@ setupDvars()
 	level.mapname			= getcvar("mapname");
 
 	// HUD settings + notifications
-	level.show_modlabel		= cvardef("scr_show_modlabel", 1, 0, 1, "int");
 	level.show_rulehud		= cvardef("scr_show_rules", 1, 0, 1, "int");
-	level.show_kdhud		= cvardef("scr_show_hud_score", 1, 0, 1, "int");
 	level.show_teamscore		= cvardef("scr_show_teamscore", 1, 0, 1, "int");
-	level.show_headshots		= cvardef("scr_show_headshots", 1, 0, 1, "int");
 	level.show_healthbar		= cvardef("scr_show_healthbar", 1, 0, 1, "int");
 	level.static_crosshair		= cvardef("scr_static_crosshair", 0, 0, 1, "int");
 	level.old_headicons		= cvardef("scr_old_headicons", 1, 0, 1, "int");
@@ -22,6 +21,14 @@ setupDvars()
 	level.disable_deathicon		= cvardef("scr_disable_deathicon", 1, 0, 1, "int");
 	level.disable_waypoints		= cvardef("ax_disable_waypoints", 1, 0, 1, "int");
 	level.disable_grenade_icons	= cvardef("ax_disable_grenade_icons", 1, 0, 1, "int");
+	level.ax_show_modlabel		= cvardef("ax_show_modlabel", 1, 0, 1, "int");
+	level.ax_show_mini		= cvardef("ax_show_mini", 1, 0, 1, "int");
+	level.ax_show_mini_flags	= cvardef("ax_show_mini_flags", 1, 0, 1, "int");
+	level.ax_show_mini_headshots	= cvardef("ax_show_mini_headshots", 1, 0, 1, "int");
+	level.ax_show_mini_melees	= cvardef("ax_show_mini_melees", 1, 0, 1, "int");
+	level.ax_show_rules		= cvardef("ax_show_rules", 1, 0, 1, "int");
+	level.ax_show_rules_delay	= cvardef("ax_show_rules_delay", 10, 1, 60, "int");
+	level.ax_show_rules_duration	= cvardef("ax_show_rules_duration", 5, 0, 60, "int");
 
 	// gameplay settings
 	level.allow_shellshock		= cvardef("ax_allow_shellshock", 1, 0, 1, "int");
@@ -39,6 +46,7 @@ setupDvars()
 	level.sudden_death_timelimit	= cvardef("ax_sudden_death_timelimit", 0, -1, 1440, "int");
 	level.sudden_death_f_norespawn	= cvardef("ax_sudden_death_norespawn", 0, 0, 1, "int");
 	level.sudden_death_notie	= cvardef("ax_sudden_death_notie", 0, 0, 1, "int");
+	level.sudden_death_minplayers	= cvardef("ax_sudden_death_minplayers", 1, 0, 32, "int");
 	level.ax_scoresave_expire	= cvardef("ax_scoresave_expire", 600, 0, 3600, "int");
 	level.ax_teambalance_menu	= cvardef("ax_teambalance_menu", 1, 0, 99, "int");
 	level.ax_ctf_pressurecook	= cvardef("ax_ctf_pressurecook", 0, 0, 1440, "float");	
