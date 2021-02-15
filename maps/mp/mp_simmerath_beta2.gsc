@@ -13,7 +13,7 @@ main()
         maps\mp\mp_simmerath_beta2_mortars::main();
 
         setCullFog(0, 3600, 0.30, 0.31, 0.36, 0);
-        ambientPlay("ambient_mp_simmerath_beta2");
+        ambientPlay("simmerath_ambfix");
 
         game["allies"] = "american";
         game["axis"] = "german";

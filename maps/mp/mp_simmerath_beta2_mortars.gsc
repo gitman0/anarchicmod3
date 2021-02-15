@@ -6,10 +6,13 @@
 
 main()
 {
-             level._effect["mortar_explosion"][0] = loadfx("fx/explosions/mortarExp_dirt.efx");
-             level._effect["mortar_explosion"][1] = loadfx("fx/explosions/mortarExp_mud.efx");
+	if (getCvarInt("scr_simmerath_mortars") == 1)
+	{
+		level._effect["mortar_explosion"][0] = loadfx("fx/explosions/mortarExp_dirt.efx");
+		level._effect["mortar_explosion"][1] = loadfx("fx/explosions/mortarExp_mud.efx");
 
-level thread simmerath_mortars();
+		level thread simmerath_mortars();
+	}
 }
 
 simmerath_mortars()
